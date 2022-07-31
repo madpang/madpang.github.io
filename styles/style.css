@@ -1,0 +1,38 @@
+html {
+	font-size: 16px;
+	font-family: "Futura", "Uchen", sans-serif;
+	background-color: aliceblue;
+}
+
+body {
+	width: 600px;
+	margin: 0 auto;
+	background-color: beige;
+	padding: 0px 20px 20px 20px;
+	border: 5px solid black;
+}
+
+h1 {
+	font-size: 60px;
+	text-align: center;
+	margin: 0;
+	padding: 20px 0;
+	color: red;
+	text-shadow: 3px 3px 1px black;
+}
+
+p, li {
+	font-size: 16 px;
+	line-height: 2;
+	/* letter-spacing: 1px; */
+}
+
+p {
+	width: 512px;
+	/* border: 1px solid black; */
+}
+
+img {
+	display: block;
+	margin: 0 auto;
+}

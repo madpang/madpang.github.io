@@ -13,7 +13,7 @@ body {
 }
 
 h1 {
-	font-size: 60px;
+	font-size: 4rem;
 	text-align: center;
 	margin: 0;
 	padding: 20px 0;
@@ -22,14 +22,12 @@ h1 {
 }
 
 p, li {
-	font-size: 16 px;
-	line-height: 2;
-	/* letter-spacing: 1px; */
+	font-size: 1rem;
+	line-height: 1.5;
 }
 
 p {
 	width: 512px;
-	/* border: 1px solid black; */
 }
 
 img {

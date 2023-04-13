@@ -1,0 +1,66 @@
+{
+	"W1": {
+		"Host": "iCloud",
+		"Volume": "Workspace1",
+		"AccPt": "Workspace1",
+		"Allow": ["Lily-Acrux", "PD-Pisces"],
+		"Note": "iCloud Drive, link to home dir"
+	},
+	"W2": {
+		"Host": "Lily-Acrux",
+		"IP": "192.168.51.40",
+		"Volume": "Workspace2",
+		"AccPt": "Workspace2",
+		"Allow": "All",
+		"User": "LPa",
+		"Pswd": "IamLPa!",
+		"Note": "shared workspace @Lily-Acrux, w/ dedicated user account"
+	},
+	"W3": {
+		"Host": "PD-Pisces",
+		"Volume": "Workspace3",
+		"AccPt": "Workspace3",
+		"Allow": "PD-Pisces",
+		"Note": "local workspace @PD-Pisces"
+	},
+	"W4": {
+		"Host": "Lily-Titan",
+		"IP": "192.168.51.54",
+		"Volume": "Workspace4",
+		"AccPt": "Workspace4",
+		"Allow": "All",
+		"User": "tangt",
+		"Pswd": "tangt!",	
+		"Note": "shared workspace @Lily-Titan, link to home dir, w/ admin account"
+	},
+	"W6": {
+		"Host": "lily-share03",
+		"IP": "192.168.52.66",
+		"Volume": "WKSP6",
+		"AccPt": "Workspace6",
+		"Allow": "All",
+		"User": "tangt",
+		"Pswd": "tangt",
+		"Note": "shared workspace @lily-share03, link to home dir, w/ admin account"
+	},
+	"W7": {
+		"Host": "SUPERMICRO-02",
+		"IP": "192.168.52.80",
+		"Volume": "WKSP7",
+		"AccPt": "Workspace7",
+		"Allow": "All",
+		"User": "tangt",
+		"Pswd": "tangt",
+		"Note": "shared workspace @SUPERMICRO-02, link to home dir, w/ admin account"
+	},	
+	"FS": {
+		"Host": "lily-fs",
+		"IP": "192.168.50.4",
+		"Volume": "shared",
+		"AccPt": "lilyFS",
+		"Allow": "All",
+		"User": "usct_member",
+		"Pswd": "uT6V5pJb",
+		"Note": "Lily MedTech File Server, default is lily-fs04/shared"
+	}
+}

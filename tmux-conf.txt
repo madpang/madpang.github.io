@@ -1,0 +1,40 @@
+# HOW:
+# - create a symbolic link at $HOME/.tmux.conf
+# - need the proper setting of TERMINFO (see zsh-config.sh)
+
+# use PoewrShell in each session (load PROFILE manually)
+set-option -g default-command 'pwsh -NoExit -Command  ". ~/.pwshrc.ps1"'
+set-option -g default-terminal 'tmux'
+
+# modify the escape key
+unbind C-b
+set-option -g prefix `
+bind ` send-prefix
+
+# make tmux behaves more like screen
+unbind %
+bind | split-window -h
+unbind '"'
+bind - split-window -v
+unbind w
+bind '"' choose-window
+unbind x
+bind x confirm-before -p "kill-window #W? (y/n)" kill-window
+unbind &
+bind k confirm-before -p "kill-pane #P? (y/n)" kill-pane
+unbind ,
+bind A command-prompt -I "#W" "rename-window '%%'"
+
+# set Emacs mode
+set-option -g mode-keys emacs
+
+# turn off status bar
+set-option -g status off
+
+# set larger history
+set-option -g history-limit 3000
+
+# POSTLOG
+# --------------------------------
+# - `set-option default-command` is used instead of `set-option default-shell`, since the latter causes some problem for MATLAB to call native commands (e.g. ls)
+# - `set-option -g default-terminal 'xterm-256color'` is not used, since the side-effect is unclear

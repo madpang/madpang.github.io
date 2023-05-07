@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-05-07T23:22:58+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Your awesome title</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2023/05/07/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2023-05-07T23:05:53+09:00</published><updated>2023-05-07T23:05:53+09:00</updated><id>http://localhost:4000/jekyll/update/2023/05/07/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2023/05/07/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+
+&lt;p&gt;Jekyll requires blog post files to be named according to the following format:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YEAR-MONTH-DAY-title.MARKUP&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YEAR&lt;/code&gt; is a four-digit number, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MONTH&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DAY&lt;/code&gt; are both two-digit numbers, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MARKUP&lt;/code&gt; is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+
+&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;Tom&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &apos;Hi, Tom&apos; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry><entry><title type="html">A Implement Icloud Equivalent</title><link href="http://localhost:4000/2022/05/25/a-implement-iCloud-equivalent.html" rel="alternate" type="text/html" title="A Implement Icloud Equivalent" /><published>2022-05-25T00:00:00+09:00</published><updated>2022-05-25T00:00:00+09:00</updated><id>http://localhost:4000/2022/05/25/a-implement-iCloud-equivalent</id><content type="html" xml:base="http://localhost:4000/2022/05/25/a-implement-iCloud-equivalent.html">&lt;h1 id=&quot;poormans-icloud-implementation&quot;&gt;Poorman’s “iCloud” implementation&lt;/h1&gt;
+
+&lt;h2 id=&quot;issues-of-icloud&quot;&gt;Issues of iCloud&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;UNRELIABLE → see 2022-01-26 crash.&lt;/li&gt;
+  &lt;li&gt;Unable to utilize &lt;em&gt;Time Machine&lt;/em&gt; → letting Time Machine to spit files into the iCloud managed directories would only create chaos across multiple devices.&lt;/li&gt;
+  &lt;li&gt;Unsuitable for &lt;strong&gt;Git&lt;/strong&gt; → iCloud would occasionally delete files (and only leave some &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.icloud&lt;/code&gt; stub files) when “it” considers that file is of NOT frequent use, and this would just trigger the monitoring of Git.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;purpose&quot;&gt;Purpose&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Workspace synchronization—this is what exactly iCloud do, but I want a more controllable way.&lt;/li&gt;
+  &lt;li&gt;Workspace backup, to hold my ass.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;method&quot;&gt;Method&lt;/h2&gt;
+
+&lt;h3 id=&quot;arsenal-of-automation&quot;&gt;Arsenal of automation&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;PowerShell&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Shortcuts.app&lt;/strong&gt; (macOS)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;bash/zsh&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;AppleScript&lt;/strong&gt; (macOS)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Wolfram Script&lt;/strong&gt; → there is license constrain, the last resort or just for fast prototyping&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;considerations&quot;&gt;Considerations&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;After THIS implementation, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;W1:@iCloud&lt;/code&gt; would generally be deprecated, and would be only for temporary use.&lt;/li&gt;
+  &lt;li&gt;It is only necessary to sync between &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;W2:@Lily-Acrux&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;W3:@PD-Pisces&lt;/code&gt;, to facilitate work-from-home.&lt;/li&gt;
+  &lt;li&gt;While &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;W4:@Lily-Titan&lt;/code&gt; takes a special role as the central Git repositories, it holds project-base &lt;em&gt;stacks&lt;/em&gt;, and &lt;em&gt;archives&lt;/em&gt;. There will be large chunks of raw data stored there, and is not supposed to sync between other workspaces. The backup of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;W4:&lt;/code&gt; will be carried out separately (using Linux utilities).&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Render unto &lt;strong&gt;Git&lt;/strong&gt; the things that are Git’s, and unto &lt;strong&gt;rsync&lt;/strong&gt; the things that are rsync’s&lt;/em&gt;.&lt;/li&gt;
+  &lt;li&gt;Relative symbolic links FROM the managed folder (and pointing to git repo.) could be synced by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rsync&lt;/code&gt;. → config &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;core.symlinks = false&lt;/code&gt; in Git repo. to see links as it is, instead of tracing the original file.&lt;/li&gt;
+  &lt;li&gt;Bidirectional sync is necessary for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;W2:@Lily-Acrux&lt;/code&gt; ←→ &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;W3:@PD-Pisces&lt;/code&gt;. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--delete&lt;/code&gt; option and double execution of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rsync&lt;/code&gt; are necessary. Since no &lt;em&gt;central&lt;/em&gt; “repo” exists in-between (it is like working tree to working tree git merge—which is actually forbidden in Git), one must be CAUTION&lt;sup id=&quot;fnref:1&quot; role=&quot;doc-noteref&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot; rel=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt; about the order of “pull/push” operation (and I realized that iCloud must have adopted the &lt;em&gt;frequent&lt;/em&gt; sync strategy to handle this issue).&lt;/li&gt;
+  &lt;li&gt;Take care of &lt;em&gt;File-Sharing&lt;/em&gt; (e.g. via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SMB&lt;/code&gt;) → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rync&lt;/code&gt; runs orders more efficiently via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SSH&lt;/code&gt; than crossing mounted &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SMB&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;folders-to-by-synced&quot;&gt;Folders to by synced&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;01-Lily&lt;/code&gt;: my main work folder&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;02-PhD&lt;/code&gt;: my research folder&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;03-Zettelkasten&lt;/code&gt; : my notes collection&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;04-resource&lt;/code&gt;: document, unsorted material (e.g. external MATLAB packages), etc.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;05-archive&lt;/code&gt;: things that would be gradually fade out&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;folders-to-be-managed-by-git&quot;&gt;Folders to be managed by Git&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Git-Repo&lt;/code&gt;: contains various project repositories, e.g. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dotfiles&lt;/code&gt; is moved into this folder&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;folders-need-special-treat&quot;&gt;Folders need special treat&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;**/stack&lt;/code&gt;: contains stacks of investigation → should go to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;W4:@Lily-Titan&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;==MARK== Here is an example,&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rsync &lt;span class=&quot;nt&quot;&gt;-azv&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--exclude&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;data/**&apos;&lt;/span&gt;,&lt;span class=&quot;s1&quot;&gt;&apos;media/**&apos;&lt;/span&gt;,&lt;span class=&quot;s1&quot;&gt;&apos;result/**&apos;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; Lily-Titan:~/Workspace4/01-Lily/stack/2022-02-08-attenuation-estimation ~/Workspace3/01-Lily/stack/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;folders-not-to-be-synced&quot;&gt;Folders not to be synced&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;private&lt;/code&gt;: private doc/projects, on PD-Pisces&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tmp&lt;/code&gt;: for temporary data exchange&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;implementation&quot;&gt;Implementation&lt;/h3&gt;
+
+&lt;p&gt;See &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Wi:/04-resource/macOS-Shortcuts/Sync-WKSP.shortcut&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;discussion&quot;&gt;Discussion&lt;/h2&gt;
+
+&lt;h3 id=&quot;authentication-issue&quot;&gt;Authentication issue&lt;/h3&gt;
+
+&lt;p&gt;In the current setting, one can NOT ssh into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PD-Pisces&lt;/code&gt; w/o password (server-side not configured). However, Shortcuts.app provides a utility “Run script over SSH” which accepts pre-entered password for connection. In this way, command can be always initiated from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PD-Pisces&lt;/code&gt;, which has free access to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lily-Acrux&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;notification-issue&quot;&gt;Notification issue&lt;/h3&gt;
+
+&lt;p&gt;After synchronization completes, there should be some mechanism to notify the success, one may still rely on the SSH.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;2022-03-21-b-rsync.md&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;appendix&quot;&gt;Appendix&lt;/h2&gt;
+
+&lt;h3 id=&quot;using-tree-to-explore-folder-structure&quot;&gt;Using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tree&lt;/code&gt; to explore folder structure&lt;/h3&gt;
+
+&lt;p&gt;One learns the usage by seeing the example—&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tree -dlN -L 2&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;╭ &lt;span class=&quot;nb&quot;&gt;env&lt;/span&gt;: N/A | tianhantang@LILY-TITAN:~ | git: N/A
+λ &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; tree &lt;span class=&quot;nt&quot;&gt;-dl&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-L&lt;/span&gt; 2
+&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+├── Documents
+│   └── MATLAB
+├── Downloads
+├── snap
+│   └── powershell
+└── Workspace4 -&amp;gt; /data/Workspace4
+    ├── font
+    ├── Lily
+    ├── MATLAB
+    ├── PhD
+    └── tmp
+
+11 directories
+╰ log: 2022-05-24 11:10:03 +09:00 | &lt;span class=&quot;nb&quot;&gt;stat&lt;/span&gt;: ✓
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;option &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-d&lt;/code&gt;: list directories only → this is important to avoid clutter.&lt;/li&gt;
+  &lt;li&gt;option &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-l&lt;/code&gt;: follow symbolic link → see “Workspace4” in the above result.&lt;/li&gt;
+  &lt;li&gt;option &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-N&lt;/code&gt;: Print non-printable characters as is → useful for printing Unicode characters.&lt;/li&gt;
+  &lt;li&gt;option &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-L [num]&lt;/code&gt; controls the max depth of directory tree → important to balance between details and chaos.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;footnotes&quot; role=&quot;doc-endnotes&quot;&gt;
+  &lt;ol&gt;
+    &lt;li id=&quot;fn:1&quot; role=&quot;doc-endnote&quot;&gt;
+      &lt;p&gt;Skip the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--delete&lt;/code&gt; option is an easy way to keep all incremental changes, and make the two workspaces mirror each other. It is exactly when decremental change is made that special caution must be taken. &lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot; role=&quot;doc-backlink&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;</content><author><name>TPP</name></author><summary type="html">Poorman’s “iCloud” implementation</summary></entry><entry><title type="html">A Matrix Rank</title><link href="http://localhost:4000/2022/02/02/a-matrix-rank.html" rel="alternate" type="text/html" title="A Matrix Rank" /><published>2022-02-02T00:00:00+09:00</published><updated>2022-02-02T00:00:00+09:00</updated><id>http://localhost:4000/2022/02/02/a-matrix-rank</id><content type="html" xml:base="http://localhost:4000/2022/02/02/a-matrix-rank.html">&lt;h1 id=&quot;explore-rank-issue-of-g-matrix&quot;&gt;Explore rank issue of G matrix&lt;/h1&gt;
+
+&lt;p&gt;#math/linear-algebra/matrix/sparse-matrix/rank&lt;/p&gt;
+
+&lt;h2 id=&quot;structural-rank&quot;&gt;Structural rank&lt;/h2&gt;
+
+&lt;p&gt;There is a MATLAB function &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprank&lt;/code&gt; introduced in R2006a:&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;The structural rank of a matrix is the maximum rank of all matrices w/ the same nonzero pattern.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;→ it has an important feature that&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A matrix has full structural rank &lt;em&gt;if it can be permuted so that diagonal has no zero entries&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;in terms of the usage for my investigation, since in many case, the measurement matrix G is too large to compute its rank by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rank(G)&lt;/code&gt;, I can only check its structural rank to get an upper bound, since&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;the structural rank is an upper bound on the rank of a matrix, i.e., &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprank(A) &amp;gt;= rank(full(A))&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;the implementation of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprank&lt;/code&gt; is&lt;/p&gt;
+
+&lt;div class=&quot;language-matlab highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;dmperm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In the comment of the above code, it states that&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;in exact arithmetic &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprank(A) == rank(full(sprandn(A)))&lt;/code&gt; with probability one.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Sparse matrix in MATLAB is just &lt;em&gt;association&lt;/em&gt; (in Mathematica)&lt;/p&gt;
+
+&lt;div class=&quot;language-matlab highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+     &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+
+     &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+     &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;rank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+
+     &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sparse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;sA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+
+   &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;        &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;        &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;        &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;        &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sprank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;rs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+
+     &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;-&amp;gt; for this matrix, the structural rank is 2 &lt;em&gt;since two of the columns are nonzero&lt;/em&gt;. But the actual rank of the matrix is 1 since the columns are multiples of each other.&lt;/p&gt;
+
+&lt;p&gt;-&amp;gt; however, the structural rank is NOT the count of non-zero columns&lt;/p&gt;
+
+&lt;div class=&quot;language-matlab highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+
+     &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+     &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;sA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sparse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sprank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+
+     &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;-&amp;gt; given the definition, “the structural rank of a matrix is the &lt;strong&gt;maximum&lt;/strong&gt; rank of all matrices w/ the &lt;strong&gt;same nonzero pattern&lt;/strong&gt;” -&amp;gt; there are 3 non-zero columns for this 2-by-5 matrix, so the possible maximum rank is apparently 2 (as long as at least 2 columns are nonzero).&lt;/p&gt;
+
+&lt;h2 id=&quot;dulmage-mendelsohn-decomposition&quot;&gt;Dulmage-Mendelsohn decomposition&lt;/h2&gt;
+
+&lt;p&gt;Digging the internal of structural rank calculation&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p = dmperm(A)&lt;/code&gt; finds a &lt;em&gt;vector&lt;/em&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p&lt;/code&gt; such that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p(j) = i&lt;/code&gt;  if column &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;j&lt;/code&gt; is &lt;strong&gt;matched&lt;/strong&gt; to row &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt;, or zero if column j is unmatched.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;→ The structural rank of A is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprank(A) = sum(p&amp;gt;0)&lt;/code&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;If A is a reducible matrix, the linear system &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ax = b&lt;/code&gt; can be solved by permuting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A&lt;/code&gt; to a block upper triangular form, w/ irreducible diagonal blocks, and then performing block back substitution.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;→ see &lt;a href=&quot;./2022-02-06-dmperm.md&quot;&gt;2022-02-06-dmperm&lt;/a&gt; for more info.&lt;/p&gt;
+
+&lt;h2 id=&quot;appendix&quot;&gt;Appendix&lt;/h2&gt;
+
+&lt;p&gt;About sparse matrix related functions in MATLAB → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;R = sprandn(S)&lt;/code&gt;  creates a sparse matrix that has the same &lt;em&gt;sparsity pattern&lt;/em&gt; (i.e., the indexes of the non-zeros are EXACTLY the SAME ) as the matrix S, but w/ normally distributed random entries w/ mean 0 and variance 1&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The reciprocal condition number is a scale-invariant measure of how close a given matrix is to the set of singular matrices.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;todo&quot;&gt;TODO&lt;/h2&gt;
+
+&lt;p&gt;MATLAB的帮助文档里有一个”Sparse Matrices”专题，先把它搞透 → [Documentation Home &amp;gt; MATLAB &amp;gt; Mathematics &amp;gt; Sparse Matrices]&lt;/p&gt;</content><author><name></name></author><summary type="html">Explore rank issue of G matrix</summary></entry></feed>

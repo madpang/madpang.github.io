@@ -1,0 +1,222 @@
+/*
+	@file:   common/styles/style.css
+	@brief:  the CSS style-sheet for the pd-wysheid
+	@author: madpang
+	@date:
+	- created on 2024-04-21
+	- updated on 2024-08-31
+*/
+
+/* === GLOBAL STYLES === */
+
+/* Font resources */
+@font-face {
+	font-family: 'DinkieBitmap-7px';
+	src: url('common/fonts/DinkieBitmap-7px.woff2') format('woff2');
+}
+
+/* Reset browser's default styles */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Define global CSS variables within `:root` scope */
+:root {
+	--scaling-factor: 0.5;          /* Scaling factor for different screen sizes */
+	--header-height: 96px;          /* Height of fixed header bar */
+	--header-height-scaled: calc(
+		var(--header-height) * var(--scaling-factor)
+	);
+	--main-content-padding-left: var(--header-height-scaled);
+	--main-content-padding-top: calc(32px * var(--scaling-factor));
+	--base-font-size: calc(32px * var(--scaling-factor));
+	--base-line-height: 1;
+	/* Named colors */
+	--color-snow: #FFFFFF;
+	--color-mercury: #EBEBEB;
+	--color-silver: #D6D6D6;
+	--color-tin: #919191;
+	--color-lead: #212121;
+	--color-custom-dark-1: #161616;
+	--color-licorice: #503030;
+	--color-moss: #009051;
+}
+
+body {
+	font-family: 'DinkieBitmap-7px', sans-serif;
+	font-weight: normal;
+	margin: 0px;
+	padding: 0px;
+	/* Light theme settings */
+	background-color: var(--color-snow);
+	color: var(--color-lead);
+	--header-bg-color: var(--color-mercury);
+	--header-icon-hover-bg-color: rgba(0, 0, 0, 10%);
+}
+
+body.dark-theme {
+	/* Dark theme settings
+	 * @note: it is activated by adding the 'dark-theme' class to the body through JavaScript.
+	 */
+	background-color: var(--color-custom-dark-1);
+	color: var(--color-silver);
+	--header-bg-color: var(--color-lead);
+	--header-icon-hover-bg-color: rgba(255, 255, 255, 10%);
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+a:hover {
+	color: #009051;
+}
+
+/* === HEADER STYLES === */
+
+header {
+	padding: 0px;
+	margin: 0px;	
+	height: var(--header-height-scaled);
+	width: 100%;                                      /* Stretch the header across the entire width */
+	position: fixed;                                  /* Keep the header fixed at the top */
+	left: 0px;
+	top: 0px;
+	z-index: 100;                                     /* Ensure the header is above other content */
+	background-color: var(--header-bg-color);
+	color: var(--header-text-color);	
+}
+
+header .nav-container {            	                  /* Container for navigation links and a theme switch button */
+	padding: 0px;
+	margin: 0px;	
+	position: absolute;
+	left: calc(
+		128px * var(--scaling-factor)
+	);
+	top: 0px;
+}
+
+header .clickable-icon {
+	display: block;
+	border: none;
+	background-color: transparent; /* Ensures no background color conflicts */
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor: pointer;               /* Changes cursor to pointer on hover for better UX */
+	padding: 0px;
+	margin: 0px;
+	height: var(--header-height-scaled);
+	position: absolute;
+}
+
+header .clickable-icon:hover {
+	background-color: var(--header-icon-hover-bg-color);
+}
+
+#link-stack {
+	background-image: url('common/images/label-STACK-light.png');
+	width: calc(138px * var(--scaling-factor));
+	left: 0px;
+	top: 0px;
+}
+
+body.dark-theme #link-stack {
+	background-image: url('common/images/label-STACK-dark.png');
+}
+
+#link-heap {
+	background-image: url('common/images/label-HEAP-light.png');
+	width: calc(108px * var(--scaling-factor));
+	left: calc(170px * var(--scaling-factor)); /* 138 + 32 */ 
+	top: 0px;
+}
+
+body.dark-theme #link-heap {
+    background-image: url('common/images/label-HEAP-dark.png');
+}
+
+#link-archive {
+	background-image: url('common/images/label-ARCHIVE-light.png');
+	width: calc(180px * var(--scaling-factor));
+	left: calc(310px * var(--scaling-factor)); /* 108 + 138 + 32 * 2 */
+	top: 0px;
+}
+
+body.dark-theme #link-archive {
+	background-image: url('common/images/label-ARCHIVE-dark.png');
+}
+
+#switch-theme-button {
+	width: var(--header-height-scaled);
+	background-image: url('common/images/icon-switch-theme-light.png');
+	right: 0px;
+	top: 0px;
+}
+
+body.dark-theme #switch-theme-button {
+	background-image: url('common/images/icon-switch-theme-dark.png');
+}
+
+/* === MAIN CONTENT STYLES === */
+
+main {
+	/* Adjust margin and padding */
+	margin-top: var(--header-height-scaled);
+	padding-top: var(--main-content-padding-top);
+	height: calc(
+		100vh - var(--header-height-scaled)
+	);                                              /* Adjusts height to fill the screen, subtracting the header's height */
+	overflow-y: scroll;                             /* Enable scrolling for content */
+	margin-left: 0px;
+	padding-left: var(--main-content-padding-left); /* Add padding to the left for better visual effect */
+	/* Set font size and line height */
+	font-size: var(--base-font-size);
+	line-height: var(--base-line-height);
+}
+
+p {
+	margin-top: 0;             /* No margin before the paragraph */
+	margin-bottom: 0.25em;     /* Adds space after the paragraph */
+	/* @note: the margin setting actually result in a 125% line spacing */
+}
+
+h1 {
+    font-size: 4em;            /* Relative to base font size */
+	margin-top: 0px;
+	margin-bottom: 0.5em;
+}
+
+h2 {
+    font-size: 3em;            /* Relative to base font size */
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+}
+
+h3 {
+    font-size: 2.5em;          /* Relative to base font size */
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+}
+
+h4 {
+    font-size: 2em;            /* Relative to base font size */
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+}
+
+h5 {
+    font-size: 1.5em;          /* Relative to base font size */
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+}
+
+h6 {
+    font-size: 1em;            /* Relative to base font size */
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+}

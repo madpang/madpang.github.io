@@ -1,3 +1,58 @@
 +++ header
 @file: pd-wysheid/tickets.txt
 +++
+
+=== Ticket 1
+
+@brief:
+Figure out a folder structure for the project, such that both local test using `file://` and deployment on a server are possible
+
+@status: TODO
+
+@date:
+- created on 2025-02-26
+- updated on 2025-02-26
+
+@details:
+The current folder has the following structure:
++++ tree
+.
+|- README.txt
+|- tickets.txt  # issue tracker, progress log
+|- index.html   # the entry point of the website
+|- common/      # top level assets
+|  |- fonts/
+|  |- images/
+|  |- styles/
+|  |  |- style.css
+|  |  |- common -> ../../common   # THE CRUX OF THE MATTER
+|  |- scripts/
++++
+It makes local testing easy, referencing the resources with relative paths.
+But when deployed to GitHub Pages, the symbolic link causes problems---since it forms a loop to the top level---GitHub Actions is stuck in an infinite recursion when trying to archive artifacts, spitting the following error:
++++ quote
+Archive artifact
+  ./
+  ./index.html
+  ./README.txt
+  ./.nojekyll
+  ./tickets.txt
+  ./common/
+  ./common/styles/
+  ./common/styles/style.css
+  ./common/styles/common/
+  ./common/styles/common/styles/
+  ./common/styles/common/styles/style.css
+  ./common/styles/common/styles/common/
+  ./common/styles/common/styles/common/styles/
+  ./common/styles/common/styles/common/styles/style.css
+  ./common/styles/common/styles/common/styles/common/
+  ./common/styles/common/styles/common/styles/common/styles/
+  ./common/styles/common/styles/common/styles/common/styles/style.css
+  ...
+  ...
++++
+
+If, instead, using absolute path for the resources, the local testing will break, since the browser will not be able to find the resources.
+
+The purpose of this ticket is to find a way to have both local testing and deployment possible, with minimal setup.

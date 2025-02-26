@@ -1,0 +1,6 @@
+# Temporary files
+tmp/
+
+# Misc files
+.DS_Store
+.vscode/

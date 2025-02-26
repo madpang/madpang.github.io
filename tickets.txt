@@ -5,7 +5,7 @@
 === Ticket 1
 
 @brief:
-Figure out a folder structure for the project, such that both local test using `file://` and deployment on a server are possible
+Figure out a folder structure for the project, such that both local test using `file://` and deployment on a server are possible.
 
 @status: DONE
 
@@ -70,3 +70,25 @@ For option 3, it is the simplest and most straightforward way to go, although it
 @see:
 - [MDN on HTML `base` tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base)
 - [MDN on CSS `url()` function](https://developer.mozilla.org/en-US/docs/Web/CSS/url_value)
+
+=== Ticket 2
+
+@brief:
+Write an article for the website.
+
+@status: TODO
+
+@date:
+- created on 2025-02-26
+- updated on 2025-02-26
+
+=== Ticket 3
+
+@brief:
+Add a favicon to the website.
+
+@status: TODO
+
+@date:
+- created on 2025-02-26
+- updated on 2025-02-26

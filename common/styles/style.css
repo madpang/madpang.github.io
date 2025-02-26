@@ -1,19 +1,13 @@
 /*
-	@file:   common/styles/style.css
+	@file:   pd-wysheid/common/styles/style.css
 	@brief:  the CSS style-sheet for the pd-wysheid
 	@author: madpang
 	@date:
 	- created on 2024-04-21
-	- updated on 2024-08-31
+	- updated on 2025-02-26
 */
 
 /* === GLOBAL STYLES === */
-
-/* Font resources */
-@font-face {
-	font-family: 'DinkieBitmap-7px';
-	src: url('common/fonts/DinkieBitmap-7px.woff2') format('woff2');
-}
 
 /* Reset browser's default styles */
 * {
@@ -42,6 +36,12 @@
 	--color-custom-dark-1: #161616;
 	--color-licorice: #503030;
 	--color-moss: #009051;
+}
+
+/* Font resources */
+@font-face {
+	font-family: 'DinkieBitmap-7px';
+	src: url('../../common/fonts/DinkieBitmap-7px.woff2') format('woff2');
 }
 
 body {
@@ -119,47 +119,47 @@ header .clickable-icon:hover {
 }
 
 #link-stack {
-	background-image: url('common/images/label-STACK-light.png');
+	background-image: url('../../common/images/label-STACK-light.png');
 	width: calc(138px * var(--scaling-factor));
 	left: 0px;
 	top: 0px;
 }
 
 body.dark-theme #link-stack {
-	background-image: url('common/images/label-STACK-dark.png');
+	background-image: url('../../common/images/label-STACK-dark.png');
 }
 
 #link-heap {
-	background-image: url('common/images/label-HEAP-light.png');
+	background-image: url('../../common/images/label-HEAP-light.png');
 	width: calc(108px * var(--scaling-factor));
 	left: calc(170px * var(--scaling-factor)); /* 138 + 32 */ 
 	top: 0px;
 }
 
 body.dark-theme #link-heap {
-    background-image: url('common/images/label-HEAP-dark.png');
+    background-image: url('../../common/images/label-HEAP-dark.png');
 }
 
 #link-archive {
-	background-image: url('common/images/label-ARCHIVE-light.png');
+	background-image: url('../../common/images/label-ARCHIVE-light.png');
 	width: calc(180px * var(--scaling-factor));
 	left: calc(310px * var(--scaling-factor)); /* 108 + 138 + 32 * 2 */
 	top: 0px;
 }
 
 body.dark-theme #link-archive {
-	background-image: url('common/images/label-ARCHIVE-dark.png');
+	background-image: url('../../common/images/label-ARCHIVE-dark.png');
 }
 
 #switch-theme-button {
 	width: var(--header-height-scaled);
-	background-image: url('common/images/icon-switch-theme-light.png');
+	background-image: url('../../common/images/icon-switch-theme-light.png');
 	right: 0px;
 	top: 0px;
 }
 
 body.dark-theme #switch-theme-button {
-	background-image: url('common/images/icon-switch-theme-dark.png');
+	background-image: url('../../common/images/icon-switch-theme-dark.png');
 }
 
 /* === MAIN CONTENT STYLES === */

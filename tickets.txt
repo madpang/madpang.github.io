@@ -7,7 +7,7 @@
 @brief:
 Figure out a folder structure for the project, such that both local test using `file://` and deployment on a server are possible
 
-@status: TODO
+@status: DONE
 
 @date:
 - created on 2025-02-26
@@ -56,3 +56,17 @@ Archive artifact
 If, instead, using absolute path for the resources, the local testing will break, since the browser will not be able to find the resources.
 
 The purpose of this ticket is to find a way to have both local testing and deployment possible, with minimal setup.
+
+To solve this issue, I have considered:
+1. Define a variable to supply the project root path---`$(pwd)/` for local testing, and `/` for deployment.
+2. Use a build script to create independent files for local testing and deployment, e.g. `index-local.html` and `index-deploy.html` by preprocessing the `index.html` file with appropriate path configuration.
+3. Just use relative path for current being.
+
+For option 1, one needs to use JavaScript to dynamically modify the HTML and CSS files at load time---e.g. `url()` in CSS, `<base>` tag in HTML. This is not ideal.
+Besides, there are many constrains---for example, `url()` only accepts literal string, not variables---which makes this approach difficult to implement.
+For option 2, it would be very cumbersome to maintain two separate piles of files.
+For option 3, it is the simplest and most straightforward way to go, although it might not be optimal, further improvement would be applied along the progress.
+
+@see:
+- [MDN on HTML `base` tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base)
+- [MDN on CSS `url()` function](https://developer.mozilla.org/en-US/docs/Web/CSS/url_value)

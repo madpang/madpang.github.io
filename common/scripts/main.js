@@ -1,5 +1,5 @@
 /*
-	@file:   common/scripts/main.js
+	@file:   pd-wysheid/common/scripts/main.js
 	@brief:  the main script for the website
 	@details:
 	- currently this script implements a theme switcher button, together with the `common/styles/style.css`

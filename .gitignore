@@ -1,6 +1,9 @@
 # Temporary files
-tmp/
+tmp*
 
 # Misc files
 .DS_Store
 .vscode/
+
+# Generated files
+artifact/

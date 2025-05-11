@@ -5,5 +5,5 @@ tmp*
 .DS_Store
 .vscode/
 
-# Generated files
-artifact/
+# Manuscript files
+content/

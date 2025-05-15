@@ -1,0 +1,31 @@
+name: Build & Deploy Post
+run-name: GitHub bot is building and deploying the post
+on:
+  push:
+    branches: [main]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Grant write access to the GITHUB_TOKEN
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4  # Properly initializes the repo with authentication
+
+    - name: Configure Git identity
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+    - name: Run build script
+      run: bash build.sh
+
+    - name: Switch to gh-pages branch
+      run: |
+        git fetch origin gh-pages
+        git checkout gh-pages
+
+    - name: Commit and push to gh-pages
+      run: |
+        git add .
+        git commit -m "Deploy from main @ ${{ github.sha }}" && git push origin gh-pages || echo "No changes to commit"

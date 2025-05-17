@@ -1,7 +1,7 @@
 +++ header
 @file: madpang.github.io/content/PD_2025_05_16_a/PD_2025_05_16_a.txt
-@brief: Document the process of building the blog website.
-@title: Building a blog website from scratch
+@brief: Document the process of building the blog website from scratch.
+@title: Building a blog website
 @author: madpang
 @date:
 - created on 2025-05-16

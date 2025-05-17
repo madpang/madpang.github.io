@@ -5,7 +5,7 @@
 @author: madpang
 @date:
 - created on 2025-05-16
-- updated on 2025-05-16
+- updated on 2025-05-17
 @version: 0.1.0
 +++
 
@@ -20,6 +20,22 @@ Everything is done in a simple, straightforward and transparent way.
 1. The folder organization
 2. The markup converter
 3. The deployment flow
+
+--- Folder Structure
+
++++ tree
+madpang.github.io
+|- content
+|  |- a-single-post
+|  |  |- post-text.txt
+|  |  |- media/
+|- artifact
+|  |- a-single-post
+|  |  |- post-text.html
+|  |  |- media/
+|- index.html
++++
+The `artifact/a-single-post` folder is the output of the conversion process.
 
 === Background
 

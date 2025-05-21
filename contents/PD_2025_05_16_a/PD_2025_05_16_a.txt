@@ -40,7 +40,7 @@ The `artifact/a-single-post` folder is the output of the conversion process.
 --- Post Generation
 
 +++ cmd
-./build-post.ps1 ./artifact/PD_2025_05_16_a/PD_2025_05_16_a.html ./content/PD_2025_05_16_a/PD_2025_05_16_a.txt ./common/templates/post-template.html
+./build-post.ps1 ./artifacts/PD_2025_05_16_a/PD_2025_05_16_a.html ./contents/PD_2025_05_16_a/PD_2025_05_16_a.txt ./commons/templates/post-template.html
 +++
 
 === Background

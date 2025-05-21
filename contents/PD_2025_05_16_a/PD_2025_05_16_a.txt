@@ -25,17 +25,17 @@ Everything is done in a simple, straightforward and transparent way.
 
 +++ tree
 madpang.github.io
-|- content
+|- contents
 |  |- a-single-post
 |  |  |- post-text.txt
 |  |  |- media/
-|- artifact
+|- artifacts
 |  |- a-single-post
 |  |  |- post-text.html
 |  |  |- media/
 |- index.html
 +++
-The `artifact/a-single-post` folder is the output of the conversion process.
+The `artifacts/a-single-post` folder is the output of the conversion process.
 
 --- Post Generation
 

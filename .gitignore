@@ -6,4 +6,4 @@ tmp*
 .vscode/
 
 # Generated files
-artifact/
+artifacts/

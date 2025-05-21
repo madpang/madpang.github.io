@@ -3,7 +3,7 @@
 @author: madpang
 @date:
 - created on 2025-02-22
-- updated on 2025-02-25
+- updated on 2025-05-21
 +++
 
 === Overview
@@ -25,12 +25,12 @@ The folder structure of the project is as follows:
 |- index.html   # the entry point of the website
 |- artifacts/   # the generated HTML files of the posts
 |- contents/    # @todo: the source files of the posts, symlink -> `zettelkasten` project
-|- common/      # top level assets
+|- commons/     # top level assets
 |  |- fonts/
 |  |- images/
 |  |- styles/
 |  |- scripts/
-|- utils/       # @todo: utilities for the project, symlink -> `mmd` project
+|- tools/       # tools for generating the website
 
 === License info.
 

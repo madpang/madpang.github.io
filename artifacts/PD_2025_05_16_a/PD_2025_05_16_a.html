@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- @note: This file is auto-generated. MANUAL EDITS WILL BE LOST -->
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="author" content="madpang" />
+<link rel="stylesheet" href="../../commons/styles/style.css" />
+<title>
+Building a blog website | MadPang
+</title>
+</head>
+<body>
+<header>
+<div class="nav-container">
+<a id="link-stack" class="clickable-icon" aria-label="STACK" href="../../index.html"></a>
+<a id="link-heap" class="clickable-icon" aria-label="HEAP" href="#heap"></a>
+<a id="link-archive" class="clickable-icon" aria-label="ARCHIVE" href="#archive"></a>
+</div>
+<button id="switch-theme-button" class="clickable-icon" aria-label="Toggle theme"></button>
+</header>
+<main>
+<article>
+<h1>Building a blog website</h1>
+<pre>
+
+=== TL;DR
+
+Build a blog website, with "bare hands"---no WordPress-like content management system, no static site generator.
+Write content in plain text, do custom conversion to HTML, deploy to GitHub Pages with self-defined workflow.
+Everything is done in a simple, straightforward and transparent way.
+
+=== Method
+
+1. The folder organization
+2. The markup converter
+3. The deployment flow
+
+--- Folder Structure
+
++++ tree
+madpang.github.io
+|- contents
+|  |- a-single-post
+|  |  |- post-text.txt
+|  |  |- media/
+|- artifacts
+|  |- a-single-post
+|  |  |- post-text.html
+|  |  |- media/
+|- index.html
++++
+The `artifacts/a-single-post` folder is the output of the conversion process.
+
+--- Post Generation
+
++++ cmd
+./build-post.ps1 ./artifacts/PD_2025_05_16_a/PD_2025_05_16_a.html ./contents/PD_2025_05_16_a/PD_2025_05_16_a.txt ./commons/templates/post-template.html
++++
+
+=== Background
+
+I want maximal control on page design, content organization, and deployment process, so I do not want to rely on any easy-to-use but actually overly complicated templates from CMS provider or static site generator.
+For example, I have used Jekyll and Hugo, but I have to obey their rules on how to organize contents, which I find uncomfortable.
+
+I even find the Markdown format somewhat restrictive---I would like to bend it a little bit to suit my needs.
+So I implement my own converter.
+
+To the core, I desire maximal freedom on creation.
+</pre>
+</article>
+</main>
+<script src="../../commons/scripts/main.js"></script>
+</body>
+</html>

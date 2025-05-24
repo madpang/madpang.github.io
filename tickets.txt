@@ -14,7 +14,7 @@ Figure out a folder structure for the project, such that both local test using `
 - updated on 2025-02-26
 
 @details:
-The current folder has the following structure:
+The folder structure was like:
 +++ tree
 .
 |- README.txt
@@ -28,8 +28,10 @@ The current folder has the following structure:
 |  |  |- common -> ../../common   # THE CRUX OF THE MATTER
 |  |- scripts/
 +++
-It makes local testing easy, referencing the resources with relative paths.
-But when deployed to GitHub Pages, the symbolic link causes problems---since it forms a loop to the top level---GitHub Actions is stuck in an infinite recursion when trying to archive artifacts, spitting the following error:
+The crux of the matter was that recursive symlink.
+I used this because I want to reference the resource from anywhere in this repo. by starting from the top level---pretty influenced by my C++ development experience (where one usually use CMakefile to define the project root path)---for example, the `index.html` file can reference the CSS file by `common/styles/style.css`, and the CSS file can reference the font file by `common/fonts/font.ttf`, and so on.
+
+But the recursive symlink is not a good idea, since it creates a loop in the folder structure, and upon deployment, GitHub Action gets stuck:
 +++ quote
 Archive artifact
   ./
@@ -53,7 +55,7 @@ Archive artifact
   ...
 +++
 
-If, instead, using absolute path for the resources, the local testing will break, since the browser will not be able to find the resources.
+Actually, on a server, one can use absolute path for the resources, e.g. `/common/styles/style.css`, but this in the other hand, will break the local testing---`/` would just direct to the root of the filesystem.
 
 The purpose of this ticket is to find a way to have both local testing and deployment possible, with minimal setup.
 

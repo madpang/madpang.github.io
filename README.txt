@@ -49,3 +49,6 @@ The CSS and JavaScript files are free to use, modify, and distribute.
 But the content of those articles are the intellectual creation of the author, and are thus copyrighted.
 
 Also note that, the font used in this site---called **Dinkie Bitmap**---is a product of [3type](https://3type.cn/fonts/dinkie_bitmap/index.html), if you want to use it, please purchase a license from their website.
+
+JetBrains Mono is used as the monospace font.
+It is an open-source font, and can be obtained from [GitHub](https://github.com/JetBrains/JetBrainsMono).

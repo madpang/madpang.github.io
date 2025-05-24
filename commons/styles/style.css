@@ -40,12 +40,17 @@
 
 /* Font resources */
 @font-face {
-	font-family: 'DinkieBitmap-7px';
+	font-family: 'DinkieBitmap 7px';
 	src: url('../../commons/fonts/DinkieBitmap-7px.woff2') format('woff2');
 }
 
+@font-face {
+	font-family: 'JetBrains Mono';
+	src: url('../../commons/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+}
+
 body {
-	font-family: 'DinkieBitmap-7px', sans-serif;
+	font-family: 'DinkieBitmap 7px', sans-serif;
 	font-weight: normal;
 	margin: 0px;
 	padding: 0px;
@@ -73,6 +78,12 @@ a {
 
 a:hover {
 	color: #009051;
+}
+
+pre {
+	font-family: 'JetBrains Mono', monospace;
+	font-size: 16px;
+	line-height: 18px;
 }
 
 /* === HEADER STYLES === */
@@ -204,13 +215,13 @@ h3 {
 }
 
 h4 {
-    font-size: 2em;            /* Relative to base font size */
+	font-size: 2em;            /* Relative to base font size */
 	margin-top: 1em;
 	margin-bottom: 0.5em;
 }
 
 h5 {
-    font-size: 1.5em;          /* Relative to base font size */
+	font-size: 1.5em;          /* Relative to base font size */
 	margin-top: 1em;
 	margin-bottom: 0.5em;
 }

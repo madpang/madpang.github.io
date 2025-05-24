@@ -78,11 +78,15 @@ For option 3, it is the simplest and most straightforward way to go, although it
 @brief:
 Write an article for the website.
 
-@status: TODO
+@status: DONE
 
 @date:
 - created on 2025-02-26
-- updated on 2025-02-26
+- updated on 2025-05-22
+
+@details:
+The first article is stamped as `PD_2025_05_16_a`, which is a post about the process of building *THIS* blog website.
+It should be maintained along with the development, but anyway, it is the first article that officially published online.
 
 === Ticket 3
 

@@ -25,6 +25,7 @@
 	);
 	--main-content-padding-left: var(--header-height-scaled);
 	--main-content-padding-top: calc(32px * var(--scaling-factor));
+	--main-content-padding-bottom: calc(128px * var(--scaling-factor));
 	--base-font-size: calc(32px * var(--scaling-factor));
 	--base-line-height: 1;
 	/* Named colors */
@@ -182,9 +183,13 @@ main {
 	height: calc(
 		100vh - var(--header-height-scaled)
 	);                                              /* Adjusts height to fill the screen, subtracting the header's height */
-	overflow-y: scroll;                             /* Enable scrolling for content */
 	margin-left: 0px;
 	padding-left: var(--main-content-padding-left); /* Add padding to the left for better visual effect */
+	margin-bottom: 0px;
+	padding-bottom: var(--main-content-padding-bottom);
+	/* Enable scrolling for content */
+	overflow-y: scroll;
+	overflow-x: scroll;
 	/* Set font size and line height */
 	font-size: var(--base-font-size);
 	line-height: var(--base-line-height);

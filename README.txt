@@ -3,7 +3,7 @@
 @author: madpang
 @date:
 - created on 2025-02-22
-- updated on 2025-05-21
+- updated on 2025-05-24
 +++
 
 === Overview
@@ -12,25 +12,35 @@ This is a personal knowledge system, in the form of a blog website, codename "Wy
 
 It is a collection of notes, articles, and essays on various topics.
 
-THe website is built in a bare-bones, minimalistic style, using HTML, CSS, and JavaScript, without any static site generators.
+The website is built in a bare-bones, minimalistic style, using HTML, CSS, and JavaScript, without any static site generators.
 
 The content is written in markdown-like style plain text, and converted to HTML using a custom-built converter (see [mmd](@todo) project).
 
 === Organization
 
 The folder structure of the project is as follows:
++++ tree
 .
-|- README.txt
+|- README.txt   # THIS file
 |- tickets.txt  # issue tracker, progress log
 |- index.html   # the entry point of the website
 |- artifacts/   # the generated HTML files of the posts
-|- contents/    # @todo: the source files of the posts, symlink -> `zettelkasten` project
+|  |- <post_id>
+|  |  |- <post_id>.html
+|  |  |- media/
+|- contents/    # manuscripts of the posts
+|  |- <post_id>
+|  |  |- <post_id>.txt
+|  |  |- media/
 |- commons/     # top level assets
 |  |- fonts/
 |  |- images/
 |  |- styles/
 |  |- scripts/
 |- tools/       # tools for generating the website
+|  |- mmd2html  # [submodule], for custom plain text markup to HTML converter
+|- build.ps1    # @todo: executable script to build the website
++++
 
 === License info.
 

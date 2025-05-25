@@ -1,5 +1,5 @@
 +++ header
-@file: madpang.github.io/content/PD_2025_05_16_a/PD_2025_05_16_a.txt
+@file: pd-wysheid/content/PD_2025_05_16_a/PD_2025_05_16_a.txt
 @brief: Document the process of building the blog website from scratch.
 @title: Building a blog website
 @author: madpang
@@ -24,7 +24,7 @@ Everything is done in a simple, straightforward and transparent way.
 --- Folder Structure
 
 +++ tree
-madpang.github.io
+pd-wysheid
 |- contents
 |  |- a-single-post
 |  |  |- post-text.txt

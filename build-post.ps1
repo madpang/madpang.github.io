@@ -84,4 +84,16 @@ for ($ii = 0; $ii -lt $t_lines_.Count; $ii++) {
 }
 
 # === Write the output to HTML file
+
+# Create the containing folder of the HTML post if it does not exist
+$out_dir = Split-Path -Path $path2html -Parent
+if (-not (Test-Path $out_dir)) {
+	try {
+		New-Item -ItemType Directory -Path $out_dir | Out-Null
+	} catch {
+		Write-Error "ERROR: Failed to create output directory."
+		exit -1
+	}
+}
+
 Set-Content -Path $path2html -Value $out_lines_ -Encoding utf8

@@ -7,3 +7,6 @@ tmp*
 
 # Generated files
 artifacts/
+
+# Design files
+*.afdesign

@@ -93,8 +93,24 @@ It should be maintained along with the development, but anyway, it is the first 
 @brief:
 Add a favicon to the website.
 
-@status: TODO
+@status: DONE
 
 @date:
 - created on 2025-02-26
-- updated on 2025-02-26
+- updated on 2025-05-31
+
+@details:
+
+It is a good idea to provide multiple sizes of the favicon image to allow browsers to choose the most suitable one for their interface.
+Although it is said 16x16-pixel is the standard size for a favicon, modern browsers seems to default to 32x32-pixel (checked on Firefox and Safari).
+
+Also note that different browsers have different prefers for favicon sizes.
+I have done an experiment, starting with the following versions of the favicon image (I intentionally used different images for different sizes):
++++ HTML
+<link rel="icon" type="image/png" sizes="16x16" href="./commons/images/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="./commons/images/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="64x64" href="./commons/images/favicon-64.png" />
++++
+Both Firefox and Safari selected the 32x32-pixel version (on macOS).
+But if I comment out the 32x32-pixel version, Firefox would select the 64x64-pixel version, while Safari would select the 16x16-pixel version.
+I think this is also related to the HDPi display issue, since macOS defaults to 2x pixel density---Firefox may select the 64x64-pixel version to match the nominal 32x32-pixel size.

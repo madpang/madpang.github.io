@@ -32,7 +32,7 @@ $currentPostLists = Get-ChildItem $contentsDir -Directory | Where-Object { $_.Na
 		# Extract the version info. of the post
 		foreach($line in [System.IO.File]::ReadLines($contentFile)) {
 			if ($line -match '^\+{3}$') {
-				# only read as far as the header end
+				# only read as far as the header ends
 				break
 			} elseif ($line -match '^@version:\s*(\d+\.\d+\.\d+)\s*$') {
 				$version = $Matches[1]
@@ -52,11 +52,12 @@ $currentPostLists = Get-ChildItem $contentsDir -Directory | Where-Object { $_.Na
 }
 
 # If the list is not empty, sort it by key and write to the index file
+$newRecords = @()
 if ($currentPostLists) {
-	$newRecords = $currentPostLists | Sort-Object -Property "Key" | ForEach-Object {
-		"$($_["Name"])`t$($_["Version"])"
-	}
-	Set-Content -Path $hotIndexFile -Value $newRecords -Encoding utf8
+	# Keep as objects for processing
+	$newRecords += $currentPostLists | Sort-Object -Property "Key"
+	# Write to file in string format
+	$newRecords | ForEach-Object { "$( $_["Name"] )`t$( $_["Version"] )" } | Set-Content -Path $hotIndexFile -Encoding utf8
 	Write-Host "==> Found $($currentPostLists.Count) post(s)."
 } else {
 	Write-Host "==> No valid posts found."
@@ -65,7 +66,7 @@ if ($currentPostLists) {
 
 Write-Host "==> Checking the previous post records..."
 
-$previousPostLists = (Test-Path $indexFile) ? (
+$oldPostLists = (Test-Path $indexFile) ? (
 	Get-Content -Path $indexFile -Encoding utf8 | Where-Object {
 		$_ -match '^(?<tag>[A-Z]{2})_(?<key>[0-9]{4}_[0-9]{2}_[0-9]{2}_[a-z])\t(?<ver>\d+\.\d+\.\d+)$'
 	} | ForEach-Object {
@@ -77,9 +78,52 @@ $previousPostLists = (Test-Path $indexFile) ? (
 	}
 ) : @()
 
-if ($previousPostLists) {
+$oldRecords = @()
+if ($oldPostLists) {
 	# Sort the previous posts by key
-	$previousRecords = $previousPostLists | Sort-Object -Property "Key"
+	$oldRecords += $oldPostLists | Sort-Object -Property "Key"
 } else {
 	Write-Host "==> No previous post records found."
+}
+	
+# === Main Processing ===
+
+$i = 0
+$j = 0
+while (($i -lt $oldRecords.Count) -and ($j -lt $newRecords.Count)) {
+	$oldRecord = $oldRecords[$i]
+	$newRecord = $newRecords[$j]
+	# @note: Key is sorted, and it is comparable.
+	if ($oldRecord['Key'] -eq $newRecord['Key']) {
+		if ($oldRecord['Version'] -eq $newRecord["Version"]) {
+			Write-Host "=> No change for post $($oldRecord['Name']), skipping."
+		} else {
+			Write-Host "=> Updating post $($newRecord['Name'])."
+			# @todo
+		}
+		$i++
+		$j++
+	} elseif ($oldRecord['Key'] -lt $newRecord["Key"]) {
+		Write-Host "=> Deleting post $($oldRecord['Name'])."
+		# @todo
+		$i++
+	} else { # $oldRecord['Key'] > $newRecord["Key"]
+		Write-Host "=> Adding new post $($newRecord['Name'])."
+		# @todo
+		$j++
+	}
+}
+
+# Remaining old items are deletions
+while ($i -lt $oldRecords.Count) {
+	Write-Host "=> Deleting post $($oldRecords[$i]['Name'])."
+	# @todo
+	$i++
+}
+
+# Remaining new items are additions
+while ($j -lt $newRecords.Count) {
+	Write-Host "=> Adding new post $($newRecords[$j]['Name'])."
+	# @todo
+	$j++
 }

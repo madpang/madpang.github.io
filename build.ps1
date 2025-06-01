@@ -57,7 +57,7 @@ if ($currentPostLists) {
 	# Keep as objects for processing
 	$newRecords += $currentPostLists | Sort-Object -Property "Key"
 	# Write to file in string format
-	$newRecords | ForEach-Object { "$( $_["Name"] )`t$( $_["Version"] )" } | Set-Content -Path $hotIndexFile -Encoding utf8
+	$newRecords | ForEach-Object { "$( $_['Name'] )`t$( $_['Version'] )" } | Set-Content -Path $hotIndexFile -Encoding utf8
 	Write-Host "=> Found $($currentPostLists.Count) post(s)."
 } else {
 	Write-Host "=> No valid posts found."
@@ -90,6 +90,11 @@ if ($oldPostLists) {
 # === Main Processing ===
 Write-Host "==> Building post artifacts..."
 
+# --- Determine new/update/delete actions
+
+$buildList = @()
+$deleteList = @()
+
 $i = 0
 $j = 0
 while (($i -lt $oldRecords.Count) -and ($j -lt $newRecords.Count)) {
@@ -97,21 +102,21 @@ while (($i -lt $oldRecords.Count) -and ($j -lt $newRecords.Count)) {
 	$newRecord = $newRecords[$j]
 	# @note: Key is sorted, and it is comparable.
 	if ($oldRecord['Key'] -eq $newRecord['Key']) {
-		if ($oldRecord['Version'] -eq $newRecord["Version"]) {
+		if ($oldRecord['Version'] -eq $newRecord['Version']) {
 			Write-Host "=> Skipping unchanged post $($oldRecord['Name'])"
 		} else {
 			Write-Host "=> Updating modified post $($newRecord['Name'])"
-			# @todo
+			$buildList += $newRecord['Name']
 		}
 		$i++
 		$j++
-	} elseif ($oldRecord['Key'] -lt $newRecord["Key"]) {
+	} elseif ($oldRecord['Key'] -lt $newRecord['Key']) {
 		Write-Host "=> Deleting post $($oldRecord['Name'])"
-		# @todo
+		$deleteList += $oldRecord['Name']
 		$i++
-	} else { # $oldRecord['Key'] > $newRecord["Key"]
+	} else { # $oldRecord['Key'] > $newRecord['Key']
 		Write-Host "=> Adding new post $($newRecord['Name'])"
-		# @todo
+		$buildList += $newRecord['Name']
 		$j++
 	}
 }
@@ -119,15 +124,33 @@ while (($i -lt $oldRecords.Count) -and ($j -lt $newRecords.Count)) {
 # Remaining old items are deletions
 while ($i -lt $oldRecords.Count) {
 	Write-Host "=> Removing deleted post $($oldRecords[$i]['Name'])"
-	# @todo
+	$deleteList += $oldRecords[$i]['Name']
 	$i++
 }
 
 # Remaining new items are additions
 while ($j -lt $newRecords.Count) {
 	Write-Host "=> Adding new post $($newRecords[$j]['Name'])"
-	# @todo
+	$buildList += $newRecords[$j]['Name']
 	$j++
+}
+
+# --- Apply changes
+
+$path2template_ = Join-Path "commons" "templates" "post-template.html"
+$builder_ = "./build-post.ps1"
+foreach ($item in $buildList) {
+	$path2content = Join-Path $contentsDir $item ($item + ".txt")
+	$path2artifact = Join-Path $artifactsDir $item ($item + ".html")
+	# Call external script to build the post
+	& $builder_ $path2artifact $path2content $path2template_
+}
+
+foreach ($item in $deleteList) {
+	$path2artifact = Join-Path $artifactsDir $item
+	if (Test-Path $path2artifact) {
+		Remove-Item -Path $path2artifact -Recurse -Force
+	}
 }
 
 # === Post Processing ===
@@ -135,4 +158,4 @@ Write-Host "==> Updating post index file..."
 
 Move-Item -Path $hotIndexFile -Destination $indexFile -Force
 
-Write-Host "==> Finished building post artifacts."
+Write-Host "==> FINISHED building post artifacts."

@@ -19,6 +19,7 @@
 $contentsDir = "contents"
 $artifactsDir = "artifacts"
 $indexFile = Join-Path $artifactsDir "post-index.txt"
+$hotIndexFile = Join-Path $artifactsDir "hot-post-index.txt"
 
 Write-Host "==> Scanning current post information..."
 
@@ -55,8 +56,30 @@ if ($currentPostLists) {
 	$newRecords = $currentPostLists | Sort-Object -Property "Key" | ForEach-Object {
 		"$($_["Name"])`t$($_["Version"])"
 	}
-	Set-Content -Path $indexFile -Value $newRecords -Encoding utf8
+	Set-Content -Path $hotIndexFile -Value $newRecords -Encoding utf8
 	Write-Host "==> Found $($currentPostLists.Count) post(s)."
 } else {
 	Write-Host "==> No valid posts found."
+	return
+}
+
+Write-Host "==> Checking the previous post records..."
+
+$previousPostLists = (Test-Path $indexFile) ? (
+	Get-Content -Path $indexFile -Encoding utf8 | Where-Object {
+		$_ -match '^(?<tag>[A-Z]{2})_(?<key>[0-9]{4}_[0-9]{2}_[0-9]{2}_[a-z])\t(?<ver>\d+\.\d+\.\d+)$'
+	} | ForEach-Object {
+		@{
+			"Key" = $Matches['key']
+			"Name" = $Matches['tag'] + "_" + $Matches['key']
+			"Version" = $Matches['ver']
+		}
+	}
+) : @()
+
+if ($previousPostLists) {
+	# Sort the previous posts by key
+	$previousRecords = $previousPostLists | Sort-Object -Property "Key"
+} else {
+	Write-Host "==> No previous post records found."
 }

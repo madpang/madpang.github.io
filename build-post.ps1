@@ -1,5 +1,7 @@
 #! /usr/bin/env pwsh -NoProfile
 <#
+	@file: build-post.ps1
+	
 	@brief: Build a full HTML page of a post from a custom plain text markup.
 
 	@details:
@@ -11,8 +13,8 @@
 	- madpang
 
 	@date:
-	- Created on 2025-05-18
-	- Updated on 2025-05-18
+	- created on 2025-05-18
+	- updated on 2025-05-18
 #>
 
 param(

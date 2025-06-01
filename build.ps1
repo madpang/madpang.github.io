@@ -1,0 +1,62 @@
+#! /usr/bin/env pwsh -NoProfile
+<#
+    @file: build.ps1
+
+    @brief: Build html artifacts from the content directory for website deployment.
+
+    @details: It copies `./content/*` to `./artifact/`
+
+	@note:
+	- This script only processes directories that meet naming convention `XX_YYYY_MM_DD_x`, where `XX` is a two-letter tag, and `YYYY_MM_DD_x` is a date with an optional suffix.
+
+    @date:
+    - created on 2025-05-17
+    - updated on 2025-06-01
+
+    @version: 0.2.0
+#>
+
+$contentsDir = "contents"
+$artifactsDir = "artifacts"
+$indexFile = Join-Path $artifactsDir "post-index.txt"
+
+Write-Host "==> Scanning current post information..."
+
+$currentPostLists = Get-ChildItem $contentsDir -Directory | Where-Object { $_.Name -match '^(?<tag>[A-Z]{2})_(?<key>\d{4}_\d{2}_\d{2}_[a-z])$' } | ForEach-Object {
+	$contentFile = Join-Path $_.FullName ($_.Name + ".txt")
+	if (Test-Path $contentFile) {
+		$key = $Matches['key']
+		$name = $_.Name
+		$version = $null
+		# Extract the version info. of the post
+		foreach($line in [System.IO.File]::ReadLines($contentFile)) {
+			if ($line -match '^\+{3}$') {
+				# only read as far as the header end
+				break
+			} elseif ($line -match '^@version:\s*(\d+\.\d+\.\d+)\s*$') {
+				$version = $Matches[1]
+			} else {
+				continue
+			}
+		}
+		if ($version) {
+			# collect the entry
+			@{
+				"Key" = $key
+				"Name" = $name
+				"Version" = $version
+			}
+		} # else do nothing
+	}
+}
+
+# If the list is not empty, sort it by key and write to the index file
+if ($currentPostLists) {
+	$newRecords = $currentPostLists | Sort-Object -Property "Key" | ForEach-Object {
+		"$($_["Name"])`t$($_["Version"])"
+	}
+	Set-Content -Path $indexFile -Value $newRecords -Encoding utf8
+	Write-Host "==> Found $($currentPostLists.Count) post(s)."
+} else {
+	Write-Host "==> No valid posts found."
+}

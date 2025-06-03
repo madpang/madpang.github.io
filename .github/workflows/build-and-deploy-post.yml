@@ -25,8 +25,10 @@ jobs:
         git fetch origin gh-pages
         git show origin/gh-pages:artifacts/post-index.txt > artifacts/post-index.txt
 
-    - name: Run build script
-      run: pwsh -nop build.ps1
+    - name: Configure executable and run build script
+      run: |
+        chmod +x tools/mmd2html/mmd2html
+        pwsh -nop build.ps1
 
     - name: Switch to gh-pages branch for deployment
       run: |

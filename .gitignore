@@ -5,11 +5,13 @@ tmp*
 .DS_Store
 .vscode/
 
-# Manuscript files
-contents/
-
-# Tools
-tools/
-
 # Build
 build*
+
+# (unnecessary) Submodule
+mmd2html
+zettelkasten
+
+# symlinks to the above directories
+contents
+tools

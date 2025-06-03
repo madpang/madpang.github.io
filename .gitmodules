@@ -1,0 +1,3 @@
+[submodule "mmd2html"]
+	path = mmd2html
+	url = https://github.com/madpang/mmd2html

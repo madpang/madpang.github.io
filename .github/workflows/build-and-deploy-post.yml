@@ -27,10 +27,16 @@ jobs:
 
     - name: BUILD THE POST
       run: |
-        pwsh -nop build.ps1
+        pwsh -nop build-prepare.ps1
+        pwsh -nop build-export.ps1
 
-    - name: Switch to gh-pages branch for deployment
+    - name: Switch to gh-pages branch to collect build artifacts
       run: |
         git checkout gh-pages
+        git show origin/main:build-deploy.ps1 > build-deploy.ps1
+        pwsh -nop build-deploy.ps1
+    
+    - name: Push the changes to gh-pages branch
+      run: |
         git add .
         git commit -m "Deploy from main @ ${{ github.sha }}" && git push origin gh-pages || echo "No changes to commit"

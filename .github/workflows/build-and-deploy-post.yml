@@ -19,9 +19,9 @@ jobs:
 
     - name: Retrieve the status of latest build
       run: |
-        git fetch origin gh-pages
         mkdir -p artifacts
-        git show gh-pages:artifacts/post-index.txt > artifacts/post-index.txt
+        git fetch origin gh-pages
+        git show origin/gh-pages:artifacts/post-index.txt > artifacts/post-index.txt
 
     - name: Run build script
       run: pwsh -nop build.ps1

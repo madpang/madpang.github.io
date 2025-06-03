@@ -120,12 +120,17 @@ I think this is also related to the HDPi display issue, since macOS defaults to 
 @brief:
 Add a build script to automate the post generation process.
 
-@status: INPROGRESS
+@status: DONE
 
 @date:
 - created on 2025-05-31
 - updated on 2025-06-01
 
 @details:
-There was a dummy `build.sh` script that just copy everything under `contents/` to `artifacts/`.
-Now I am making it handling the real deployment requirements.
+Execute `pwsh -nop build.ps1` to build the website.
+- `build.ps1` is a PowerShell script that implements a simple version based merge algorithm to update those posts that had a change.
+- inside `build.ps1`, it calls `build-post.ps1` to handle the generation of each post---template insertion, metadata extraction, and so on.
+- inside `build-post.ps1`, it calls external tool `mmd2html` to convert the plain text markup manuscript to HTML post.
+
+@note:
+This workflow requires PowerShell be installed on CI environment.

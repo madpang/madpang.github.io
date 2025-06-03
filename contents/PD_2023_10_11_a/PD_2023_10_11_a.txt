@@ -7,6 +7,7 @@
 - 2023-10-11
 - 2023-10-12
 @tag: [git, fiction]
+@version: 0.1.0
 +++
 
 While yesterday's work laid a solid foundation, you're still uneasy about the slightly under-maintained shrubbery-like codebase.

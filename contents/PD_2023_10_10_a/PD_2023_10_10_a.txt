@@ -6,8 +6,8 @@
 @date:
 - created on 2023-10-10
 - updated on 2025-05-25
-@version: 0.1.1
 @tag: [git, fiction]
+@version: 0.1.1
 +++
 
 You are a fresh software engineer, joining a startup company in surgical robotics called PDX.

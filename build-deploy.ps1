@@ -11,6 +11,12 @@ $exportArtifactsDir = Join-Path $workspace "artifacts"
 $artifactsDir = "artifacts"
 $deleteFileList = Join-Path $workspace "delete-posts.txt"
 
+# If the temporary artifacts directory does not exist, abort
+if (-not (Test-Path $workspace)) {
+	Write-Error "ERROR: Temporary workspace directory '$workspace' does not exist."
+	exit 1
+}
+
 # Ensure artifacts directory exists
 if (-not (Test-Path $artifactsDir)) {
 	New-Item -Path $artifactsDir -ItemType Directory | Out-Null
@@ -31,5 +37,8 @@ if (Test-Path $deleteFileList) {
 		}
 	}
 }
+
+# Remove the temporary workspace directory
+Remove-Item -Path $workspace -Recurse -Force
 
 Write-Host "=> Deployment to artifacts/ complete."

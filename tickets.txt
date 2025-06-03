@@ -114,3 +114,18 @@ I have done an experiment, starting with the following versions of the favicon i
 Both Firefox and Safari selected the 32x32-pixel version (on macOS).
 But if I comment out the 32x32-pixel version, Firefox would select the 64x64-pixel version, while Safari would select the 16x16-pixel version.
 I think this is also related to the HDPi display issue, since macOS defaults to 2x pixel density---Firefox may select the 64x64-pixel version to match the nominal 32x32-pixel size.
+
+=== Ticket 4
+
+@brief:
+Add a build script to automate the post generation process.
+
+@status: INPROGRESS
+
+@date:
+- created on 2025-05-31
+- updated on 2025-06-01
+
+@details:
+There was a dummy `build.sh` script that just copy everything under `contents/` to `artifacts/`.
+Now I am making it handling the real deployment requirements.

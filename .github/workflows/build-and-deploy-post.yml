@@ -7,10 +7,12 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Grant write access to the GITHUB_TOKEN
+      contents: write            # Grant write access to the GITHUB_TOKEN
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4  # Properly initializes the repo with authentication
+      with:
+        submodules: true         # Ensure submodules are checked out
 
     - name: Configure Git identity
       run: |

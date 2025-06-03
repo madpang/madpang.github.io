@@ -1,0 +1,94 @@
++++ header
+@file: pd-wysheid/content/PD_2023_10_11_a/PD_2023_10_11_a.txt
+@title: Git in Practice | Day Two: Odyssey
+@author: madpang
+@brief: This is part 2 of a tutorial on Git, in documentary fiction style.
+@date:
+- 2023-10-11
+- 2023-10-12
+@tag: [git, fiction]
+@version: 0.1.0
++++
+
+While yesterday's work laid a solid foundation, you're still uneasy about the slightly under-maintained shrubbery-like codebase.
+Today's goal is to pave the way for implanting your new feature into *IMAGINE*.
+
+## 09:30 | Gear up
+
+Since *IMAGINE is designed to work in tandem with specific hardware—processing endoscope video feeds through a capture board and receiving user inputs via a touch panel—you need to set up an appropriate testing environment. Although you have a display with touch functionality and a video capture board for your desktop PC, constantly sourcing an endoscope for video input is impractical. To address this, you decide to use a notebook PC as the video source, connecting its HDMI output to the capture board.
+
+However, there's a hitch: the existing code only accommodates video input through the SDI port, commonly used by endoscopes. To overcome this, you modify the `capture.cpp`` file to accept HDMI video feeds and recompile the project. This makeshift solution provides a convenient desktop testing environment, but it's not suitable for the production branch. To handle this, you use Git's stash feature to temporarily save your changes[^4]:
+``` shell
+|-[usr07@PDX07:~/WKSP7/git-repo/IMAGINE]
+: git stash push -m "test code for feeding HDMI in"
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
+```
+This action creates a stash labeled `stash@{0}`. You can continue developing your actual feature without the temporary changes. When you're ready to test, run:
+``` shell
+|-[usr07@PDX07:~/WKSP7/git-repo/IMAGINE]
+: git stash push -m "feature code to be checked"
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
+```
+This action creates another stash. However, since git stash is saved in a Last-In-First-Out manner, this new stash is placed on top of the heap and is labeled as `stash@{0}`, while the previous stash is pushed down and labeled as `stash@{1}`. Run `git stash list` to double-check the status:
+``` shell
+|-[usr07@PDX07:~/WKSP7/git-repo/IMAGINE]
+: git stash list
+stash@{0}: On feature_add_manipulation: feature code to be checked
+stash@{1}: On feature_add_manipulation: test code for feeding HDMI in
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
+```
+
+To perform the test in a simulated environment, apply both sets of change:
+``` shell
+|-[usr07@PDX07:~/WKSP7/git-repo/IMAGINE]
+: git stash apply 0
+: git stash apply 1
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
+```
+
+Once you're satisfied with the modifications, remove the test code and commit the feature code:
+``` shell
+|-[usr07@PDX07:~/WKSP7/git-repo/IMAGINE]
+: git restore .
+: git stash pop 0
+: git add .
+: git commit -m "implement manipulation feature"
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
+```
+NOTE, in the above code snippet, the first command restores all the changes; the command `git stash pop` is equivalent to `git stash apply` followed by `git stash drop` (which removes the feature code that has already been committed from the stash heap. After those operations, the stash heap looks like:
+``` shell
+|-[usr07@PDX07:~/WKSP7/git-repo/IMAGINE]
+: git stash list
+stash@{0}: On feature_add_manipulation: test code for feeding HDMI in
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
+```
+And you can go on with another iteration of hacking for the new feature.
+
+[^4]: By default, `git stash`` stores (or "stashes") the uncommitted changes (staged and unstaged files) and overlooks untracked and ignored files.
+
+## 10:30 | A Thrilling Stroke
+
+You might be so smitten with `git stash` that you're using it to casually switch your test code on and off like a light switch. But beware, even the brightest bulbs can flicker! At one point, when your feature code and test code are working in harmony, you get ready to commit the feature code. Intending to clean the stage, you type `git restore .` but then—like there is a ghost whispering in your mind—you mistype `git stash drop 0` when you should've typed `git stash apply 0`. You hit "Enter" without any doubt. Poof! Your progress vanishes into the ether!
+
+Panic sets in, but you manage to take a deep, yoga breath—because you notice that *git* has graciously printed out the hash code of the stash you just drop-kicked into oblivion:
+``` shell
+|-[usr07@PDX07:~/WKSP7/git-repo/IMAGINE]
+: git stash drop 0                                           
+Dropped refs/stash@{0} (fbf6557b4e9df303cdeb9ede9938d059c7d682be)
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
+```
+Aha! A lifeline! After a frantic web search, you discover that you can reapply the stash with its hash code:
+``` shell
+|-[usr07@PDX07:~/WKSP7/git-repo/IMAGINE]
+: git stash apply fbf6557b4e9df303cdeb9ede9938d059c7d682be
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
+```
+
+You also learn that once a stash is dropped, it becomes "dangling" and might be scooped up by Git's garbage collector. Time is of the essence! Act swiftly, basically before you even think of closing that terminal.
+
+Disaster averted, rear end saved. Now, you'd better skedaddle and grab some coffee.
+
+
+## 13:30 | A Side Walk
+
+@todo, write about the fast mockup.

@@ -6,4 +6,7 @@ tmp*
 .vscode/
 
 # Generated files
-artifact/
+artifacts/
+
+# Design files
+*.afdesign

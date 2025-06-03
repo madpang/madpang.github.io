@@ -1,0 +1,161 @@
++++ header
+@file: pd-wysheid/content/PD_2023_10_10_a/PD_2023_10_10_a.txt
+@title: Git in Practice | Day One: Ice Breaking
+@author: madpang
+@brief: This is part 1 of a tutorial on Git, in documentary fiction style.
+@date:
+- created on 2023-10-10
+- updated on 2025-05-25
+@tag: [git, fiction]
+@version: 0.1.1
++++
+
+You are a fresh software engineer, joining a startup company in surgical robotics called PDX.
+Today marks your entrance into this new field. You meet your colleagues and, of course, the code.
+
+## 10:00 | Cloning the Unknown
+
+With your expertise in image processing, your leader assigns you to *IMAGINE*, an early stage project that aims to build an add-on unit for the surgical robot. This unit aids a veteran surgeon, allowing he or she to act as an instructor for the operating surgeon by annotating the real-time endoscope image stream.
+
+Your first task? Implement several user interaction functions for the add-on, enabling the instructor to manipulate the image stream using two-finger gestures on a touch panel.
+
+The software project uses *Git* for version control. Your first step is to obtain a local copy to begin your contributions. Your leader has already provided you with the repository's URL and ensured the necessary access rights.
+
+In your terminal, you initialize the workspace with command[^3]:
++++ console
+|-[usr06@pdx-machine-06:~/ws/git-repo]
+: git clone git@bitbucket.org:pdx_software_team/imagine.git
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
++++
+
+[^3]: You can use `git clone -b master git@bitbucket.org:pdx_software_team/imagine.git` to clone a specific branch.
+
+Upon examining the README of the repository, you note its reliance on several submodules. To make sure your copy is complete, you proceed with:
++++ console
+|-[usr06@pdx-machine-06:~/ws/git-repo/imagine]
+: git submodule init
+: git submodule sync
+: git submodule update
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
++++
+
+Before you dive in, you have to identify yourself to the Git system---this is crucial for tracking your contributions accurately---by complete the minimal configuration of git:
++++ console
+|-[usr06@pdx-machine-06:~/ws/git-repo/imagine]
+: git config --global user.name <your_name>
+: git config --global user.email <your_designated_email>
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
++++
+
+## 11:00 | Making Your Mark
+
+After exploring the hierarchy of the repository, and playing with the latest executable, you quickly realize that the source code is NOT well organized as you might have expected.
+The application is functional, but it conjures up an image of that meme—a bird propelling itself upward using its head as a helicopter blade. Maybe it is not that bad.
+Anyway, you take a deep breath, and remind yourself: programmers are paid to produce code that works---elegance is of higher personal pursuit.
+You are also here to do the job, but thankfully, you can help with building a better software.
+
+To begin, you create a new branch from the main one and switch to it[^1],
++++ console
+|-[usr06@pdx-machine-06:~/ws/git-repo/imagine]
+: git branch feature/add-manipulation
+: git checkout feature-add-manipulation
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
++++
+Keep in mind, your colleagues might have already created many branches. You can use `git branch` to view existing branches and ensure your branch name is unique.
+
+[^1]: A quicker approach would be `git checkout -b feature/add-manipulation`.
+
+Next, you set up remote tracking for your new branch, linking it to the central repository:
++++ console
+|-[usr06@pdx-machine-06:~/ws/git-repo/imagine]
+: git push --set-upstream origin feature/add-manipulation
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
++++
+This step ensures two things: your colleagues can monitor your progress, and it stamps your mark on the project, indicating your intent to enhance it.
+
+Tips:
+- use `git remote -v` to verify your remote repository details.
+- use `git branch -vv` to check tracking status of local branches to the remote ones.
+
+## 12:30 | Saving Your Progress
+
+After much contemplation, you determine the best strategy to elegantly introduce new features without disrupting existing functions: create an interface class. This class will act as a bridge, liaising with the legacy code in its traditional manner but conversing with your soon-to-be-developed classes using a modern approach—an approach you plan to advocate to your team.
+
+Given that IMAGINE is primarily a GUI application utilizing the *Qt* framework, it surprises you to see it's not structured in the natural "Qt way". Instead of employing the built-in signal/slot mechanism, there's a pervasive use of extraneous message queues and shared memory units for data relay. This stems from the fact that the application has been fragmented into too many processes. While eager to enhance it, you recognize the challenge ahead: any modification must be undertaken meticulously and incrementally, like changing a tire on a moving vehicle. Don't think about an outright refactoring!
+
+By lunch time, you've conceptualized an interface class named `UICommDelegate`. This class, inheriting from `QObject`, taps into Qt's signal/slot capabilities and encompasses multiple shared memory and message queue units.
+
+Before you save your progress, you check the status of your repository changes:
++++ console
+|-[usr06@pdx-machine-06:~/ws/git-repo/imagine]
+: git status
+On branch feature/add-manipulation
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	uicomm_delegate.cpp
+	uicomm_delegate.hpp
+
+nothing added to commit but untracked files present (use "git add" to track)
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
++++
+After reviewing the output, you commit your changes and push them to the remote:
++++ console
+|-[usr06@pdx-machine-06:~/ws/git-repo/imagine]
+: git add .
+: git commit -m "add interface class UICommDelegate"
+: git push origin
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
++++
+
+That's it. You have set the stage for a further implementation. Hangout with your new colleagues for a lunch break.
+
+Tips: using git commit w/o any option will bring up your default editor (e.g. `emacs` or `nano`) to write the commit message, where you can put more detailed description.
+
+## 17:30 | Syncing Your Pace with the Team
+
+After an afternoon of digging and plumbing, and several rounds of feedback with your colleagues, you successfully plugged your `UICommDelegate` class into the existing codebase. This not only serves as a solid piton for your upcoming development but also marks the ice breaking to your new project. Satisfied with your progress, you commit your changes and prepare to push them to the remote repository. Since your colleagues are also making updates, it's essential to regularly rebase your code against the `develop` branch.
+
+First, make sure your `develop` branch is up to date:
++++ console
+|-[usr06@pdx-machine-06:~/ws/git-repo/imagine]
+: git checkout develop
+: git fetch origin
+: git pull origin
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
++++
+Next, rebase your feature branch onto the updated `develop` branch:
++++ console
+|-[usr06@pdx-machine-06:~/ws/git-repo/imagine]
+: git checkout feature/add-manipulation
+: git rebase develop
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
++++
+
+With only a new class added, conflicts are unlikely. Now you can push the rebased branch back to the remote repository[^2].
++++ console
+|-[usr06@pdx-machine-06:~/ws/git-repo/imagine]
+: git push
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
++++
+
+[^2]: If you rebase before pushing your updates, your local branch will diverge from the remote branch. In such a case, use `git push --force` to sync the remote branch with your local changes.
+
+Before wrapping up your first day, one team member informs you that the CI/CD pipeline automatically triggers for branches with specific naming patterns. To take advantage of this, rename your local branch:
++++ console
+|-[usr06@pdx-machine-06:~/ws/git-repo/imagine]
+: git branch -m feature_add_manipulation
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
++++
+To propagate this change to the remote repository, push the renamed branch and delete the old one:
++++ console
+|-[usr06@pdx-machine-06:~/ws/git-repo/imagine]
+: git push -u origin feature_add_manipulation
+: git push --delete origin feature_add_manipulation
+|-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
++++
+Note, `-u` is a short ver. for `--set-upstream`.
+
+That concludes your first day's work. Enjoy your well-deserved downtime.

@@ -1,0 +1,54 @@
++++ header
+@file: pd-wysheid/content/PD_2025_05_16_a/PD_2025_05_16_a.txt
+@brief: Document the process of building the blog website from scratch.
+@title: Building a blog website
+@author: madpang
+@date:
+- created on 2025-05-16
+- updated on 2025-05-17
+@version: 0.1.0
++++
+
+=== TL;DR
+
+Build a blog website, with "bare hands"---no WordPress-like content management system, no static site generator.
+Write content in plain text, do custom conversion to HTML, deploy to GitHub Pages with self-defined workflow.
+Everything is done in a simple, straightforward and transparent way.
+
+=== Method
+
+1. The folder organization
+2. The markup converter
+3. The deployment flow
+
+--- Folder Structure
+
++++ tree
+pd-wysheid
+|- contents
+|  |- a-single-post
+|  |  |- post-text.txt
+|  |  |- media/
+|- artifacts
+|  |- a-single-post
+|  |  |- post-text.html
+|  |  |- media/
+|- index.html
++++
+The `artifacts/a-single-post` folder is the output of the conversion process.
+
+--- Post Generation
+
++++ cmd
+./build-post.ps1 ./artifacts/PD_2025_05_16_a/PD_2025_05_16_a.html ./contents/PD_2025_05_16_a/PD_2025_05_16_a.txt ./commons/templates/post-template.html
++++
+
+=== Background
+
+I want maximal control on page design, content organization, and deployment process, so I do not want to rely on any easy-to-use but actually overly complicated templates from CMS provider or static site generator.
+For example, I have used Jekyll and Hugo, but I have to obey their rules on how to organize contents, which I find uncomfortable.
+
+I even find the Markdown format somewhat restrictive---I would like to bend it a little bit to suit my needs.
+So I implement my own converter.
+
+To the core, I desire maximal freedom on creation.

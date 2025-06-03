@@ -14,7 +14,7 @@ Figure out a folder structure for the project, such that both local test using `
 - updated on 2025-02-26
 
 @details:
-The current folder has the following structure:
+The folder structure was like:
 +++ tree
 .
 |- README.txt
@@ -28,8 +28,10 @@ The current folder has the following structure:
 |  |  |- common -> ../../common   # THE CRUX OF THE MATTER
 |  |- scripts/
 +++
-It makes local testing easy, referencing the resources with relative paths.
-But when deployed to GitHub Pages, the symbolic link causes problems---since it forms a loop to the top level---GitHub Actions is stuck in an infinite recursion when trying to archive artifacts, spitting the following error:
+The crux of the matter was that recursive symlink.
+I used this because I want to reference the resource from anywhere in this repo. by starting from the top level---pretty influenced by my C++ development experience (where one usually use CMakefile to define the project root path)---for example, the `index.html` file can reference the CSS file by `common/styles/style.css`, and the CSS file can reference the font file by `common/fonts/font.ttf`, and so on.
+
+But the recursive symlink is not a good idea, since it creates a loop in the folder structure, and upon deployment, GitHub Action gets stuck:
 +++ quote
 Archive artifact
   ./
@@ -53,7 +55,7 @@ Archive artifact
   ...
 +++
 
-If, instead, using absolute path for the resources, the local testing will break, since the browser will not be able to find the resources.
+Actually, on a server, one can use absolute path for the resources, e.g. `/common/styles/style.css`, but this in the other hand, will break the local testing---`/` would just direct to the root of the filesystem.
 
 The purpose of this ticket is to find a way to have both local testing and deployment possible, with minimal setup.
 
@@ -76,19 +78,59 @@ For option 3, it is the simplest and most straightforward way to go, although it
 @brief:
 Write an article for the website.
 
-@status: TODO
+@status: DONE
 
 @date:
 - created on 2025-02-26
-- updated on 2025-02-26
+- updated on 2025-05-22
+
+@details:
+The first article is stamped as `PD_2025_05_16_a`, which is a post about the process of building *THIS* blog website.
+It should be maintained along with the development, but anyway, it is the first article that officially published online.
 
 === Ticket 3
 
 @brief:
 Add a favicon to the website.
 
-@status: TODO
+@status: DONE
 
 @date:
 - created on 2025-02-26
-- updated on 2025-02-26
+- updated on 2025-05-31
+
+@details:
+
+It is a good idea to provide multiple sizes of the favicon image to allow browsers to choose the most suitable one for their interface.
+Although it is said 16x16-pixel is the standard size for a favicon, modern browsers seems to default to 32x32-pixel (checked on Firefox and Safari).
+
+Also note that different browsers have different prefers for favicon sizes.
+I have done an experiment, starting with the following versions of the favicon image (I intentionally used different images for different sizes):
++++ HTML
+<link rel="icon" type="image/png" sizes="16x16" href="./commons/images/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="./commons/images/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="64x64" href="./commons/images/favicon-64.png" />
++++
+Both Firefox and Safari selected the 32x32-pixel version (on macOS).
+But if I comment out the 32x32-pixel version, Firefox would select the 64x64-pixel version, while Safari would select the 16x16-pixel version.
+I think this is also related to the HDPi display issue, since macOS defaults to 2x pixel density---Firefox may select the 64x64-pixel version to match the nominal 32x32-pixel size.
+
+=== Ticket 4
+
+@brief:
+Add a build script to automate the post generation process.
+
+@status: DONE
+
+@date:
+- created on 2025-05-31
+- updated on 2025-06-01
+
+@details:
+Execute `pwsh -nop build.ps1` to build the website.
+- `build.ps1` is a PowerShell script that implements a simple version based merge algorithm to update those posts that had a change.
+- inside `build.ps1`, it calls `build-post.ps1` to handle the generation of each post---template insertion, metadata extraction, and so on.
+- inside `build-post.ps1`, it calls external tool `mmd2html` to convert the plain text markup manuscript to HTML post.
+
+@note:
+This workflow requires PowerShell be installed on CI environment.

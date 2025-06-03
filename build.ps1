@@ -21,6 +21,17 @@ $artifactsDir = "artifacts"
 $indexFile = Join-Path $artifactsDir "post-index.txt"
 $hotIndexFile = Join-Path $artifactsDir "hot-post-index.txt"
 
+# if contents directory does not exist, abort
+if (-not (Test-Path $contentsDir)) {
+	Write-Error "ERROR: contents directory does not exist."
+	exit 1
+}
+
+# if artifacts directory does not exist, create it
+if (-not (Test-Path $artifactsDir)) {
+	New-Item -Path $artifactsDir -ItemType Directory | Out-Null
+}
+
 Write-Host "==> Scanning current post information..."
 
 $currentPostLists = Get-ChildItem $contentsDir -Directory | Where-Object { $_.Name -match '^(?<tag>[A-Z]{2})_(?<key>\d{4}_\d{2}_\d{2}_[a-z])$' } | ForEach-Object {

@@ -23,7 +23,7 @@ param(
 	[Parameter(Mandatory = $True, Position = 3)][string]$path2html_template
 )
 
-$converter_ = "./tools/mmd2html/mmd2html"
+$converter_ = "./tools/mmd2html/mmd2html.ps1"
 
 # === Convert the source text to HTML
 $formatted_lines = (& $converter_ $path2txt)

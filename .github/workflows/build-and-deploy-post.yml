@@ -17,15 +17,17 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-    - name: Run build script
-      run: bash build.sh
-
-    - name: Switch to gh-pages branch
+    - name: Retrieve the status of latest build
       run: |
         git fetch origin gh-pages
-        git checkout gh-pages
+        mkdir -p artifacts
+        git show gh-pages:artifacts/post-index.txt > artifacts/post-index.txt
 
-    - name: Commit and push to gh-pages
+    - name: Run build script
+      run: pwsh -nop build.ps1
+
+    - name: Switch to gh-pages branch for deployment
       run: |
+        git checkout gh-pages
         git add .
         git commit -m "Deploy from main @ ${{ github.sha }}" && git push origin gh-pages || echo "No changes to commit"

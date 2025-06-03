@@ -1,3 +1,0 @@
-[submodule "mmd2html"]
-	path = tools/mmd2html
-	url = git@github.com:madpang/mmd2html.git

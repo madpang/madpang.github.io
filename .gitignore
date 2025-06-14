@@ -8,10 +8,13 @@ tmp*
 # Build
 build*
 
-# (unnecessary) Submodule
+# (Unnecessary) Submodule
 mmd2html
 zettelkasten
 
-# symlinks to the above directories
+# Symlinks to the above directories
 contents
 tools
+
+# Design files
+*.afdesign

@@ -9,6 +9,9 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../../commons/images/favicon-16.png" />
 <link rel="icon" type="image/png" sizes="32x32" href="../../commons/images/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="64x64" href="../../commons/images/favicon-64.png" />
+<link rel="preconnect" href="https://cdn.fonts.net">
+<script type="text/javascript" src="https://cdn.fonts.net/kit/39bc753a-f150-4e86-9295-2669dbbc5d47/39bc753a-f150-4e86-9295-2669dbbc5d47_enhanced.js" async></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.fonts.net/kit/39bc753a-f150-4e86-9295-2669dbbc5d47/39bc753a-f150-4e86-9295-2669dbbc5d47_enhanced.css" />
 <title>
 Building a Blog Site with Bare Hands---No Magic, No Fuss | MadPang
 </title>
@@ -25,67 +28,96 @@ Building a Blog Site with Bare Hands---No Magic, No Fuss | MadPang
 <main>
 <article>
 <h1>Building a Blog Site with Bare Hands---No Magic, No Fuss</h1>
-<pre>
 
-# TL;DR
+<h2>TL;DR</h2>
 
+<s-paragraph>
+<p>
 This post describes a minimalist approach to build a personal blog site without using any static site generator (like [Hugo] or [Jekyll]) or content management system (like [WordPress]).
 Instead, contents are written in plain text using a custom, lightweight markup format, then converted into HTML files using a user-defined PowerShell script.
 The generated HTML files are organized manually and deployed to [GitHub Pages] via a simple, transparent [GitHub Actions] workflow.
 This method offers complete control over the site's structure, styling, and deployment, favoring simplicity and clarity over convenience and abstraction.
+</p>
+</s-paragraph>
 
-# Method
+<h2>Method</h2>
 
+<s-paragraph>
+<p>
 There are three essential parts to this approach:
-1. **Folder Organization**---Clean separation of raw content and generated HTML.
-2. **Markup Converter**---A PowerShell script that converts plain text into styled HTML using a template.
-3. **Deployment Flow**---A GitHub Actions workflow that automates the deployment of the generated HTML files to GitHub Pages.
+</p>
+<ol>
+<li><strong>Folder Organization</strong>---Clean separation of raw content and generated HTML.</li>
+<li><strong>Markup Converter</strong>---A PowerShell script that converts plain text into styled HTML using a template.</li>
+<li><strong>Deployment Flow</strong>---A GitHub Actions workflow that automates the deployment of the generated HTML files to GitHub Pages.</li>
+</ol>
+</s-paragraph>
 
-## The Folder Organization
+<h3>The Folder Organization</h3>
 
+<s-paragraph>
+<p>
 The project follows a simple directory layout:
-+++ tree
+</p>
+<pre class="tree">
 the-blog-site
 |- contents
-|  |- <tag>_YYYY_MM_DD_[a-z]            <- a single post
-|  |  |- <tag>_YYYY_MM_DD_[a-z].txt     <- the manuscript of the post
+|  |- &lt;tag&gt;_YYYY_MM_DD_[a-z]            &lt;- a single post
+|  |  |- &lt;tag&gt;_YYYY_MM_DD_[a-z].txt     &lt;- the manuscript of the post
 |  |  |- media/
 |- artifacts
-|  |- <tag>_YYYY_MM_DD_[a-z]
-|  |  |- <tag>_YYYY_MM_DD_[a-z].html    <- the generated HTML of the post
+|  |- &lt;tag&gt;_YYYY_MM_DD_[a-z]
+|  |  |- &lt;tag&gt;_YYYY_MM_DD_[a-z].html    &lt;- the generated HTML of the post
 |  |  |- media/
-|- index.html                           <- the main page of the blog site
-+++
+|- index.html                           &lt;- the main page of the blog site
+</pre>
+<p>
 The `artifacts/a-single-post` folder is the output of the conversion process.
-
 The `contents` and `artifacts` folder form the cornerstone of the blog site.
 The `contents` folder holds the my post manuscripts---each post consists of a text file and an optional `media` folder for images or other assets.
 The `artifacts` folder mirrors the structure of `contents`---after conversion, each post's HTML file is placed in the corresponding folder under `artifacts`, along with any media files.
+Note, each post is named with a pattern ` &lt;tag&gt;_YYYY_MM_DD_[a-z]`, where the ` &lt;tag&gt;` is a short free-chosen phrase to suit the author's need, and the timestamp `YYYY_MM_DD` together with the postfix `[a-z]` should ensures an unique identifier for the post.
+</p>
+</s-paragraph>
 
-Note, each post is named with a pattern `<tag>_YYYY_MM_DD_[a-z]`, where the `<tag>` is a short free-chosen phrase to suit the author's need, and the timestamp `YYYY_MM_DD` together with the postfix `[a-z]` should ensures an unique identifier for the post.
+<h3>The Markup Conversion</h3>
 
-## The Markup Conversion
-
+<s-paragraph>
+<p>
 A single post is converted using the command:
-+++ cmd@bash
+</p>
+<pre class="console">
 pwsh -nop ./build-post.ps1 \
 	./artifacts/PD_2025_05_16_a/PD_2025_05_16_a.html \
 	./contents/PD_2025_05_16_a/PD_2025_05_16_a.txt \
 	./commons/templates/post-template.html
-+++
+</pre>
+<p>
 This command runs a PowerShell script `build-post.ps1` that takes three arguments:
-1. The output HTML file path.
-2. The input text file path.
-3. The template HTML file path.
+</p>
+<ol>
+<li>The output HTML file path.</li>
+<li>The input text file path.</li>
+<li>The template HTML file path.</li>
+</ol>
+<p>
 It reads the input text file, calls an external tool [mm2html] to parses its lightweight markup (a customized alternative to Markdown), injects the parsed content into an HTML template, outputs a complete HTML file, and saves it to the specified output path.
+</p>
+</s-paragraph>
 
+<s-paragraph>
+<p>
 The whole blog posts are generated by the command:
-+++ cmd@bash
+</p>
+<pre class="console">
 pwsh -nop ./build.ps1
-+++
+</pre>
+<p>
 The PowerShell script `build.ps1` scans the `contents` folder to generates a record of all the names and corresponding versions of the posts, compares it with previous one (if it exists) to determine "add/modify/delete" action for each post, then it calls `build-post.ps1` for each of those categorized into "add/modify", and deletes the corresponding folder from "artifacts" for those categorized into "delete".
+</p>
+</s-paragraph>
 
-## The Deployment Flow
+<h3>The Deployment Flow</h3>
 
 This blog site is a static website, hosted on [GitHub Pages].
 
@@ -104,16 +136,16 @@ A new push to the `main` branch will trigger a GitHub Actions workflow that:
 	d. Push the changes to the `gh-pages` branch, which is configured to be served by GitHub Pages.
 As a result, only the changed HTML files land in `gh-pages` branch, and the site is updated with minimal footprint.
 
-# Discussion
+<h2>Discussion</h2>
 
-## The Post Naming Scheme
+<h3>The Post Naming Scheme</h3>
 
 The post naming scheme `<tag>_YYYY_MM_DD_[a-z]` is designed to ensure uniqueness and but yet simplicity:
 - `<tag>` is a short, cryptic phrase, usually consists of two uppercase letters, e.g. `PD`, `LM`, `RF`, etc., which could mean anything or nothing---it may be used to help categorize posts.
 - `YYYY_MM_DD` provides a clear timestamp, making it easy to sort and locate posts chronologically.
 - `[a-z]` is a single letter suffix that allows for multiple posts on the same day---yes, at most 26 posts a day, but this capacity is more than enough for my writing pace.
 
-## The Incremental Build
+<h3>The Incremental Build</h3>
 
 The build process is designed to be minimal overhead---a big part of keeping things efficient is not rebuilding every post every time---it only reacts to changes, very much like a sync-and-merge operation.
 This is achieved thanks to the `@version` metadata embedded in each post manuscript and the unique naming scheme.
@@ -137,7 +169,7 @@ then, we can see that:
 - `PD_2025_05_30_a` is a new post, so it is marked as "added".
 Note, in internal processing, the `<tag>` part is stripped off, so the remaining identifier is just `YYYY_MM_DD_[a-z]`, which is lexicographically sortable.
 
-## The GitHub Actions Tricks
+<h3>The GitHub Actions Tricks</h3>
 
 Since two branches are used separately for "authoring" and "deployment", the deployment procedures needs to deal with both branches.
 The build process is actually split into three parts:
@@ -147,7 +179,7 @@ The build process is actually split into three parts:
 The first and second parts are done in the `main` branch, while the third part is done in the `gh-pages` branch.
 A temporary intermediate folder untracked by neither branch is used for data exchange.
 
-# Motivation
+<h2>Motivation</h2>
 
 Most blogging platforms or static site generators aim to simplify publishing workflows.
 Their core model is you focus on the content and they handle everything else---the form, the deployment, etc.
@@ -162,7 +194,6 @@ Therefore, I decided to build my own blog site from scratch, keeping the pipelin
 
 Building a blog with "bare hands" might sound old-school and daunting, but it is delightful 
 for me---I desire maximal freedom of creation.
-</pre>
 </article>
 </main>
 <script src="../../commons/scripts/main.js"></script>

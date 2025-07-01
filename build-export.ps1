@@ -1,7 +1,8 @@
 #! /usr/bin/env pwsh -NoProfile
 <#$
 	@file: build-export.ps1
-	@brief: Build HTML artifacts for new and updated posts, outputting to tmp-ws/artifacts/.
+	@brief: Build HTML artifacts for newly added and updated posts, output to tmp-ws/artifacts/.
+	@details: This script combines the new and updated post lists, and for each post, it will call the build-post.ps1 script to generate the HTML artifact.
 	@note: This script should be executed on the working branch which has contents folder.
 #>
 
@@ -9,7 +10,7 @@ $kWorkspace = "tmp-ws"
 $kContents = "contents"
 
 $m_template_file = Join-Path "commons" "templates" "post-template.html"
-$m_build_exe = "./build-post.ps1"
+$m_build_script = "./build-post.ps1"
 
 $exportArtifactsDir = Join-Path $kWorkspace "artifacts"
 $newFileList = Join-Path $kWorkspace "new-posts.txt"
@@ -30,7 +31,7 @@ foreach ($item in $buildList) {
 	$path2content = Join-Path $kContents $item ($item + ".txt")
 	$path2artifact = Join-Path $exportArtifactsDir $item ($item + ".html")
 	# Call external script to build the post
-	& $m_build_exe $path2artifact $path2content $m_template_file
+	& $m_build_script $path2artifact $path2content $m_template_file
 }
 
 Write-Host "=> FINISHED exporting post artifacts to $exportArtifactsDir."

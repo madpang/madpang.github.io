@@ -5,29 +5,30 @@
 	@note: This script should be executed on the working branch which has contents folder.
 #>
 
-$contentsDir = "contents"
-$artifactsDir = "artifacts"
-$workspace = "tmp-ws"
-$oldIndexFile = Join-Path $artifactsDir "post-index.txt"
-$hotIndexFile = Join-Path $workspace $artifactsDir "post-index.txt"
+$kWorkspace = "tmp-ws"
+$kContents = "contents"
+$kArtifacts = "artifacts"
+
+$oldIndexFile = Join-Path $kArtifacts "post-index.txt"
+$hotIndexFile = Join-Path $kWorkspace $kArtifacts "post-index.txt"
 
 # if contents directory does not exist, abort
-if (-not (Test-Path $contentsDir)) {
+if (-not (Test-Path $kContents)) {
 	Write-Error "ERROR: contents directory does not exist."
 	exit 1
 }
 
-# If tmp workspace already exists, remove it
-if (Test-Path $workspace) {
-	Remove-Item -Path $workspace -Recurse -Force
+# If tmp kWorkspace already exists, remove it
+if (Test-Path $kWorkspace) {
+	Remove-Item -Path $kWorkspace -Recurse -Force
 }
-New-Item -Path $workspace -ItemType Directory | Out-Null
-New-Item -Path (Join-Path $workspace $artifactsDir) -ItemType Directory | Out-Null
+New-Item -Path $kWorkspace -ItemType Directory | Out-Null
+New-Item -Path (Join-Path $kWorkspace $kArtifacts) -ItemType Directory | Out-Null
 
 Write-Host "==> Scanning current post information..."
 
-$currentPostLists = Get-ChildItem $contentsDir -Directory | Where-Object { $_.Name -match '^(?<tag>[A-Z]{2})_(?<key>\d{4}_\d{2}_\d{2}_[a-z])$' } | ForEach-Object {
-	$contentFile = Join-Path $contentsDir $_.Name ($_.Name + ".txt")
+$currentPostLists = Get-ChildItem $kContents -Directory | Where-Object { $_.Name -match '^(?<tag>[A-Z]{2})_(?<key>\d{4}_\d{2}_\d{2}_[a-z])$' } | ForEach-Object {
+	$contentFile = Join-Path $kContents $_.Name ($_.Name + ".txt")
 	if (Test-Path $contentFile) {
 		$key = $Matches['key']
 		$name = $_.Name
@@ -141,8 +142,8 @@ while ($j -lt $newRecords.Count) {
 
 # --- Export the new/update/delete lists
 
-$newList | Set-Content -Path (Join-Path $workspace "new-posts.txt") -Encoding utf8
+$newList | Set-Content -Path (Join-Path $kWorkspace "new-posts.txt") -Encoding utf8
 
-$updateList | Set-Content -Path (Join-Path $workspace "update-posts.txt") -Encoding utf8
+$updateList | Set-Content -Path (Join-Path $kWorkspace "update-posts.txt") -Encoding utf8
 
-$deleteList | Set-Content -Path (Join-Path $workspace "delete-posts.txt") -Encoding utf8
+$deleteList | Set-Content -Path (Join-Path $kWorkspace "delete-posts.txt") -Encoding utf8

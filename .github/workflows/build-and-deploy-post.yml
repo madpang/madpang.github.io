@@ -19,7 +19,19 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-    - name: Retrieve the status of latest build
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'  # Temurin is an Eclipse Foundation provided OpenJDK
+        java-version: '21'
+
+    - name: Build the mmd2html converter
+      run: |
+        cd mmd2html
+        chmod +x ./gradlew
+        ./gradlew build
+
+    - name: Retrieve the post index
       run: |
         mkdir -p artifacts
         git fetch origin gh-pages

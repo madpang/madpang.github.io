@@ -10,7 +10,6 @@
 <link rel="icon" type="image/png" sizes="32x32" href="../../commons/images/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="64x64" href="../../commons/images/favicon-64.png" />
 <title>
-Git in Practice | Day Two: Odyssey | MadPang
 </title>
 </head>
 <body>
@@ -25,15 +24,20 @@ Git in Practice | Day Two: Odyssey | MadPang
 <main>
 <article>
 <h1>Git in Practice | Day Two: Odyssey</h1>
+<s-paragraph>
 <pre>
-
 While yesterday's work laid a solid foundation, you're still uneasy about the slightly under-maintained shrubbery-like codebase.
 Today's goal is to pave the way for implanting your new feature into *IMAGINE*.
-
-## 09:30 | Gear up
-
+</pre>
+</s-paragraph>
+<h2>09:30 | Gear up</h2>
+<s-paragraph>
+<pre>
 Since *IMAGINE is designed to work in tandem with specific hardware—processing endoscope video feeds through a capture board and receiving user inputs via a touch panel—you need to set up an appropriate testing environment. Although you have a display with touch functionality and a video capture board for your desktop PC, constantly sourcing an endoscope for video input is impractical. To address this, you decide to use a notebook PC as the video source, connecting its HDMI output to the capture board.
-
+</pre>
+</s-paragraph>
+<s-paragraph>
+<pre>
 However, there's a hitch: the existing code only accommodates video input through the SDI port, commonly used by endoscopes. To overcome this, you modify the `capture.cpp`` file to accept HDMI video feeds and recompile the project. This makeshift solution provides a convenient desktop testing environment, but it's not suitable for the production branch. To handle this, you use Git's stash feature to temporarily save your changes[^4]:
 ``` shell
 |-[usr07@PDX07:~/WKSP7/git-repo/IMAGINE]
@@ -54,7 +58,10 @@ stash@{0}: On feature_add_manipulation: feature code to be checked
 stash@{1}: On feature_add_manipulation: test code for feeding HDMI in
 |-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
 ```
-
+</pre>
+</s-paragraph>
+<s-paragraph>
+<pre>
 To perform the test in a simulated environment, apply both sets of change:
 ``` shell
 |-[usr07@PDX07:~/WKSP7/git-repo/IMAGINE]
@@ -62,7 +69,10 @@ To perform the test in a simulated environment, apply both sets of change:
 : git stash apply 1
 |-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
 ```
-
+</pre>
+</s-paragraph>
+<s-paragraph>
+<pre>
 Once you're satisfied with the modifications, remove the test code and commit the feature code:
 ``` shell
 |-[usr07@PDX07:~/WKSP7/git-repo/IMAGINE]
@@ -80,13 +90,21 @@ stash@{0}: On feature_add_manipulation: test code for feeding HDMI in
 |-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
 ```
 And you can go on with another iteration of hacking for the new feature.
-
+</pre>
+</s-paragraph>
+<s-paragraph>
+<pre>
 [^4]: By default, `git stash`` stores (or "stashes") the uncommitted changes (staged and unstaged files) and overlooks untracked and ignored files.
-
-## 10:30 | A Thrilling Stroke
-
+</pre>
+</s-paragraph>
+<h2>10:30 | A Thrilling Stroke</h2>
+<s-paragraph>
+<pre>
 You might be so smitten with `git stash` that you're using it to casually switch your test code on and off like a light switch. But beware, even the brightest bulbs can flicker! At one point, when your feature code and test code are working in harmony, you get ready to commit the feature code. Intending to clean the stage, you type `git restore .` but then—like there is a ghost whispering in your mind—you mistype `git stash drop 0` when you should've typed `git stash apply 0`. You hit "Enter" without any doubt. Poof! Your progress vanishes into the ether!
-
+</pre>
+</s-paragraph>
+<s-paragraph>
+<pre>
 Panic sets in, but you manage to take a deep, yoga breath—because you notice that *git* has graciously printed out the hash code of the stash you just drop-kicked into oblivion:
 ``` shell
 |-[usr07@PDX07:~/WKSP7/git-repo/IMAGINE]
@@ -100,16 +118,24 @@ Aha! A lifeline! After a frantic web search, you discover that you can reapply t
 : git stash apply fbf6557b4e9df303cdeb9ede9938d059c7d682be
 |-[yyyy-MM-ddThh:mm:ss+hh:mm][o]
 ```
-
+</pre>
+</s-paragraph>
+<s-paragraph>
+<pre>
 You also learn that once a stash is dropped, it becomes "dangling" and might be scooped up by Git's garbage collector. Time is of the essence! Act swiftly, basically before you even think of closing that terminal.
-
+</pre>
+</s-paragraph>
+<s-paragraph>
+<pre>
 Disaster averted, rear end saved. Now, you'd better skedaddle and grab some coffee.
-
-
-## 13:30 | A Side Walk
-
+</pre>
+</s-paragraph>
+<h2>13:30 | A Side Walk</h2>
+<s-paragraph>
+<pre>
 @todo, write about the fast mockup.
 </pre>
+</s-paragraph>
 </article>
 </main>
 <script src="../../commons/scripts/main.js"></script>

@@ -25,7 +25,7 @@ param(
 
 $kTempOutput = "tmp-output.html" # @note: this is an intermediate file, it is an temporary usage, and will be optimized in the future.
 
-$m_converter = 'java -cp ./tools/app/build/classes/java/main MmdConverter'
+$m_converter = 'java -jar ./mmd2html/app/build/libs/mmd2html.jar'
 
 $m_cmd = @($m_converter, $path2txt, $kTempOutput) -join ' '
 

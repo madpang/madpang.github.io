@@ -10,3 +10,6 @@ artifacts/
 
 # Design files
 *.afdesign
+
+# Work-Breakdown tickets
+tickets.txt

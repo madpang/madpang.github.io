@@ -134,3 +134,74 @@ Execute `pwsh -nop build.ps1` to build the website.
 
 @note:
 This workflow requires PowerShell be installed on CI environment.
+
+=== Ticket 5
+
+@brief:
+Refine the layout of the website.
+
+@status: TODO
+
+@date:
+- created on 2025-07-04
+- updated on 2025-07-04
+
+@details:
+The current layout of the website is functional, but there are several areas that could be improved for better usability and aesthetics.
+
+=== Ticket 6
+
+@brief:
+Add a logo to the upper left corner of the website.
+
+@status: TODO
+
+@date:
+- created on 2025-07-04
+- updated on 2025-07-04
+
+@details:
+First I need a logo.
+
+=== Ticket 7
+
+@brief:
+Add a search function to the website.
+
+@status: TODO
+
+@date:
+- created on 2025-07-04
+- updated on 2025-07-04
+
+@details:
+A search function would be a great addition to the website, allowing users to quickly find relevant posts and information.
+
+=== Ticket 8
+
+@brief:
+Add a game to the website.
+
+@status: TODO
+
+@date:
+- created on 2025-07-04
+- updated on 2025-07-04
+
+@details:
+Just for fun.
+I just would try to make some simple web games withe the help of AI tools.
+
+=== Ticket 9
+
+@brief:
+Make the top navigation bar semi-transparent.
+
+@status: TODO
+
+@date:
+- created on 2025-07-04
+- updated on 2025-07-04
+
+@details:
+Try to mimic the *Liquid Glass* effect introduced by Apple in WWDC (Worldwide Developers Conference) 2025.

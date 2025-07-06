@@ -205,3 +205,18 @@ Make the top navigation bar semi-transparent.
 
 @details:
 Try to mimic the *Liquid Glass* effect introduced by Apple in WWDC (Worldwide Developers Conference) 2025.
+
+=== Ticket 10
+
+@brief:
+Automatic post title extraction and insertion into the index page.
+
+@status: TODO
+
+@date:
+- created on 2025-07-07
+- updated on 2025-07-07
+
+@details:
+Currently, the post titles are manually inserted into the index page.
+I would like to automate this process by extracting the post titles from the metadata and inserting them into the index page automatically.

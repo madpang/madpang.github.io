@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<!-- @note: This file is auto-generated. MANUAL EDITS WILL BE LOST -->
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="author" content="madpang" />
+<link rel="stylesheet" href="../../commons/styles/style.css" />
+<link rel="icon" type="image/png" sizes="16x16" href="../../commons/images/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../../commons/images/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="64x64" href="../../commons/images/favicon-64.png" />
+<title>
+</title>
+</head>
+<body>
+<header>
+<div class="nav-container">
+<a id="link-stack" class="clickable-icon" aria-label="STACK" href="../../index.html"></a>
+<a id="link-heap" class="clickable-icon" aria-label="HEAP" href="#heap"></a>
+<a id="link-archive" class="clickable-icon" aria-label="ARCHIVE" href="#archive"></a>
+</div>
+<button id="switch-theme-button" class="clickable-icon" aria-label="Toggle theme"></button>
+</header>
+<main>
+<article>
+<h1>Setup up a Ubuntu based Server | Storage Configuration</h1>
+<h2>Introduction</h2>
+<s-paragraph>
+<p>
+This article documents the process of setting up a Ubuntu-based server for scientific computing and file hosting, with an emphasis on high I/O performance, data redundancy, and system backup.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+By following the steps outlined here, you'll be able to configure a server with the following features:
+- A software *RAID 10* array composed of four NVMe drives, providing both high-speed data access and redundancy---ideal for storing working stacks that contains code/data/docs.
+- A dedicated 2.5-inch SSD mounted as a backup volume for safeguarding the working stacks.
+- A separate system backup volume, implemented on another SSD, inspired by the concept of macOS Time Machine---ideal for snapshot-based recovery of the operating system.
+- A logical volume (LVM) setup for OS and swap space for efficient memory management.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+The resulting storage layout after completing the configuration is as follows:
+</p>
+<pre>
+&gt; lsblk
+NAME                      MAJ:MIN RM   SIZE RO TYPE   MOUNTPOINTS
+sda                         8:0    0   1.8T  0 disk   
+|-sda1                      8:1    0   1.8T  0 part   /mnt/timemachine
+sdb                         8:16   0   1.8T  0 disk   
+|-sdb1                      8:17   0   1.8T  0 part   /mnt/backup
+sdc                         8:32   0 931.5G  0 disk   
+|-sdc1                      8:33   0     1G  0 part   /boot/efi
+|-sdc2                      8:34   0     2G  0 part   /boot
+|-sdc3                      8:35   0 928.5G  0 part   
+  |-ubuntu--vg-ubuntu--lv 252:0    0   100G  0 lvm    /
+  |-ubuntu--vg-swap--lv   252:1    0   256G  0 lvm    [SWAP]
+sr0                        11:0    1  1024M  0 rom    
+nvme0n1                   259:0    0 953.9G  0 disk   
+|-nvme0n1p1               259:2    0 953.9G  0 part   
+  |-md0                     9:0    0   1.9T  0 raid10 /mnt/workspace
+nvme1n1                   259:1    0 953.9G  0 disk   
+|-nvme1n1p1               259:3    0 953.9G  0 part   
+  |-md0                     9:0    0   1.9T  0 raid10 /mnt/workspace
+|-nvme2n1                   259:4  0 953.9G  0 disk   
+  |-nvme2n1p1               259:7  0 953.9G  0 part   
+  |-md0                     9:0    0   1.9T  0 raid10 /mnt/workspace
+|-nvme3n1                   259:5  0 953.9G  0 disk   
+  |-nvme3n1p1               259:6  0 953.9G  0 part   
+  |-md0                     9:0    0   1.9T  0 raid10 /mnt/workspace
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+This configuration balances performance, reliability, and maintainability, making it suitable for R&amp;D work setup.
+</p>
+</s-paragraph>
+<h2>Method</h2>
+<h3>Install the OS</h3>
+<s-paragraph>
+<p>
+Download the OS image from the [Ubuntu official site](https://ubuntu.com/).
+Then create a bootable USB drive using the `dd` command:
+</p>
+<pre>
+# insert the USB flash to be used as OS installer
+# identify the name of the USB flash recognized by the OS
+&gt; lsblk
+# the example output might be
+NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+...
+sdd           8:0    1   233G  0 disk
+|-sdd1        8:1    1   233G  0 part /media/madpang/KIOXIA
+# unmount any mounted partitions of the USB flash
+&gt; sudo umount /dev/sdd1
+# write the Ubuntu installation ISO to the USB flash
+&gt; sudo dd if=~/Downloads/ubuntu-24.04.1-desktop-amd64.iso of=/dev/sdd bs=4M status=progress
+</pre>
+<p>
+And there you go---yes, you do not need any third-party tools to create a bootable USB drive.
+Note, this process is also applicable to macOS, just remember that `diskutil` is your friend when you need to manipulate the USB flash.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+Insert the USB flash drive into the server and boot from it (depending on the manufacturer, you may need to press F2, F7, or F12 during startup to access the BIOS menu).
+Then follow the [instruction](https://ubuntu.com/tutorials/install-ubuntu-server#3-boot-from-install-media) to install Ubuntu server.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+I use an entire SSD disk for the installation and allow the installer to automatically handle the partitioning to simplify the process.
+Just remember to enable the LVM option.
+</p>
+</s-paragraph>
+<h3>Configure the RAID enabled storage for workspace</h3>
+<s-paragraph>
+<p>
+Before the RAID setup, the storage layout looks like this:
+</p>
+<pre>
+&gt; lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
+NAME          SIZE    FSTYPE     TYPE    MOUNTPOINT
+# ...
+nvme0n1       953.9G             disk 
+nvme2n1       953.9G             disk 
+nvme1n1       953.9G             disk 
+nvme3n1       953.9G             disk 
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+I choose to set up a *RAID 10* array using the four NVMe disks, because:
+- RAID 1 provides high reliability through mirroring;
+- RAID 0 increases speed and capacity via striping;
+- RAID 10 combines both advantages.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+To start, use `mdadm` to create the RAID array:
+</p>
+<pre>
+# create a primary partition spanning the entire space for each NVMe disk
+&gt; for i in {0..3}; do sudo parted /dev/nvme${i}n1 --script mklabel gpt mkpart primary 0% 100% set 1 raid on; done
+# create the RAID 10 array
+&gt; sudo mdadm --create --verbose /dev/md0 --level=10 --raid-devices=4 /dev/nvme[0123]n1p1
+</pre>
+<p>
+Note, the RAID array creation command might take a long time (in my case, it took about 2 hours).
+During the process, one can use `cat /proc/mdstat` to monitor the progress.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+After the finish of synthesizing `/dev/md0`, create a filesystem on it:
+</p>
+<pre>
+&gt; sudo mkfs.ext4 /dev/md0
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Mount the RAID enabled file system:
+</p>
+<pre>
+# create the mount point
+&gt; sudo mkdir /mnt/workspace
+&gt; sudo mount /dev/md0 /mnt/workspace
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Note, the software-based RAID 10 array is managed by `mdadm`, which stores its configuration in each member disk's *superblock*, however, it is recommended to retrieve this configuration and save it in `/etc/mdadm/mdadm.conf`:
+</p>
+<pre>
+# create the configuration file
+&gt; sudo mdadm --detail --scan | sudo tee -a /etc/mdadm/mdadm.conf
+# update the initramfs
+&gt; sudo update-initramfs -u
+</pre>
+</s-paragraph>
+<h3>Configure the storage for system backup</h3>
+<s-paragraph>
+<p>
+A server should be stable; however, technology evolves rapidly, and sometimes I need to take the risk of experimenting with new ideas. To mitigate potential issues, I prefer a timestamped system snapshot mechanism that allows me to revert to a specific system state when needed.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+The storage configuration is straightforward:
+</p>
+<pre>
+# create a primary partition spanning the entire space of a SSD disk
+&gt; sudo parted /dev/sda --script mklabel gpt mkpart ext4part ext4 0% 100%
+# create an `ext` Extended file system on it
+sudo mkfs.ext4 /dev/sda1
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Mount the file system:
+</p>
+<pre>
+# create the mount point
+&gt; sudo mkdir /mnt/timemachine
+&gt; sudo mount /dev/sda1 /mnt/timemachine
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Generate the first snapshot of the system state:
+</p>
+<pre>
+sudo rsync -aHAXv --numeric-ids --delete --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} / /mnt/timemachine/$(hostname)/$(date +%F_%H-%M)/
+</pre>
+<p>
+This command utilizes `rsync` to backup the root directory of the system to `/mnt/timemachine` (with dynamically generated time stamp), excluding the following directories:
+- `/dev/*`: Device files (e.g., hardware devices).
+- `/proc/*`: Kernel and process information (virtual filesystem).
+- `/sys/*`: System information (virtual filesystem).
+- `/tmp/*`: Temporary files.
+- `/run/*`: Runtime data.
+- `/mnt/*`: Mounted filesystems.
+- `/media/*`: Removable media (e.g., USB drives).
+- `/lost+found`: Recovered files from filesystem checks.
+The meaning of the options is:
+- `a`: Preserves symbolic links, permissions, timestamps, and other file attributes (Archive mode).
+- `H`: Preserves hard links.
+- `A`: Preserves Access Control Lists (ACLs).
+- `X`: Preserves extended attributes.
+- `v`: Displays detailed output of the operation (Verbose mode).
+- `numeric-ids`: Use numeric user and group IDs instead of mapping to names, which is useful when transferring between systems with different user/group names.
+- `delete`: Deletes files in the destination that no longer exist in the source. This ensures the backup is an exact mirror of the source.
+</p>
+</s-paragraph>
+<h3>Configure the storage for workspace backup</h3>
+<s-paragraph>
+<p>
+Although RAID 10 has been setup for `/mnt/workspace` to add a safety net for the *real asset* in modern digital life---the user data---but redundancy is not the same as backup.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+The storage configuration is similar to that for system file backup:
+</p>
+<pre>
+# create a primary partition spanning the entire space of a SSD disk
+&gt; sudo parted /dev/sdb --script mklabel gpt mkpart ext4part ext4 0% 100%
+# create an `ext` Extended file system on it
+&gt; sudo mkfs.ext4 /dev/sdb1
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Mount the file system:
+</p>
+<pre>
+# create the mount point
+&gt; sudo mkdir /mnt/backup
+&gt; sudo mount /dev/sdb1 /mnt/backup
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Perform the backup:
+</p>
+<pre>
+# create the folder for backup
+&gt; sudo mkdir /mnt/backup/wksp.bak
+# change the ownership to the user for user data bacup
+&gt; sudo chown madpang:madpang /mnt/backup/wksp.bak
+&gt; sudo chmod 750 /mnt/backup/wksp.bak
+# start the backup and show progress in standard output
+&gt; rsync -ah --delete --progress --stats /mnt/workspace/wksp4/ /mnt/backup/wksp4.bak
+</pre>
+<p>
+The meaning of the options is:
+- `a`: Archive mode.
+- `h`: human-readable file sizes.
+- `delete`: Deletes files in the destination that no longer exist in the source.
+- `progress`: shows file-level copy progress.
+- `stats`: provide a summary at the end of operation.
+</p>
+</s-paragraph>
+<h3>Configure the SWAP area</h3>
+<s-paragraph>
+<p>
+*SWAP* is a space on a storage device---e.g. a SSD---that is used as virtual memory when a system's physical RAM is fully utilized.
+It acts as an overflow area for data that cannot fit into RAM, allowing the system to continue running even when memory is low.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+The main scenarios for using swap are:
+- Handling memory-intensive applications;
+- Supporting hibernation (saving the system state to disk)
+which are common in scientific computing.
+That is why I am setting up a swap space on my server.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+There is default swap configuration on Ubuntu Server 24.04 LTS, using a *swap file* (a file on the filesystem that serves as swap space), but I prefer to use a *swap partition* (a dedicated partition on the disk that serves as swap space) instead.
+Because a swap partition is generally faster and more efficient than using a swap file.
+Besides, a swap space should generally have the same size as the physical RAM, and I have 256 GB of RAM on my server, so I need a swap space of 256 GB.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+After a fresh installation of Ubuntu Server 24.04 LTS, run the following command to check the default swap configuration:
+</p>
+<pre>
+&gt; swapon --show
+NAME      TYPE SIZE USED PRIO
+/swap.img file   4G   0B   -2
+</pre>
+<p>
+I want to remove this swap file and create a swap partition instead.
+To remove the swap file:
+</p>
+<pre>
+# disable the swap file
+&gt; sudo swapoff /swap.img
+# remove the swap file
+&gt; sudo rm /swap.img
+# remove the swap entry from fstab -&gt; see next section
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+To create a swap partition (note, I enabled LVM during the installation):
+</p>
+<pre>
+# create a logical volume for swap (size is specified in base 2^30)
+&gt; sudo lvcreate -L 256G -n swap-lv ubuntu-vg
+# format it as swap
+&gt; sudo mkswap /dev/ubuntu-vg/swap-lv
+# enable that swap, and one can check the swap status by `free -h` or `swapon --show`
+&gt; sudo swapon /dev/ubuntu-vg/swap-lv
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+To make the new swap setup persistent across reboots, update the `/etc/fstab` file (use `sudo nano` to edit):
+</p>
+<pre>
+# ...
+# delete this line -&gt; /dev/ubuntu-vg/swap-lv none swap sw 0 0
+# &gt;&gt;&gt; add the following line
+/dev/disk/by-id/&lt;replace-with-your-id&gt; none swap sw 0 0
+# &lt;&lt;&lt;
+</pre>
+</s-paragraph>
+<h3>Configure the system to use the new storage layout</h3>
+<s-paragraph>
+<p>
+To ensure that the new storage layout is used after reboot---i.e., automatically mounted---update the `/etc/fstab` file (use `sudo nano` to edit):
+</p>
+<pre>
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# &lt;file system&gt; &lt;mount point&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt;  &lt;pass&gt;
+/dev/disk/by-id/&lt;replace-with-your-device-id&gt; / ext4 defaults 0 1
+/dev/disk/by-id/dm-name-ubuntu--vg-swap--lv none swap sw 0 0
+/dev/disk/by-uuid/&lt;replace-with-your-device-uuid&gt; /boot ext4 defaults 0 1
+/dev/disk/by-uuid/&lt;replace-with-your-device-uuid&gt; /boot/efi vfat defaults 0 1
+/dev/disk/by-uuid/&lt;replace-with-your-device-uuid&gt; /mnt/backup ext4 defaults,nofail 0 2
+/dev/disk/by-uuid/&lt;replace-with-your-device-uuid&gt; /mnt/timemachine ext4 defaults,nofail 0 2
+/dev/disk/by-uuid/&lt;replace-with-your-device-uuid&gt; /mnt/workspace ext4 defaults,nofail 0 2
+</pre>
+</s-paragraph>
+<h2>Extra Notes</h2>
+<h3>Tips on OS installation on a headless server</h3>
+<s-paragraph>
+<p>
+When working with a headless machine---not yet has an OS installed---the initial hurdle is how to handle the interactive installation process.
+A keyboard is portable and is enough for the input, but a monitor is not---although there are many sort of portable monitors available, but still not convenient, some of them requires additional power supply, while some of them support USB-C video/power delivery but the server side may not support it.
+I find a better solution is to use a minimal capture card---an integrated device that has accepts HDMI signal output from the server and delivers to the host machine via USB connection ---for example, I use such a device from [UGREEN].
+The minimal capture card may not be powerful enough for time time use due to thermal issue, but is especially fit for the server installation work, since you usually want to carry your own laptop.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+Once the OS is installed, you can go on with your cozy SSH connection---Ubuntu server usually has OpenSSH server installed by default, if not, you can install it with:
+</p>
+<pre>
+# install &amp; launch ssh server
+sudo apt install -y openssh-server
+sudo systemctl enable ssh
+sudo systemctl start ssh
+</pre>
+<p>
+If you do not manually configure the IP address of the server, you can find it by `hostname -I`.
+</p>
+</s-paragraph>
+<h3>Explanation of the some commands</h3>
+<s-paragraph>
+<p>
+The following command uses `parted` to create a new partition table and a primary partition on the specified disk.
+</p>
+<pre>
+sudo parted /dev/sdb --script mklabel gpt mkpart ext4part ext4 0% 100%
+</pre>
+<p>
+The `--script` flag tells parted to run in non-interactive mode, executing all commands without prompting for user confirmation.
+The `mklabel gpt` command creates a new GPT (GUID Partition Table) on the disk, and the `mkpart ext4part ext4 0% 100%` command creates a primary partition that spans the entire disk, formatted as an ext4 filesystem, labeled as `ext4part`.
+Note:
+- the `ext4part` parameter is just a label for the partition, and it can be set to any name you choose, and you can see it by by command such as `sudo parted /dev/sdb print`; but it is not important for the partition to function so people usually just use the generic name `ext4part`.
+- the `ext4` parameter here only sets the partition type flag---it does not actually format the partition with ext4---you need a separate `mkfs.ext4` command to create the filesystem.
+</p>
+</s-paragraph>
+<h2>References</h2>
+<s-paragraph>
+<p>
+1. [Canonical Ubuntu Tutorial: Install Ubuntu Server](https://ubuntu.com/tutorials/install-ubuntu-server#1-overview)(accessed on 2025-07-12)
+2. [DigitalOcean Tutorial: How To Configure RAID Arrays on Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-create-raid-arrays-with-mdadm-on-ubuntu)(accessed on 2025-07-12)
+</p>
+</s-paragraph>
+<h2>Appendix</h2>
+<h3>Background</h3>
+<s-paragraph>
+<p>
+This is actually the second time I've set up a server.
+The first time was back in 2022, prompted by the long-term remote work policy that began in late 2021 due to the global spread of COVID-19.
+At that time, I needed a *multi-workspace, cross-platform* workflow.
+The core of that setup was a server that could serve as a central workspace---handling large-scale data exchange and providing backup services.
+Linux naturally came to mind due to its reputation for stability and customizability.
+While I didn’t have any prior experience with Linux then, I had been a Unix (macOS) user for 9 years, and I was already comfortable with the command line and eager to explore and learn more.
+I managed to set up Ubuntu Server 22.04 LTS on a Dell Precision T7910 Workstation that fulfilled my needs:
+1. provided samba file sharing services to allow mounting the server as a local disk on both Mac and Windows;
+2. provided CLI based MATLAB environments with CUDA ability for long-running computation tasks;
+3. provided Time Machine backup services for macOS (supported by samba);
+It had been running smoothly for more than 3 years.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+Recently, the newest LTS version of Ubuntu Server (24.04) has been around for a while, and I decided to refine my workflow and upgrade the server.
+Things have changed a lot since during those years---both the world and my personal life.
+But my understanding and experience with Linux have matured.
+I still need that *central workspace* for stacks of my code, data and docs.
+I still need to handle complex computation tasks.
+I emphasize more on work-stack self-containment and reproducibility and consequently I value even more on data backup and version control.
+I no longer need to support Time Machine backup services for macOS, but I want to try more other technologies such as docker containers, web service deployment.
+I gained C++ and Python into my toolbox besides the MATLAB-Mathematica dual-wielding.
+I also began to work on robotics besides my ultrasound research, so I want to enhance my ability to develop with ROS (Robot Operating System) and LLM (Large Language Models).
+The new setup reflects my new needs and interests.
+</p>
+</s-paragraph>
+<h3>The Hardware</h3>
+<s-paragraph>
+<p>
+The hardware used in this setup is a 2016 model Dell Precision T7910 Workstation.
+It is equipped with:
+- 2x Intel Xeon E5-2687W v3 CPUs, each with 10 cores and 20 threads, running at 3.1 GHz;
+- 256GB DDR4 RAM, running at 2133 MHz;
+- 1x Nvidia GeForce GTX TITAN X graphic card (Maxwell architecture), w/ 12GB memory;
+- 4x 1TB NVMe disks (Intel);
+- 2x 2TB SSD disks (Crucial and SanDisk);
+- 1x 2TB HDD disk (Toshiba);
+It is an old machine but still powerful enough for my needs.
+</p>
+</s-paragraph>
+</article>
+</main>
+<script src="../../commons/scripts/main.js"></script>
+</body>
+</html>

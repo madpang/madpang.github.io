@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<!-- @note: This file is auto-generated. MANUAL EDITS WILL BE LOST -->
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="author" content="madpang" />
+<link rel="stylesheet" href="../../commons/styles/style.css" />
+<link rel="icon" type="image/png" sizes="16x16" href="../../commons/images/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../../commons/images/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="64x64" href="../../commons/images/favicon-64.png" />
+<title>
+</title>
+</head>
+<body>
+<header>
+<div class="nav-container">
+<a id="link-stack" class="clickable-icon" aria-label="STACK" href="../../index.html"></a>
+<a id="link-heap" class="clickable-icon" aria-label="HEAP" href="#heap"></a>
+<a id="link-archive" class="clickable-icon" aria-label="ARCHIVE" href="#archive"></a>
+</div>
+<button id="switch-theme-button" class="clickable-icon" aria-label="Toggle theme"></button>
+</header>
+<main>
+<article>
+<h1>Setup NFS Server for Local Network File Sharing</h1>
+<s-paragraph>
+<p>
+My workflow involves a multi-workspace setup, where I usually works on a MacBook Pro as *THE TERMINAL*---enjoying its *Liquid Retina XDR* display and the aesthetic of macOS for coding, writing, and graphic design---while using a Linux machine as the server for heavy lifting tasks, such as long-run simulation, batch data processing, machine learning, etc.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+This guide provides steps to set up a Network File System (NFS) server on a Ubuntu machine and how to mount it from a macOS client.
+</p>
+</s-paragraph>
+<h2>Configure Directories Sharing on the Server</h2>
+<s-paragraph>
+<p>
+Suppose you are logging to the Ubuntu server as a non-root user---with *uid* `1000` and *gid* `1000`, and with sudo privilege---and you want to share a directory located at `/mnt/workspace/share` with your local network.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+1. Install the NFS server package on the Ubuntu machine:
+</p>
+<pre>
+sudo apt update
+sudo apt install nfs-kernel-server
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+2. Create the directory to share
+</p>
+<pre>
+sudo mkdir -p /mnt/workspace/share
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+3. Set the appropriate permissions for the shared directory:
+</p>
+<pre>
+sudo chown $USER:$USER /mnt/workspace/share
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+4. Configure the NFS exports by editing the `/etc/exports` file:
+# replace `192.168.1.0/24` with your actual network
+</p>
+<pre>
+echo "/mnt/workspace/share 192.168.1.0/24(rw,sync,all_squash,no_subtree_check,anonuid=1000,anongid=1000)" |  sudo tee -a /etc/exports
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+5. Export the shared directory:
+</p>
+<pre>
+sudo exportfs -ra
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+6. Start the NFS server:
+</p>
+<pre>
+sudo systemctl enable nfs-server
+sudo systemctl start nfs-kernel-server
+   ```
+
+If you have a firewall enabled, you may need to allow NFS traffic:
+``` cmd @server
+sudo ufw allow from 192.168.1.0/24 to any port nfs
+sudo ufw reload
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+NOTE, many tutorials may suggest set the permission of the shared directory as
+</p>
+<pre>
+sudo chown nobody:nogroup /mnt/workspace/share
+sudo chmod 777 /mnt/workspace/share
+</pre>
+<p>
+but I think it is more convenient to just use a *common* non-root user on the server to manage the shared directory.
+The use of `all_squash` option maps all user requests to the anonymous user, which would default to `nobody:nogroup`, but is set specifically to `anonuid:anongid`.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+This is suitable for a one-man multi-workspace setup, or a small team that does not want tangle with user permission issues.
+However, if you need fine-grained access control, you may want to reconsider the permission policy or even you would better consider using a protocol other than NFS.
+</p>
+</s-paragraph>
+<h2>Connect to the NFS Shared Directory from Clients</h2>
+<h3>Connect from macOS</h3>
+<s-paragraph>
+<p>
+You can mount an NFS share from macOS---macOS includes built-in support for NFS:
+</p>
+<pre>
+sudo mount -t nfs -o resvport 192.168.1.100:/mnt/workspace/share /mnt/nfs_share
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+To unmount:
+</p>
+<pre>
+sudo umount /mnt/nfs_share
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+NOTE, the command `mount -t nfs -o resvport ...` is equivalent to `mount_nfs -P ...`, where the `-P` option tells the NFS client to use of a privileged source port ($&lt; 1024$), which many NFS servers (especially Linux-based ones) require for security.
+However, the latter one---`mount_nfs -P` is NOT documented in the manpage, for better code maintainability, you should prefer using the former command.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+Since I usually use my MacBook Pro as a portable work terminal, I often do not configure persistence on-boot mount, rather I would like to create some wrapper utilities to help automate the mount/unmount task---for example, have a look at [ohmypwsh](https://github.com/madpang/ohmypwsh).
+</p>
+</s-paragraph>
+<h3>Connect from Ubuntu</h3>
+<s-paragraph>
+<p>
+To connect to a NFS server from a Ubuntu client, you first need to install NFS client software:
+</p>
+<pre>
+sudo apt install nfs-common
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Then mount the shared directory:
+</p>
+<pre>
+sudo mount 192.168.1.100:/mnt/workspace/share /mnt/nfs_share
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+To unmount:
+</p>
+<pre>
+sudo umount /mnt/nfs_share
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+In a real world company project, your team may have a central NFS server, and you may want to mount the NFS share automatically at boot time.
+You can add an entry to the `/etc/fstab` file to ensure this:
+</p>
+<pre>
+echo "192.168.1.100:/mnt/workspace/share /mnt/nfs_share nfs defaults 0 0" | sudo tee -a /etc/fstab
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+A small tip: you can use the command `showmount -e &lt;nfs-server-address&gt;` from the client to check the available NFS shares on the server.
+This even works with `showmount -e localhost` on the server itself to verify the NFS is correctly configured.
+</p>
+</s-paragraph>
+<h2>Conclusion</h2>
+<s-paragraph>
+<p>
+Setting up an NFS server on a Ubuntu machine and connecting to it from macOS or Ubuntu clients is straightforward.
+This setup allows for efficient and consistent multi-workspace workflows.
+</p>
+</s-paragraph>
+</article>
+</main>
+<script src="../../commons/scripts/main.js"></script>
+</body>
+</html>

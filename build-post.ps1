@@ -9,12 +9,9 @@
 	2. Use the mmd2html tool to convert the source text to HTML, and insert it into the anchor point in the template.
 	3. Write the output to the target HTML file.
 
-	@author
-	- madpang
+	@author: madpang
 
-	@date:
-	- created on 2025-05-18
-	- updated on 2025-07-01
+	@date: [created: 2025-05-18, updated: 2025-08-11]
 #>
 
 param(
@@ -25,52 +22,60 @@ param(
 
 $kTempOutput = "tmp-output.html" # @note: this is an intermediate file, it is an temporary usage, and will be optimized in the future.
 
-$m_converter = 'java -jar ./mmd2html/app/build/libs/mmd2html.jar'
+$mConverter = 'java -jar ./mmd2html/app/build/libs/mmd2html.jar'
 
-$m_cmd = @($m_converter, $path2txt, $kTempOutput) -join ' '
+$mCmd = @($mConverter, $path2txt, $kTempOutput) -join ' '
 
-Write-Host "[DEBUG] Converting source text to HTML: $m_cmd"
+Write-Host "[DEBUG  ] Converting source text to HTML: $mCmd"
 
-# === Convert the source text to HTML
-Invoke-Expression $m_cmd
+# --- Convert the source text to HTML
+Invoke-Expression $mCmd
+
 if ($LASTEXITCODE -ne 0) {
-	Write-Host "[ERROR] mmd2html conversion failed with exit code $LASTEXITCODE."
-	exit
+	Write-Host "[ERROR  ] mmd2html conversion failed with exit code $LASTEXITCODE."
+	exit $LASTEXITCODE
 }
 
-$formatted_lines = Get-Content -Path $kTempOutput -Encoding utf8
+if (-not (Test-Path $kTempOutput)) {
+	Write-Host "[ERROR  ] mmd2html did not generate output file."
+	exit 1
+}
 
-# --- Extract h1 heading (for display in the tab title)
-$tab_title = $null
-foreach ($line in $formatted_lines) {
+$formattedLines = Get-Content -Path $kTempOutput -Encoding utf8
+
+# --- Extract h1 heading (for display in the web browser tab)
+$browserTabTitle = $null
+foreach ($line in $formattedLines) {
 	if ($line -match '<h1>(.*)</h1>') {
-		$tab_title = $Matches[1]
+		$browserTabTitle = $Matches[1]
 		break
 	}
 }
-if (-not $tab_title) {
-	Write-Error "ERROR: article must have a title."
-	exit 2
+if (-not $browserTabTitle) {
+	Write-Host "[ERROR  ] article must have a title."
+	exit 1
 }
 
-$author_info = "MadPang"
+# --- Read the template HTML file
+if (-not (Test-Path $path2template)) {
+	Write-Host "[ERROR  ] Template file not found: $path2template"
+	exit 1
+}
 
-# === Read the template HTML file
-$template_lines = Get-Content -Path $path2template
+$templateLines = Get-Content -Path $path2template
 
-# === Initialize the output HTML
-$m_out_lines = @()
-
-# === Processing
+# --- Assemble the output HTML file
+$authorInfo = "MadPang"
 $inBlockComment = $false
-for ($ii = 0; $ii -lt $template_lines.Count; $ii++) {
-	$line = $template_lines[$ii]
+$outputLines = @()
+for ($ii = 0; $ii -lt $templateLines.Count; $ii++) {
+	$line = $templateLines[$ii]
 	# Check if the line is a block comment start, assuming only world character, `@`, and `:` are allowed
 	if ($line -match '^<!--\s*(?<id>[@:\w]+)\s*$') {
 		$inBlockComment = $true
 		$id = $Matches['id']
 		if ($id -eq '@ANCHOR:NULL') {
-			$m_out_lines += '<!-- @note: This file is auto-generated. MANUAL EDITS WILL BE LOST -->'
+			$outputLines += '<!-- @note: This file is auto-generated. MANUAL EDITS WILL BE LOST -->'
 		}
 		continue
 	}
@@ -84,30 +89,37 @@ for ($ii = 0; $ii -lt $template_lines.Count; $ii++) {
 	}
 	if ($line -match '^<!--\s*@ANCHOR:TITLE\s*-->$') {
 		# Insert the title text into the anchor point
-		$out_lines += "$tab_title | $v_author_info"
+		$outputLines += "$browserTabTitle | $authorInfo"
 		continue
 	}
 	if ($line -match "^<!--\s*@ANCHOR:ARTICLE\s*-->$") {
 		# Insert the formatted lines into the anchor point
-		$m_out_lines += $formatted_lines
+		$outputLines += $formattedLines
 		continue
 	}
 
 	# Add normal line to the output
-	$m_out_lines += $line
+	$outputLines += $line
 }
 
 # === Write the output to HTML file
 
 # Create the containing folder of the HTML post if it does not exist
-$out_dir = Split-Path -Path $path2html -Parent
-if (-not (Test-Path $out_dir)) {
+$outputDir = Split-Path -Path $path2html -Parent
+if (-not (Test-Path $outputDir)) {
 	try {
-		New-Item -ItemType Directory -Path $out_dir | Out-Null
+		New-Item -ItemType Directory -Path $outputDir | Out-Null
 	} catch {
-		Write-Error "ERROR: Failed to create output directory."
-		exit -1
+		Write-Host "[ERROR  ] Failed to create output directory: $outputDir"
+		exit 1
 	}
 }
 
-Set-Content -Path $path2html -Value $m_out_lines -Encoding utf8
+try {
+	Set-Content -Path $path2html -Value $outputLines -Encoding utf8
+	Write-Host "[DEBUG  ] Successfully created: $path2html"
+	exit 0
+} catch {
+	Write-Host "[ERROR  ] Failed to write output file: $path2html"
+	exit 1
+}

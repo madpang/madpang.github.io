@@ -32,6 +32,10 @@ foreach ($item in $buildList) {
 	$path2artifact = Join-Path $exportArtifactsDir $item ($item + ".html")
 	# Call external script to build the post
 	& $m_build_script $path2artifact $path2content $m_template_file
+	if ($LASTEXITCODE -ne 0) {
+		Write-Host "[ERROR  ] Failed to build post: $item"
+		exit $LASTEXITCODE
+	}
 }
 
-Write-Host "=> FINISHED exporting post artifacts to $exportArtifactsDir."
+Write-Host "[INFO   ] Finished exporting post artifacts to $exportArtifactsDir."

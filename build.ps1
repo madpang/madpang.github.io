@@ -16,7 +16,7 @@
 	@version: 0.3.0
 #>
 
-& ./build-prepare.ps1
+& ./prepare-build.ps1
 if ($LASTEXITCODE -ne 0) {
 	Write-Host "[ERROR  ] Preparation failed, exiting."
 	exit $LASTEXITCODE

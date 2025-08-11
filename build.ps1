@@ -22,7 +22,7 @@ if ($LASTEXITCODE -ne 0) {
 	exit $LASTEXITCODE
 }
 
-& ./build-export.ps1
+& ./export-build.ps1
 if ($LASTEXITCODE -ne 0) {
 	Write-Host "[ERROR  ] Export failed, exiting."
 	exit $LASTEXITCODE

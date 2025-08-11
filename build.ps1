@@ -18,20 +18,28 @@
 
 & ./prepare-build.ps1
 if ($LASTEXITCODE -ne 0) {
-	Write-Host "[ERROR  ] Preparation failed, exiting."
+	Write-Host "[ERROR  ] Preparation failed, exit."
 	exit $LASTEXITCODE
 }
 
 & ./export-build.ps1
 if ($LASTEXITCODE -ne 0) {
-	Write-Host "[ERROR  ] Export failed, exiting."
+	Write-Host "[ERROR  ] Export failed, exit."
 	exit $LASTEXITCODE
 }
 
-& ./build-deploy.ps1
+& ./deploy-build.ps1
 if ($LASTEXITCODE -ne 0) {
-	Write-Host "[ERROR  ] Deployment failed, exiting."
+	Write-Host "[ERROR  ] Deployment failed, exit."
 	exit $LASTEXITCODE
 }
 
-Write-Host "[INFO   ] building post artifacts."
+Write-Host "[INFO   ] Cleaning up post build workspace..."
+# Clean up the temporary workspace
+$kWorkspace = "tmp-ws"
+if (Test-Path $kWorkspace) {
+	Remove-Item -Path $kWorkspace -Recurse -Force
+}
+
+Write-Host "[INFO   ] Build process completed successfully."
+exit 0

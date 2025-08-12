@@ -6,7 +6,9 @@
 
 	@details: Syncs the exported HTMLs and post-index.txt, and removes deleted posts.
 
-	@note: This script should be executed on the deployment branch---which contains the artifacts directory.
+	@note:
+	- This script should be executed on the deployment branch, which contains the artifacts directory.
+	- This script should be called from the root of the repository.
 
 	@author: madpang
 

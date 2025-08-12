@@ -2,7 +2,7 @@
 <#
 	@file: build-post.ps1
 	
-	@brief: Build a full HTML page of a post from a custom plain text markup.
+	@brief: Build a single HTML post from the manuscript.
 
 	@details:
 	1. Read the template HTML file.

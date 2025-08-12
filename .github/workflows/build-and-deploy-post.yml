@@ -39,14 +39,14 @@ jobs:
 
     - name: BUILD THE POST
       run: |
-        pwsh -nop prepare-build.ps1
-        pwsh -nop export-build.ps1
+        pwsh -nop ./scripts/prepare-build.ps1
+        pwsh -nop ./scripts/export-build.ps1
 
     - name: Switch to gh-pages branch to collect build artifacts
       run: |
         git checkout gh-pages
-        git show origin/main:deploy-build.ps1 > deploy-build.ps1
-        pwsh -nop deploy-build.ps1
+        git show origin/main:scripts/deploy-build.ps1 > deploy-build.ps1
+        pwsh -nop ./deploy-build.ps1
         git show origin/main:index.html > index.html
     
     - name: Push the changes to gh-pages branch

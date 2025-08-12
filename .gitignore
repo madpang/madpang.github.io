@@ -7,6 +7,8 @@ tmp*
 
 # Build
 build*
+scripts/
+*.ps1
 
 # (Unnecessary) Submodule
 mmd2html

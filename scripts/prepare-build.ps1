@@ -4,7 +4,9 @@
 
 	@brief: Prepare for building HTML artifacts from the text manuscripts.
 
-	@note: This script should be executed on the working branch which has *contents* folder.
+	@note: 
+	- This script should be executed on the working branch, which has *contents* folder.
+	- This script should be called from the root of the repository.
 
 	@author: madpang
 

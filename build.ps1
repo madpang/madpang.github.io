@@ -16,19 +16,19 @@
 	@version: 0.3.0
 #>
 
-& ./prepare-build.ps1
+& ./scripts/prepare-build.ps1
 if ($LASTEXITCODE -ne 0) {
 	Write-Host "[ERROR  ] Preparation failed, exit."
 	exit $LASTEXITCODE
 }
 
-& ./export-build.ps1
+& ./scripts/export-build.ps1
 if ($LASTEXITCODE -ne 0) {
 	Write-Host "[ERROR  ] Export failed, exit."
 	exit $LASTEXITCODE
 }
 
-& ./deploy-build.ps1
+& ./scripts/deploy-build.ps1
 if ($LASTEXITCODE -ne 0) {
 	Write-Host "[ERROR  ] Deployment failed, exit."
 	exit $LASTEXITCODE

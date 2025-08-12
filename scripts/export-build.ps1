@@ -6,7 +6,9 @@
 
 	@details: This script combines the new and updated post lists, then for each post, it will call the `build-post.ps1` script to generate the HTML artifact.
 
-	@note: This script should be executed on the working branch which has contents folder.
+	@note:
+	- This script should be executed on the working branch, which has contents folder.
+	- This script should be called from the root of the repository.
 
 	@author: madpang
 

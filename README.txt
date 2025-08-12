@@ -40,7 +40,9 @@ The folder structure of the project is as follows:
 |- contents       # symlink to zettelkasten
 |- mmd2html/      # [submodule] custom plain text markup to HTML converter
 |- tools          # symlink to mmd2html
-|- build.ps1      # script to build the blogs
+|- build-post.ps1 # script to build a single blog post
+|- build.ps1      # script to build blogs for the website
+|- scripts/       # utility scripts
 ```
 
 ## License info.

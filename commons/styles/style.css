@@ -2,9 +2,7 @@
 	@file:   pd-wysheid/commons/styles/style.css
 	@brief:  The CSS style-sheet for the pd-wysheid
 	@author: madpang
-	@date:
-	- created on 2024-04-21
-	- updated on 2025-07-01
+	@date:   [created: 2024-04-21, updated: 2025-10-10]
 */
 
 /* === FONT RESOURCES === */
@@ -65,20 +63,18 @@
 * {
 	margin: 0;
 	padding: 0;
-	box-sizing: border-box;
+	box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
 /* Define global CSS variables within `:root` scope */
 :root {
-	--scaling-factor: 0.5;          /* Scaling factor for different screen sizes */
-	--header-height: 96px;          /* Height of fixed header bar */
-	--header-height-scaled: calc(
-		var(--header-height) * var(--scaling-factor)
-	);
-	--main-content-padding-left: var(--header-height-scaled);
-	--main-content-padding-top: calc(32px * var(--scaling-factor));
-	--main-content-padding-bottom: calc(128px * var(--scaling-factor));
-	--base-font-size: calc(32px * var(--scaling-factor));
+	--var-scaling: 0.5; /* Scaling factor for different screen sizes */
+	--header-height: calc(96px * var(--var-scaling));
+	--main-content-padding-left: calc(96px * var(--var-scaling));
+	--main-content-padding-right: var(--main-content-padding-left);
+	--main-content-padding-top: calc(96px * var(--var-scaling));
+	--main-content-padding-bottom: var(--main-content-padding-top);
+	--base-font-size: calc(32px * var(--var-scaling));
 	--base-line-height: 1.5;
 	/* Named colors */
 	--color-snow: #FFFFFF;
@@ -119,7 +115,7 @@ body.dark-theme {
 header {
 	padding: 0px;
 	margin: 0px;	
-	height: var(--header-height-scaled);
+	height: var(--header-height);
 	width: 100%;                                      /* Stretch the header across the entire width */
 	position: fixed;                                  /* Keep the header fixed at the top */
 	left: 0px;
@@ -133,23 +129,21 @@ header .nav-container {            	                  /* Container for navigatio
 	padding: 0px;
 	margin: 0px;	
 	position: absolute;
-	left: calc(
-		128px * var(--scaling-factor)
-	);
+	left: calc(28px * var(--var-scaling));
 	top: 0px;
 }
 
 header .clickable-icon {
 	display: block;
 	border: none;
-	background-color: transparent; /* Ensures no background color conflicts */
+	background-color: transparent;                    /* Ensures no background color conflicts */
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
-	cursor: pointer;               /* Changes cursor to pointer on hover for better UX */
+	cursor: pointer;                                  /* Changes cursor to pointer on hover for better UX */
 	padding: 0px;
 	margin: 0px;
-	height: var(--header-height-scaled);
+	height: var(--header-height);
 	position: absolute;
 }
 
@@ -159,7 +153,7 @@ header .clickable-icon:hover {
 
 #link-stack {
 	background-image: url('../../commons/images/label-STACK-light.png');
-	width: calc(138px * var(--scaling-factor));
+	width: calc(138px * var(--var-scaling));
 	left: 0px;
 	top: 0px;
 }
@@ -170,8 +164,8 @@ body.dark-theme #link-stack {
 
 #link-heap {
 	background-image: url('../../commons/images/label-HEAP-light.png');
-	width: calc(108px * var(--scaling-factor));
-	left: calc(170px * var(--scaling-factor)); /* 138 + 32 */ 
+	width: calc(108px * var(--var-scaling));
+	left: calc(170px * var(--var-scaling)); /* 138 + 32 */ 
 	top: 0px;
 }
 
@@ -181,8 +175,8 @@ body.dark-theme #link-heap {
 
 #link-archive {
 	background-image: url('../../commons/images/label-ARCHIVE-light.png');
-	width: calc(180px * var(--scaling-factor));
-	left: calc(310px * var(--scaling-factor)); /* 108 + 138 + 32 * 2 */
+	width: calc(180px * var(--var-scaling));
+	left: calc(310px * var(--var-scaling)); /* 108 + 138 + 32 * 2 */
 	top: 0px;
 }
 
@@ -191,7 +185,7 @@ body.dark-theme #link-archive {
 }
 
 #switch-theme-button {
-	width: var(--header-height-scaled);
+	width: var(--header-height);
 	background-image: url('../../commons/images/icon-switch-theme-light.png');
 	right: 0px;
 	top: 0px;
@@ -213,16 +207,20 @@ a:hover {
 /* === MAIN CONTENT STYLES === */
 
 main {
-	/* Adjust margin and padding */
-	margin-top: var(--header-height-scaled);
+	/* --- Vertical layout --- */
+	margin-top: var(--header-height); /* Pushes content below the fixed header */
+	height: calc(100vh - var(--header-height)); /* Adjusts height to fill the screen, subtracting the header's height */
 	padding-top: var(--main-content-padding-top);
-	height: calc(
-		100vh - var(--header-height-scaled)
-	);                                              /* Adjusts height to fill the screen, subtracting the header's height */
-	margin-left: 0px;
-	padding-left: var(--main-content-padding-left); /* Add padding to the left for better visual effect */
-	margin-bottom: 0px;
 	padding-bottom: var(--main-content-padding-bottom);
+	margin-bottom: 0px;
+	/* --- Horizontal layout --- */
+	width: 1024px;
+	margin-left: auto;
+	margin-right: auto;
+	border-left: 100px solid red;
+	border-right: 100px solid green;
+	padding-left: var(--main-content-padding-left);
+	padding-right: var(--main-content-padding-right);
 	/* Enable scrolling for content */
 	overflow-y: scroll;
 	overflow-x: scroll;

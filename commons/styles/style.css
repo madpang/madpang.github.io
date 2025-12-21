@@ -73,6 +73,8 @@
 	--header-height: calc(96px * var(--var-scaling));
 	--footer-height: calc(32px * var(--var-scaling));
 
+	--header-icon-size: var(--header-height);
+
 	--content-width: calc(1802px * var(--var-scaling));
 	--content-pad-x: calc(96px * var(--var-scaling));
 	--content-pad-y: calc(96px * var(--var-scaling));
@@ -89,6 +91,7 @@
 	--color-silver: #D6D6D6;
 	--color-tin: #919191;
 	--color-lead: #212121;
+	--color-crayons-maraschino: rgba(255, 38, 0, 1.00);
 	--color-electric-blue: rgba(44, 117, 255, 1.00);
 	--color-frosted-glass: rgba(214, 214, 214, 0.75);
 	--color-custom-dark-1: #161616;
@@ -105,11 +108,58 @@ body {
 
 /* === CUSTOM CLASSES FOR STYLING === */
 
+/* --- Utility Classes --- */
+.pd-button {
+	border: none;
+	background-color: transparent;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor: pointer;
+	/* @note: Requires another class to supply background-image */
+}
+
 /* --- (1) Header Bar --- */
 /* header is fixed at top of viewport */
+.pd-site-header {
+	z-index: 1000; /* Ensure the header is above other content */
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: var(--header-height);
+	background-color: var(--header-bg-color);
+	/* [DEBUG] Comment out the following border line in production */
+	border: 2px solid var(--color-crayons-maraschino);
+	/* layout: horizontal flexbox */
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+/* --- header components --- */
+.left-aligned-icon,
+.right-aligned-icon {
+	height: 100%;
+	flex: 0 0 var(--header-icon-size);
+}
+.right-aligned-icon {
+	margin-left: auto; /* Pushes the button to the far right */
+}
+/* @note: left-aligned-icon has default margin-left: 0 */
+
+.pd-site-theme-switch {
+	background-image: url('../../commons/images/icon-switch-theme-light.png');
+}
 
 /* --- (2) Main Content --- */
 /* main spans from below header to bottom of viewport (can be covered by footer) */
+.pd-site-main {
+	z-index: 500;
+	margin-top: var(--header-height); /* Pushes content below the fixed header */
+	min-height: calc(100vh - var(--header-height));	/* @note: min-height is used to allow content to grow beyond viewport height */
+	padding: 0px;
+}
 
 /* --- (3) Footer Bar --- */
 /* footer is fixed at bottom of viewport, may cover some main content if overlapping */

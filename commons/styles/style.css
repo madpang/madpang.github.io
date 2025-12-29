@@ -79,6 +79,7 @@
 	--content-pad-x: calc(96px * var(--var-scaling));
 	--content-pad-y: calc(96px * var(--var-scaling));
 
+	/* @todo: to be removed later */
 	--main-content-padding-left: calc(96px * var(--var-scaling));
 	--main-content-padding-right: var(--main-content-padding-left);
 	--main-content-padding-top: calc(96px * var(--var-scaling));
@@ -120,6 +121,14 @@ body {
 }
 
 /* --- (1) Header Bar --- */
+
+/* diagram */
+/*
+| [96px icon][ <-- ~  nav: links links link ~ -->]   [96px toggle ] |
+|<--------------------------- 100% width -------------------------->|
+|<-----------fixed header as a *flex container* ------------------->|
+*/
+
 /* header is fixed at top of viewport */
 .pd-site-header {
 	z-index: 1000; /* Ensure the header is above other content */
@@ -142,7 +151,8 @@ body {
 .left-aligned-icon,
 .right-aligned-icon {
 	height: 100%;
-	flex: 0 0 var(--header-icon-size);
+	width: var(--header-icon-size);
+	flex: 0 0 auto; /* Fix-sized icon DO NOT participate flexing */
 }
 .right-aligned-icon {
 	margin-left: auto; /* Pushes the button to the far right */
@@ -151,6 +161,32 @@ body {
 
 .pd-site-theme-switch {
 	background-image: url('../../commons/images/icon-switch-theme-light.png');
+}
+
+.pd-site-nav {
+	height: 100%;
+	flex: 1; /* Takes up remaining space between left and right icons */
+	/* [DEBUG] Comment out the following border line in production */
+	border: 2px solid var(--color-crayons-maraschino);	
+
+	/* LAYOUT: A flex container, but itself is an inline element */
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;     /* Centers navigation links vertically */
+	justify-content: center; /* Centers navigation links horizontally */
+}
+
+.pd-site-nav-link {
+	height: 100%;
+	/* margin: 0px 16px;  */
+	display: inline-flex;
+	align-items: center;
+}
+
+img.pd-site-nav-link-image {
+	display: block;
+	height: 100%;
+	width: auto;
 }
 
 /* --- (2) Main Content --- */
@@ -184,19 +220,19 @@ body {
 .left-gradient-bar {
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(to right, var(--color-electric-blue), var(--color-frosted-glass));
+	background-image: linear-gradient(to right, var(--color-electric-blue), var(--color-frosted-glass));
 }
 
 .center-semitransparent-bar {
 	width: 100%;
 	height: 100%;
-	background: var(--color-frosted-glass);
+	background-color: var(--color-frosted-glass);
 }
 
 .right-gradient-bar {
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(to left, var(--color-electric-blue), var(--color-frosted-glass));
+	background-image: linear-gradient(to left, var(--color-electric-blue), var(--color-frosted-glass));
 }
 /* ------------------------- */
 
@@ -231,7 +267,7 @@ header .nav-container {            	                  /* Container for navigatio
 }
 
 /* centered fixed-width article/content area */
-.site-main > .post {
+.site-main > .pd-post {
 	width: var(--content-width);
 	margin: 0 auto; /* Center the content horizontally */
 	padding: var(--content-pad-y) var(--content-pad-x);

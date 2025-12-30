@@ -87,15 +87,14 @@
 	--base-font-size: calc(32px * var(--var-scaling));
 	--base-line-height: 1.5;
 	/* Named colors */
-	--color-snow: #FFFFFF;
-	--color-mercury: #EBEBEB;
-	--color-silver: #D6D6D6;
-	--color-tin: #919191;
-	--color-lead: #212121;
-	--color-crayons-maraschino: rgba(255, 38, 0, 1.00);
-	--color-electric-blue: rgba(44, 117, 255, 1.00);
-	--color-frosted-glass: rgba(214, 214, 214, 0.75);
-	--color-custom-dark-1: #161616;
+	--color-snow:              rgba(255, 255, 255, 1.00);
+	--color-mercury:           rgba(235, 235, 235, 1.00);
+	--color-silver:            rgba(214, 214, 214, 1.00);
+	--color-tin:               rgba(145, 145, 145, 1.00);
+	--color-lead:              rgba(33, 33, 33, 1.00);
+	--color-maraschino:        rgba(255, 38, 0, 1.00);
+	--color-electric-blue:     rgba(44, 117, 255, 1.00);
+	--color-frosted-glass:     rgba(214, 214, 214, 0.75);
 }
 
 body {
@@ -112,60 +111,64 @@ body {
    ========================= */
 
 /* layout */
-.pd-flex { display: flex; }
+.pd-flex-container { display: flex; }
 .pd-inline-flex { display: inline-flex; }
-.pd-row { flex-direction: row; }
-.pd-col { flex-direction: column; }
+.pd-layout-row { flex-direction: row; }
+.pd-layout-col { flex-direction: column; }
 .pd-center-y { align-items: center; }
 .pd-center-x { justify-content: center; }
 .pd-ml-auto { margin-left: auto; }
 .pd-mt-96 { margin-top: calc(96px * var(--var-scaling)); }
 .pd-flex-1 { flex: 1 1 auto; }
-.pd-flex-none { flex: 0 0 auto; }
-.pd-debug-border {
-	--debug-border-thickness: 2px;
-	--debug-border-color: var(--color-crayons-maraschino);
-	border-width: var(--debug-border-thickness);
-	border-style: solid;
-	border-color: var(--debug-border-color);
-}
+.pd-flex-0 { flex: 0 0 auto; }
 
 /* sizing (token-based) */
-.pd-h-96 { height: calc(96px * var(--var-scaling)); }
+.pd-h-32 {
+	--pd-height: calc(32px * var(--var-scaling));
+	height: var(--pd-height);}
+.pd-h-96 {
+	--pd-height: calc(96px * var(--var-scaling));
+	height: var(--pd-height);}
 .pd-h-full { height: 100%; }
+.pd-w-96 {
+	--pd-width: calc(96px * var(--var-scaling));
+	width: var(--pd-width);}
 .pd-w-full { width: 100%; }
 .pd-w-icon { width: var(--header-icon-size); }
 .pd-h-header { height: var(--header-height); }
 .pd-h-footer { height: var(--footer-height); }
 
 /* positioning */
-.pd-fixed { position: fixed; }
-.pd-top-0 { top: 0; }
-.pd-bottom-0 { bottom: 0; }
-.pd-left-0 { left: 0; }
-.pd-w-full { width: 100%; }
+.pd-viewport-anchor { position: fixed; } /* position relative to viewport */
+.pd-anchor-t-0 { top: 0; }               /* position anchor top */
+.pd-anchor-b-0 { bottom: 0; }            /* position anchor bottom */
+.pd-anchor-l-0 { left: 0; }              /* position anchor left */
 .pd-z-1000 { z-index: 1000; }
 .pd-z-999  { z-index: 999; }
 
 /* Coloring */
-.pd-bg-null    { background-color: transparent; }
-.pd-bg-mercury { background-color: var(--color-mercury); }
-
+.pd-bg-null { background-color: transparent; }
+.pd-bg-mercury {
+	--pd-bg-color: var(--color-mercury);
+	background-color: var(--pd-bg-color); }
+.pd-bg-electric-blue {
+	--pd-bg-color: var(--color-electric-blue);
+	background-color: var(--pd-bg-color); }
 
 /* clickable visual reset */
 .pd-btn {
-	border: none;
-	padding: 0;
-	background-color: transparent;
+	/* default size */
+	height: var(--pd-height, calc(128px * var(--var-scaling)));
+	width: var(--pd-width, calc(128px * var(--var-scaling)));
+	/* visual */
+	border-width: 0;                     /* no border */
+	background-color: var(--pd-bg-color, transparent);
+	background-image: var(--pd-bg-img, none);
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
-	cursor: pointer;
-}
-
-/* background image helper
-   (component-specific classes will set background-image) */
-.pd-bg-cover { background-size: cover; }
+	/* behavior */
+	cursor: pointer;}
 
 /* footer grid utilities */
 .pd-grid { display: grid; }
@@ -197,7 +200,7 @@ body {
    ========================= */
 
 /* left icon */
-.pd-asset-home {
+.pd-asset-home-icon {
   background-image: url('../../commons/images/icon-home-light.png');
 }
 
@@ -227,3 +230,14 @@ body {
 .pd-nav-w-stack   { width: 140px; }
 .pd-nav-w-heap    { width: 132px; }
 .pd-nav-w-archive { width: 168px; }
+
+/* =========================
+   Debugging utilities
+   ========================= */
+.pd-debug-border {
+	--debug-border-thickness: 2px;
+	--debug-border-color: var(--color-maraschino);
+	border-width: var(--debug-border-thickness);
+	border-style: solid;
+	border-color: var(--debug-border-color);
+}

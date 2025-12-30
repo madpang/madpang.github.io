@@ -13,15 +13,22 @@ New CSS Debugging Page
 </head>
 <body>
 <header
-	class="pd-debug-border pd-fixed pd-top-0 pd-left-0 pd-h-96 pd-w-full pd-bg-mercury pd-z-1000 pd-flex pd-row pd-center-y"
-	style="--debug-border-color: blue;"
-	aria-label="Page Header"
->
+	class="pd-viewport-anchor pd-anchor-t-0 pd-anchor-l-0 pd-h-96 pd-w-full pd-bg-mercury pd-z-1000 pd-flex-container pd-layout-row pd-center-y"
+	aria-label="Page Header" >
+<button
+	id="btn-go-home"
+	class="pd-btn pd-h-96 pd-w-96 pd-bg-electric-blue"
+	aria-label="Go HomePage" >
+</button>
 </header>
 <main
-	class="pd-mt-96"
->
+	class="pd-debug-border pd-mt-96" >
 Hello
+<button
+	id="btn-go-home"
+	class="pd-debug-border pd-btn pd-h-96 pd-w-96"
+	aria-label="Go HomePage" >
+</button>
 </main>
 </body>
 </html>

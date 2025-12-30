@@ -1,0 +1,229 @@
+/*
+	@file:   pd-wysheid/commons/styles/style.css
+	@brief:  The CSS style-sheet for the pd-wysheid
+	@author: madpang
+	@date:   [created: 2024-04-21, updated: 2025-12-21]
+*/
+
+/* === FONT RESOURCES === */
+
+/* --- Monospace font resources, Latin-1 subset */
+@font-face {
+	font-family: 'IBM Plex Mono';
+	font-style: normal;
+	font-weight: 300;
+	src: local("IBM Plex Mono Light"), local("IBMPlexMono-Light"), url("../../commons/fonts/IBMPlexMono-Light-Latin1.woff2") format("woff2");
+	unicode-range: U+0020-007E, U+00A0-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+20AC, U+2122, U+2212, U+FB01-FB02
+}
+
+@font-face {
+	font-family: 'IBM Plex Mono';
+	font-style: italic;
+	font-weight: 300;
+	src: local("IBM Plex Mono Light Italic"), local("IBMPlexMono-LightItalic"), url("../../commons/fonts/IBMPlexMono-LightItalic-Latin1.woff2") format("woff2");
+	unicode-range: U+0020-007E, U+00A0-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+20AC, U+2122, U+2212, U+FB01-FB02
+}
+
+/* --- Sans font resources, Latin-1 subset */
+@font-face {
+	font-family: 'IBM Plex Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: local("IBM Plex Sans"), local("IBMPlexSans"), url("../../commons/fonts/IBMPlexSans-Regular-Latin1.woff2") format("woff2");
+	unicode-range: U+0000, U+000D, U+0020-007E, U+00A0-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+20AC, U+2122, U+2212, U+FB01-FB02
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans';
+	font-style: italic;
+	font-weight: 400;
+	src: local("IBM Plex Sans Italic"), local("IBMPlexSans-Italic"), url("IBMPlexSans-Italic-Latin1.woff2") format("woff2");
+	unicode-range: U+0000, U+000D, U+0020-007E, U+00A0-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+20AC, U+2122, U+2212, U+FB01-FB02
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans';
+	font-style: normal;
+	font-weight: 700;
+	src: local("IBM Plex Sans Bold"), local("IBMPlexSans-Bold"), url("../../commons/fonts/IBMPlexSans-Bold-Latin1.woff2") format("woff2");
+	unicode-range: U+0000, U+000D, U+0020-007E, U+00A0-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+20AC, U+2122, U+2212, U+FB01-FB02
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans';
+	font-style: italic;
+	font-weight: 700;
+	src: local("IBM Plex Sans Bold Italic"), local("IBMPlexSans-BoldItalic"), url("../../IBMPlexSans-BoldItalic-Latin1.woff2") format("woff2");
+	unicode-range: U+0000, U+000D, U+0020-007E, U+00A0-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+20AC, U+2122, U+2212, U+FB01-FB02
+}
+
+/* === GLOBAL STYLES === */
+
+/* Reset browser's default styles */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+/* Define global CSS variables within `:root` scope */
+:root {
+	--var-scaling: 0.5; /* Scaling factor for different screen sizes */
+
+	--header-height: calc(96px * var(--var-scaling));
+	--footer-height: calc(32px * var(--var-scaling));
+
+	--header-icon-size: var(--header-height);
+
+	--content-width: calc(1802px * var(--var-scaling));
+	--content-pad-x: calc(96px * var(--var-scaling));
+	--content-pad-y: calc(96px * var(--var-scaling));
+
+	/* @todo: to be removed later */
+	--main-content-padding-left: calc(96px * var(--var-scaling));
+	--main-content-padding-right: var(--main-content-padding-left);
+	--main-content-padding-top: calc(96px * var(--var-scaling));
+	--main-content-padding-bottom: var(--main-content-padding-top);
+	--base-font-size: calc(32px * var(--var-scaling));
+	--base-line-height: 1.5;
+	/* Named colors */
+	--color-snow: #FFFFFF;
+	--color-mercury: #EBEBEB;
+	--color-silver: #D6D6D6;
+	--color-tin: #919191;
+	--color-lead: #212121;
+	--color-crayons-maraschino: rgba(255, 38, 0, 1.00);
+	--color-electric-blue: rgba(44, 117, 255, 1.00);
+	--color-frosted-glass: rgba(214, 214, 214, 0.75);
+	--color-custom-dark-1: #161616;
+}
+
+body {
+	font-family: 'IBM Plex Sans', sans-serif;
+	/* --- Light theme settings --- */
+	background-color: var(--color-snow);
+	color: var(--color-lead);	
+	--header-bg-color: var(--color-mercury);
+	--header-icon-hover-bg-color: rgba(0, 0, 0, 0.10);
+}
+
+/* =========================
+   Micro-Tailwind (pd-*)
+   ========================= */
+
+/* layout */
+.pd-flex { display: flex; }
+.pd-inline-flex { display: inline-flex; }
+.pd-row { flex-direction: row; }
+.pd-col { flex-direction: column; }
+.pd-center-y { align-items: center; }
+.pd-center-x { justify-content: center; }
+.pd-ml-auto { margin-left: auto; }
+.pd-mt-96 { margin-top: calc(96px * var(--var-scaling)); }
+.pd-flex-1 { flex: 1 1 auto; }
+.pd-flex-none { flex: 0 0 auto; }
+.pd-debug-border {
+	--debug-border-thickness: 2px;
+	--debug-border-color: var(--color-crayons-maraschino);
+	border-width: var(--debug-border-thickness);
+	border-style: solid;
+	border-color: var(--debug-border-color);
+}
+
+/* sizing (token-based) */
+.pd-h-96 { height: calc(96px * var(--var-scaling)); }
+.pd-h-full { height: 100%; }
+.pd-w-full { width: 100%; }
+.pd-w-icon { width: var(--header-icon-size); }
+.pd-h-header { height: var(--header-height); }
+.pd-h-footer { height: var(--footer-height); }
+
+/* positioning */
+.pd-fixed { position: fixed; }
+.pd-top-0 { top: 0; }
+.pd-bottom-0 { bottom: 0; }
+.pd-left-0 { left: 0; }
+.pd-w-full { width: 100%; }
+.pd-z-1000 { z-index: 1000; }
+.pd-z-999  { z-index: 999; }
+
+/* Coloring */
+.pd-bg-null    { background-color: transparent; }
+.pd-bg-mercury { background-color: var(--color-mercury); }
+
+
+/* clickable visual reset */
+.pd-btn {
+	border: none;
+	padding: 0;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	cursor: pointer;
+}
+
+/* background image helper
+   (component-specific classes will set background-image) */
+.pd-bg-cover { background-size: cover; }
+
+/* footer grid utilities */
+.pd-grid { display: grid; }
+.pd-footer-cols { grid-template-columns: 1fr var(--content-width) 1fr; }
+
+/* =========================
+   Components
+   ========================= */
+
+/* footer bars stay as-is (these are "components", not utilities) */
+.left-gradient-bar {
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to right, var(--color-electric-blue), var(--color-frosted-glass));
+}
+.center-semitransparent-bar {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-frosted-glass);
+}
+.right-gradient-bar {
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to left, var(--color-electric-blue), var(--color-frosted-glass));
+}
+
+/* =========================
+   Header button assets
+   ========================= */
+
+/* left icon */
+.pd-asset-home {
+  background-image: url('../../commons/images/icon-home-light.png');
+}
+
+/* theme toggle */
+.pd-asset-theme-switch {
+  background-image: url('../../commons/images/icon-switch-theme-light.png');
+}
+
+/* nav labels */
+.pd-asset-nav-stack {
+  background-image: url('../../commons/images/label-STACK-light.png');
+}
+.pd-asset-nav-heap {
+  background-image: url('../../commons/images/label-HEAP-light.png');
+}
+.pd-asset-nav-archive {
+  background-image: url('../../commons/images/label-ARCHIVE-light.png');
+}
+
+/* nav label sizing (since you said every part is pre-defined size) */
+.pd-nav-label {
+  height: 100%;
+  width: var(--nav-label-width, 160px); /* fallback if you want */
+}
+
+/* or per-label widths if they differ */
+.pd-nav-w-stack   { width: 140px; }
+.pd-nav-w-heap    { width: 132px; }
+.pd-nav-w-archive { width: 168px; }

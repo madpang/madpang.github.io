@@ -12,13 +12,23 @@ New CSS Debugging Page
 </title>
 </head>
 <body>
+<!-- @DIAGRAM
+| ------------------------  HEADER BAR --------------------------- |
+| [96px icon][<< ~  nav: links links link ~   >>]   [96px toggle ] |
+| -------------------------- 100% width -------------------------- |
+-->
 <header
 	class="pd-viewport-anchor pd-anchor-t-0 pd-anchor-l-0 pd-h-96 pd-w-full pd-bg-mercury pd-z-1000 pd-flex-container pd-layout-row pd-center-y"
 	aria-label="Page Header" >
 <button
 	id="btn-go-home"
-	class="pd-btn pd-h-96 pd-w-96 pd-bg-electric-blue"
+	class="pd-btn pd-h-96 pd-w-96 pd-asset-home-icon pd-flex-0"
 	aria-label="Go HomePage" >
+</button>
+<button
+	id="btn-toggle-theme"
+	class="pd-btn pd-h-96 pd-w-96 pd-asset-theme-switch pd-flex-0 pd-ml-auto"
+	aria-label="Toggle Light/Dark Theme" >
 </button>
 </header>
 <main

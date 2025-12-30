@@ -151,9 +151,6 @@ body {
 .pd-bg-mercury {
 	--pd-bg-color: var(--color-mercury);
 	background-color: var(--pd-bg-color); }
-.pd-bg-electric-blue {
-	--pd-bg-color: var(--color-electric-blue);
-	background-color: var(--pd-bg-color); }
 
 /* clickable visual reset */
 .pd-btn {
@@ -199,14 +196,15 @@ body {
    Header button assets
    ========================= */
 
-/* left icon */
+/* home icon */
 .pd-asset-home-icon {
-  background-image: url('../../commons/images/icon-home-light.png');
+	/* @todo: add a real icon image */
+	--pd-bg-color: var(--color-electric-blue);
 }
 
 /* theme toggle */
 .pd-asset-theme-switch {
-  background-image: url('../../commons/images/icon-switch-theme-light.png');
+	--pd-bg-img: url('../../commons/images/icon-switch-theme-light.png');
 }
 
 /* nav labels */

@@ -129,11 +129,15 @@ body {
 .pd-h-96 {
 	--pd-height: calc(96px * var(--var-scaling));
 	height: var(--pd-height);}
-.pd-h-full { height: 100%; }
+.pd-h-full {
+	--pd-height: 100%;
+	height: var(--pd-height);}
 .pd-w-96 {
 	--pd-width: calc(96px * var(--var-scaling));
 	width: var(--pd-width);}
-.pd-w-full { width: 100%; }
+.pd-w-full {
+	--pd-width: 100%;
+	width: var(--pd-width);}
 .pd-w-icon { width: var(--header-icon-size); }
 .pd-h-header { height: var(--header-height); }
 .pd-h-footer { height: var(--footer-height); }
@@ -163,7 +167,7 @@ body {
 	background-image: var(--pd-bg-img, none);
 	background-repeat: no-repeat;
 	background-position: center;
-	background-size: cover;
+	background-size: contain;
 	/* behavior */
 	cursor: pointer;}
 
@@ -208,14 +212,14 @@ body {
 }
 
 /* nav labels */
-.pd-asset-nav-stack {
-  background-image: url('../../commons/images/label-STACK-light.png');
+.pd-asset-stack-label {
+	--pd-bg-img: url('../../commons/images/label-STACK-light.png');
 }
-.pd-asset-nav-heap {
-  background-image: url('../../commons/images/label-HEAP-light.png');
+.pd-asset-heap-label {
+	--pd-bg-img: url('../../commons/images/label-HEAP-light.png');
 }
-.pd-asset-nav-archive {
-  background-image: url('../../commons/images/label-ARCHIVE-light.png');
+.pd-asset-archive-label {
+	--pd-bg-img: url('../../commons/images/label-ARCHIVE-light.png');
 }
 
 /* nav label sizing (since you said every part is pre-defined size) */

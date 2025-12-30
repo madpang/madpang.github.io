@@ -13,21 +13,43 @@ New CSS Debugging Page
 </head>
 <body>
 <!-- @DIAGRAM
-| ------------------------  HEADER BAR --------------------------- |
-| [96px icon][<< ~  nav: links links link ~   >>]   [96px toggle ] |
-| -------------------------- 100% width -------------------------- |
+| ------------------------  HEADER BAR ------------------------------ |
+| [96px icon] [<< ~~~  nav: link link link... ~~~  >>] [96px toggle ] |
+| -------------------------- 100% width ----------------------------- |
 -->
 <header
 	class="pd-viewport-anchor pd-anchor-t-0 pd-anchor-l-0 pd-h-96 pd-w-full pd-bg-mercury pd-z-1000 pd-flex-container pd-layout-row pd-center-y"
 	aria-label="Page Header" >
 <button
 	id="btn-go-home"
-	class="pd-btn pd-h-96 pd-w-96 pd-asset-home-icon pd-flex-0"
+	class="pd-btn pd-h-full pd-w-96 pd-asset-home-icon pd-flex-0"
 	aria-label="Go HomePage" >
 </button>
+<nav
+	class="pd-debug-border pd-h-full pd-inline-flex pd-flex-1"
+	aria-label="Site Navigation" >
+	<button
+		id="btn-link-stack"
+		class="pd-debug-border pd-btn pd-h-full pd-asset-stack-label pd-flex-0"
+		style="--pd-width: 100px;"
+		aria-label="STACK Link" >
+	</button>
+	<button
+		id="btn-link-heap"
+		class="pd-debug-border pd-btn pd-h-full pd-asset-heap-label pd-flex-0"
+		style="--pd-width: 100px;"
+		aria-label="HEAP Link" >
+	</button>
+	<button
+		id="btn-link-archive"
+		class="pd-debug-border pd-btn pd-h-full pd-asset-archive-label pd-flex-0"
+		style="--pd-width: 100px;"
+		aria-label="ARCHIVE Link" >
+	</button>
+</nav>
 <button
 	id="btn-toggle-theme"
-	class="pd-btn pd-h-96 pd-w-96 pd-asset-theme-switch pd-flex-0 pd-ml-auto"
+	class="pd-btn pd-h-full pd-w-96 pd-asset-theme-switch pd-flex-0 pd-ml-auto"
 	aria-label="Toggle Light/Dark Theme" >
 </button>
 </header>

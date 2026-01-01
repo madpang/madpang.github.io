@@ -150,6 +150,10 @@ body {
 .pd-z-1000 { z-index: 1000; }
 .pd-z-999  { z-index: 999; }
 
+/* Transformation */
+.pd-reverse-x {
+	transform: scaleX(-1); }
+
 /* Coloring */
 .pd-bg-null { background-color: transparent; }
 .pd-bg-color {
@@ -177,22 +181,6 @@ body {
 /* =========================
    Components
    ========================= */
-
-/* footer bars stay as-is (these are "components", not utilities) */
-.pd-reverse-x {
-	transform: scaleX(-1);
-}
-
-.center-semitransparent-bar {
-  width: 100%;
-  height: 100%;
-  background-color: var(--color-frosted-glass);
-}
-.right-gradient-bar {
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(to left, var(--color-electric-blue), var(--color-frosted-glass));
-}
 
 /* =========================
    Utilities

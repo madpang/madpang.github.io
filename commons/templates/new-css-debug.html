@@ -65,12 +65,24 @@ Hello
 	aria-label="Go HomePage" >
 </button>
 </main>
+<!-- @DIAGRAM
+| ------------------------  FOOTER BAR ------------------------------ |
+| [opt. grad.] [  --- fixed-width semi-trans. bar ---  ] [opt. grad.] |
+| -------------------------- 100% width ----------------------------- |
+-->
 <footer
-	class="pd-debug-border pd-viewport-anchor pd-anchor-b-0 pd-anchor-l-0 pd-h-32 pd-w-full pd-z-999 pd-grid pd-tri-cols pd-center-y"
+	class="pd-viewport-anchor pd-anchor-b-0 pd-anchor-l-0 pd-h-32 pd-w-full pd-z-999 pd-grid pd-tri-cols pd-center-y"
 	aria-label="Page Footer" >
-	<div class="pd-h-full pd-w-full pd-bg-grad-x" style="--pd-grad-color-start: red;"></div>
-	<div class="pd-h-full pd-w-full pd-bg-color" style="--pd-bg-color: var(--color-frosted-glass);"></div>
-	<div class="pd-h-full pd-w-full pd-bg-grad-x pd-reverse-x" ></div>
+	<div
+		class="pd-h-full pd-w-full pd-bg-grad-x" >
+	</div>
+	<div
+		class="pd-h-full pd-w-full pd-bg-color"
+		style="--pd-bg-color: var(--color-frosted-glass);" >
+	</div>
+	<div
+		class="pd-h-full pd-w-full pd-bg-grad-x pd-reverse-x" >
+	</div>
 </footer>
 </body>
 </html>

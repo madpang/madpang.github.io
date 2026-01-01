@@ -23,33 +23,39 @@ New CSS Debugging Page
 <button
 	id="btn-go-home"
 	class="pd-btn pd-h-full pd-w-96 pd-asset-home-icon pd-flex-0"
+	style="--pd-bg-color: blue;"
 	aria-label="Go HomePage" >
 </button>
 <nav
-	class="pd-debug-border pd-h-full pd-inline-flex pd-flex-1"
+	class="pd-h-full pd-inline-flex pd-flex-1"
 	aria-label="Site Navigation" >
+	<div
+		class="pd-debug-border pd-h-full pd-w-128 pd-flex-0"
+		aria-hidden="true">
+	</div>	
 	<button
 		id="btn-link-stack"
-		class="pd-debug-border pd-btn pd-h-full pd-asset-stack-label pd-flex-0"
-		style="--pd-width: 100px;"
+		class="pd-btn pd-h-full pd-asset-stack-label pd-flex-0"
+		style="--pd-bg-img: url('../../commons/images/STACK-label.png'); --pd-width: 170px;"
 		aria-label="STACK Link" >
 	</button>
 	<button
 		id="btn-link-heap"
-		class="pd-debug-border pd-btn pd-h-full pd-asset-heap-label pd-flex-0"
-		style="--pd-width: 100px;"
+		class="pd-btn pd-h-full pd-asset-heap-label pd-flex-0"
+		style="--pd-bg-img: url('../../commons/images/HEAP-label.png'); --pd-width: 140px;"
 		aria-label="HEAP Link" >
 	</button>
 	<button
 		id="btn-link-archive"
-		class="pd-debug-border pd-btn pd-h-full pd-asset-archive-label pd-flex-0"
-		style="--pd-width: 100px;"
+		class="pd-btn pd-h-full pd-asset-archive-label pd-flex-0"
+		style="--pd-bg-img: url('../../commons/images/ARCHIVE-label.png'); --pd-width: 212px;"
 		aria-label="ARCHIVE Link" >
 	</button>
 </nav>
 <button
 	id="btn-toggle-theme"
-	class="pd-btn pd-h-full pd-w-96 pd-asset-theme-switch pd-flex-0 pd-ml-auto"
+	class="pd-btn pd-h-full pd-w-96 pd-flex-0 pd-ml-auto"
+	style="--pd-bg-img: url('../../commons/images/icon-switch-theme-light.png');"
 	aria-label="Toggle Light/Dark Theme" >
 </button>
 </header>

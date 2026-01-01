@@ -124,20 +124,17 @@ body {
 
 /* sizing (token-based) */
 .pd-h-32 {
-	--pd-height: calc(32px * var(--var-scaling));
-	height: var(--pd-height);}
+	--pd-height: 32px;
+	height: calc(var(--pd-height) * var(--var-scaling));}
 .pd-h-96 {
-	--pd-height: calc(96px * var(--var-scaling));
-	height: var(--pd-height);}
-.pd-h-full {
-	--pd-height: 100%;
-	height: var(--pd-height);}
+	--pd-height: 96px;
+	height: calc(var(--pd-height) * var(--var-scaling));}
 .pd-w-96 {
-	--pd-width: calc(96px * var(--var-scaling));
-	width: var(--pd-width);}
-.pd-w-full {
-	--pd-width: 100%;
-	width: var(--pd-width);}
+	--pd-width: 96px;
+	width: calc(var(--pd-width) * var(--var-scaling));}
+.pd-w-128 {
+	--pd-width: 128px;
+	width: calc(var(--pd-width) * var(--var-scaling));}
 .pd-w-icon { width: var(--header-icon-size); }
 .pd-h-header { height: var(--header-height); }
 .pd-h-footer { height: var(--footer-height); }
@@ -159,8 +156,8 @@ body {
 /* clickable visual reset */
 .pd-btn {
 	/* default size */
-	height: var(--pd-height, calc(128px * var(--var-scaling)));
-	width: var(--pd-width, calc(128px * var(--var-scaling)));
+	height: calc(var(--pd-height, 128px) * var(--var-scaling));
+	width: calc(var(--pd-width, 128px) * var(--var-scaling));
 	/* visual */
 	border-width: 0;                     /* no border */
 	background-color: var(--pd-bg-color, transparent);
@@ -197,41 +194,11 @@ body {
 }
 
 /* =========================
-   Header button assets
+   Utilities
    ========================= */
 
-/* home icon */
-.pd-asset-home-icon {
-	/* @todo: add a real icon image */
-	--pd-bg-color: var(--color-electric-blue);
-}
-
-/* theme toggle */
-.pd-asset-theme-switch {
-	--pd-bg-img: url('../../commons/images/icon-switch-theme-light.png');
-}
-
-/* nav labels */
-.pd-asset-stack-label {
-	--pd-bg-img: url('../../commons/images/label-STACK-light.png');
-}
-.pd-asset-heap-label {
-	--pd-bg-img: url('../../commons/images/label-HEAP-light.png');
-}
-.pd-asset-archive-label {
-	--pd-bg-img: url('../../commons/images/label-ARCHIVE-light.png');
-}
-
-/* nav label sizing (since you said every part is pre-defined size) */
-.pd-nav-label {
-  height: 100%;
-  width: var(--nav-label-width, 160px); /* fallback if you want */
-}
-
-/* or per-label widths if they differ */
-.pd-nav-w-stack   { width: 140px; }
-.pd-nav-w-heap    { width: 132px; }
-.pd-nav-w-archive { width: 168px; }
+.pd-h-full { height: 100%; }
+.pd-w-full { width: 100%;}
 
 /* =========================
    Debugging utilities

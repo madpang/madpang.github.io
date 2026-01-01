@@ -75,7 +75,6 @@
 
 	--header-icon-size: var(--header-height);
 
-	--content-width: calc(1802px * var(--var-scaling));
 	--content-pad-x: calc(96px * var(--var-scaling));
 	--content-pad-y: calc(96px * var(--var-scaling));
 
@@ -121,6 +120,10 @@ body {
 .pd-mt-96 { margin-top: calc(96px * var(--var-scaling)); }
 .pd-flex-1 { flex: 1 1 auto; }
 .pd-flex-0 { flex: 0 0 auto; }
+.pd-grid { display: grid; }
+.pd-tri-cols {
+	--pd-cent-width: calc(1802px * var(--var-scaling));
+	grid-template-columns: 1fr var(--pd-cent-width) 1fr; }
 
 /* sizing (token-based) */
 .pd-h-32 {
@@ -149,9 +152,12 @@ body {
 
 /* Coloring */
 .pd-bg-null { background-color: transparent; }
-.pd-bg-mercury {
-	--pd-bg-color: var(--color-mercury);
-	background-color: var(--pd-bg-color); }
+.pd-bg-color {
+	background-color: var(--pd-bg-color, var(--color-mercury)); }
+.pd-bg-grad-x {
+	background-image: linear-gradient(to right,
+		var(--pd-grad-color-start, var(--color-electric-blue)),
+		var(--pd-grad-color-end, var(--color-frosted-glass))); }
 
 /* clickable visual reset */
 .pd-btn {
@@ -168,20 +174,15 @@ body {
 	/* behavior */
 	cursor: pointer;}
 
-/* footer grid utilities */
-.pd-grid { display: grid; }
-.pd-footer-cols { grid-template-columns: 1fr var(--content-width) 1fr; }
-
 /* =========================
    Components
    ========================= */
 
 /* footer bars stay as-is (these are "components", not utilities) */
-.left-gradient-bar {
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(to right, var(--color-electric-blue), var(--color-frosted-glass));
+.pd-reverse-x {
+	transform: scaleX(-1);
 }
+
 .center-semitransparent-bar {
   width: 100%;
   height: 100%;
@@ -198,7 +199,7 @@ body {
    ========================= */
 
 .pd-h-full { height: 100%; }
-.pd-w-full { width: 100%;}
+.pd-w-full { width: 100%; }
 
 /* =========================
    Debugging utilities

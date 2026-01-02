@@ -96,15 +96,6 @@
 	--color-frosted-glass:     rgba(214, 214, 214, 0.75);
 }
 
-body {
-	font-family: 'IBM Plex Sans', sans-serif;
-	/* --- Light theme settings --- */
-	background-color: var(--color-snow);
-	color: var(--color-lead);	
-	--header-bg-color: var(--color-mercury);
-	--header-icon-hover-bg-color: rgba(0, 0, 0, 0.10);
-}
-
 /* =========================
    Micro-Tailwind (pd-*)
    ========================= */
@@ -118,6 +109,8 @@ body {
 .pd-center-x { justify-content: center; }
 .pd-ml-auto { margin-left: auto; }
 .pd-mt-96 { margin-top: calc(96px * var(--var-scaling)); }
+.pd-pt-96 { padding-top: calc(96px * var(--var-scaling)); }
+.pd-pb-96 { padding-bottom: calc(96px * var(--var-scaling)); }
 .pd-flex-1 { flex: 1 1 auto; }
 .pd-flex-0 { flex: 0 0 auto; }
 .pd-grid { display: grid; }
@@ -138,17 +131,17 @@ body {
 .pd-w-128 {
 	--pd-width: 128px;
 	width: calc(var(--pd-width) * var(--var-scaling));}
-.pd-w-icon { width: var(--header-icon-size); }
-.pd-h-header { height: var(--header-height); }
-.pd-h-footer { height: var(--footer-height); }
 
 /* positioning */
-.pd-viewport-anchor { position: fixed; } /* position relative to viewport */
-.pd-anchor-t-0 { top: 0; }               /* position anchor top */
-.pd-anchor-b-0 { bottom: 0; }            /* position anchor bottom */
-.pd-anchor-l-0 { left: 0; }              /* position anchor left */
+.pd-viewport-anchor { position: fixed; }  /* position relative to viewport */
+.pd-parent-anchor { position: absolute; } /* position relative to nearest positioned ancestor */
+.pd-anchor-t-0 { top: 0; }                /* position anchor top */
+.pd-anchor-b-0 { bottom: 0; }             /* position anchor bottom */
+.pd-anchor-l-0 { left: 0; }               /* position anchor left */
+.pd-anchor-r-0 { right: 0; }              /* position anchor right */
 .pd-z-1000 { z-index: 1000; }
 .pd-z-999  { z-index: 999; }
+.pd-z-100 { z-index: 100; }
 
 /* Transformation */
 .pd-reverse-x {
@@ -163,7 +156,10 @@ body {
 		var(--pd-grad-color-start, var(--color-electric-blue)),
 		var(--pd-grad-color-end, var(--color-frosted-glass))); }
 
-/* clickable visual reset */
+/* =========================
+   Components
+   ========================= */
+
 .pd-btn {
 	/* default size */
 	height: calc(var(--pd-height, 128px) * var(--var-scaling));
@@ -177,10 +173,6 @@ body {
 	background-size: contain;
 	/* behavior */
 	cursor: pointer;}
-
-/* =========================
-   Components
-   ========================= */
 
 /* =========================
    Utilities
@@ -198,4 +190,11 @@ body {
 	border-width: var(--debug-border-thickness);
 	border-style: solid;
 	border-color: var(--debug-border-color);
+}
+
+/* Root: column flex; header fixed height, main takes rest */
+.pd-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }

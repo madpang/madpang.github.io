@@ -11,14 +11,15 @@
 New CSS Debugging Page
 </title>
 </head>
-<body>
+<body
+	class="pd-debug-border pd-viewport-anchor pd-anchor-t-0 pd-anchor-b-0 pd-anchor-l-0 pd-anchor-r-0 pd-flex-container pd-layout-col" >
 <!-- @DIAGRAM
 | ------------------------  HEADER BAR ------------------------------ |
 | [96px icon] [<< ~~~  nav: link link link... ~~~  >>] [96px toggle ] |
 | -------------------------- 100% width ----------------------------- |
 -->
 <header
-	class="pd-viewport-anchor pd-anchor-t-0 pd-anchor-l-0 pd-h-96 pd-w-full pd-bg-color pd-z-1000 pd-flex-container pd-layout-row pd-center-y"
+	class="pd-h-96 pd-w-full pd-bg-color pd-flex-0 pd-z-1000 pd-flex-container pd-layout-row pd-center-y"
 	aria-label="Page Header" >
 <button
 	id="btn-go-home"
@@ -56,14 +57,16 @@ New CSS Debugging Page
 	aria-label="Toggle Light/Dark Theme" >
 </button>
 </header>
+<div
+	class="pd-debug-border pd-flex-1 pd-w-full" 
+	style="--debug-border-color: blue;">
 <main
-	class="pd-mt-96" >
-Hello
-<button
-	id="btn-go-home"
-	class="pd-btn pd-h-96 pd-w-96"
-	aria-label="Go HomePage" >
-</button>
+	class="pd-debug-border pd-h-full pd-w-full pd-z-100"
+	style="--debug-border-color: green;">
+<article>
+<h1>Create a Custom CSS Debugging Page for Web Development</h1>
+<p>This page is designed to help web developers debug and test CSS styles effectively.</p>
+</article>
 </main>
 <!-- @DIAGRAM
 | ------------------------  FOOTER BAR ------------------------------ |
@@ -71,7 +74,7 @@ Hello
 | -------------------------- 100% width ----------------------------- |
 -->
 <footer
-	class="pd-viewport-anchor pd-anchor-b-0 pd-anchor-l-0 pd-h-32 pd-w-full pd-z-999 pd-grid pd-tri-cols pd-center-y"
+	class="pd-parent-anchor pd-anchor-b-0 pd-anchor-l-0 pd-h-32 pd-w-full pd-z-999 pd-grid pd-tri-cols pd-center-y"
 	aria-label="Page Footer" >
 	<div
 		class="pd-h-full pd-w-full pd-bg-grad-x" >
@@ -84,5 +87,6 @@ Hello
 		class="pd-h-full pd-w-full pd-bg-grad-x pd-reverse-x" >
 	</div>
 </footer>
+</div>
 </body>
 </html>

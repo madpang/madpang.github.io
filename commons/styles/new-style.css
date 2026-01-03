@@ -96,6 +96,10 @@
 	box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
+/* ::-webkit-scrollbar {
+	display: none;
+} */
+
 /* =========================
    Components
    ========================= */
@@ -118,6 +122,19 @@
 	/* pure constructive, for layout purpose */
 	pointer-events: none;
 	user-select: none;
+}
+
+.pd-h-header { height: var(--header-height); }
+.pd-h-footer { height: var(--footer-height); }
+
+.pd-main-scrollable {
+	margin-top: var(--header-height);
+	min-height: calc(100vh - var(--header-height));
+	min-width: 100%;
+	overflow-y: auto; }
+
+.pd-article {
+	overflow-x: hidden;
 }
 
 /* =========================
@@ -162,7 +179,7 @@
 
 /* positioning */
 .pd-viewport-anchor { position: fixed; }  /* position relative to viewport */
-.pd-parent-anchor { position: sticky; } /* position relative to nearest positioned ancestor */
+.pd-parent-anchor { position: absolute; } /* position relative to nearest positioned ancestor */
 .pd-anchor-t-0 { top: 0; }                /* position anchor top */
 .pd-anchor-b-0 { bottom: 0; }             /* position anchor bottom */
 .pd-anchor-l-0 { left: 0; }               /* position anchor left */
@@ -183,11 +200,6 @@
 	background-image: linear-gradient(to right,
 		var(--pd-grad-color-start, var(--color-electric-blue)),
 		var(--pd-grad-color-end, var(--color-frosted-glass))); }
-
-/* Interactivity */
-.pd-scroll-y {
-	overflow-y: auto;
-	-webkit-overflow-scrolling: touch; /* for smooth scrolling on iOS */ }
 
 /* =========================
    Debugging utilities

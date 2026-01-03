@@ -90,6 +90,22 @@
 	box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
+body {
+	--bg-color: var(--color-snow);
+	--fg-color: var(--color-lead);
+	--btn-hover-mask: rgba(0, 0, 0, 0.1);
+}
+
+body.pd-dark-theme {
+	--bg-color: var(--color-lead);
+	--fg-color: var(--color-snow);
+	--btn-hover-mask: rgba(255, 255, 255, 0.1);
+}
+
+body {
+	font-family: 'IBM Plex Sans', sans-serif;
+}
+
 /* ::-webkit-scrollbar {
 	display: none;
 } */
@@ -111,6 +127,9 @@
 	background-size: contain;
 	/* behavior */
 	cursor: pointer;}
+
+.pd-btn:hover {
+	--pd-bg-color: var(--btn-hover-mask); }
 
 .pd-dummy {
 	/* pure constructive, for layout purpose */

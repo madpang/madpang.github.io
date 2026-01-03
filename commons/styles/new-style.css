@@ -150,7 +150,7 @@
 .pd-center-x { justify-content: center; }
 .pd-ml-auto { margin-left: auto; }
 .pd-mt-96 { margin-top: calc(96px * var(--var-scaling)); }
-.pd-pt-96 { padding-top: calc(96px * var(--var-scaling)); }
+.pd-pt-48 { padding-top: calc(48px * var(--var-scaling)); }
 .pd-pb-96 { padding-bottom: calc(96px * var(--var-scaling)); }
 .pd-pl-96 { padding-left: calc(96px * var(--var-scaling)); }
 .pd-pr-96 { padding-right: calc(96px * var(--var-scaling)); }

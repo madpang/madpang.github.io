@@ -162,7 +162,7 @@
 
 /* positioning */
 .pd-viewport-anchor { position: fixed; }  /* position relative to viewport */
-.pd-parent-anchor { position: absolute; } /* position relative to nearest positioned ancestor */
+.pd-parent-anchor { position: sticky; } /* position relative to nearest positioned ancestor */
 .pd-anchor-t-0 { top: 0; }                /* position anchor top */
 .pd-anchor-b-0 { bottom: 0; }             /* position anchor bottom */
 .pd-anchor-l-0 { left: 0; }               /* position anchor left */

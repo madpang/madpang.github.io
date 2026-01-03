@@ -61,23 +61,17 @@
 
 /* Define global CSS variables within `:root` scope */
 :root {
-	--var-scaling: 0.5; /* Scaling factor for different screen sizes */
+	/* Scaling factor for different screen sizes */
+	--var-scaling: 0.5;
 
+	/* Base typography */
+	--base-font-size: calc(32px * var(--var-scaling));
+	--base-line-height: 1.5;
+
+	/* Components dimensions */
 	--header-height: calc(96px * var(--var-scaling));
 	--footer-height: calc(32px * var(--var-scaling));
 
-	--header-icon-size: var(--header-height);
-
-	--content-pad-x: calc(96px * var(--var-scaling));
-	--content-pad-y: calc(96px * var(--var-scaling));
-
-	/* @todo: to be removed later */
-	--main-content-padding-left: calc(96px * var(--var-scaling));
-	--main-content-padding-right: var(--main-content-padding-left);
-	--main-content-padding-top: calc(96px * var(--var-scaling));
-	--main-content-padding-bottom: var(--main-content-padding-top);
-	--base-font-size: calc(32px * var(--var-scaling));
-	--base-line-height: 1.5;
 	/* Named colors */
 	--color-snow:              rgba(255, 255, 255, 1.00);
 	--color-mercury:           rgba(235, 235, 235, 1.00);
@@ -128,9 +122,8 @@
 .pd-h-footer { height: var(--footer-height); }
 
 .pd-main-scrollable {
-	margin-top: var(--header-height);
-	min-height: calc(100vh - var(--header-height));
-	min-width: 100%;
+	min-height: 100vh;
+	min-width: 100vw;
 	overflow-y: auto; }
 
 .pd-article {
@@ -150,7 +143,7 @@
 .pd-center-x { justify-content: center; }
 .pd-ml-auto { margin-left: auto; }
 .pd-mt-96 { margin-top: calc(96px * var(--var-scaling)); }
-.pd-pt-48 { padding-top: calc(48px * var(--var-scaling)); }
+.pd-pt-128 { padding-top: calc(128px * var(--var-scaling)); }
 .pd-pb-96 { padding-bottom: calc(96px * var(--var-scaling)); }
 .pd-pl-96 { padding-left: calc(96px * var(--var-scaling)); }
 .pd-pr-96 { padding-right: calc(96px * var(--var-scaling)); }

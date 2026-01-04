@@ -1,0 +1,59 @@
+name: Rebuild & Deploy All Posts
+run-name: GitHub bot is rebuilding and deploying all posts
+
+on:
+  workflow_dispatch:
+
+jobs:
+  rebuild-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - name: Configure Git identity
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Build the mmd2html converter
+      run: |
+        cd mmd2html
+        chmod +x ./gradlew
+        ./gradlew build
+
+    - name: BUILD ALL POSTS
+      run: |
+        pwsh -nop ./scripts/prepare-build.ps1
+        pwsh -nop ./scripts/export-build.ps1
+
+    - name: Switch to gh-pages branch to deploy full artifacts
+      run: |
+        git fetch origin gh-pages
+        git checkout gh-pages
+
+        # Make sure we fully replace artifacts/ (not just apply diffs)
+        rm -rf artifacts
+        mkdir -p artifacts
+
+        # Use deploy script from main so gh-pages stays lightweight
+        git show origin/main:scripts/deploy-build.ps1 > deploy-build.ps1
+        pwsh -nop ./deploy-build.ps1
+
+        # Keep site entrypoint synced from main
+        git show origin/main:index.html > index.html
+
+    - name: Push the changes to gh-pages branch
+      run: |
+        git add .
+        git commit -m "Full rebuild deploy from main @ ${{ github.sha }}" && git push origin gh-pages || echo "No changes to commit"

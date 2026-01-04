@@ -70,6 +70,7 @@
 	--color-silver:            rgba(214, 214, 214, 1.00);
 	--color-tin:               rgba(145, 145, 145, 1.00);
 	--color-lead:              rgba(33, 33, 33, 1.00);
+	--color-licorice:          rgba(0, 0, 0, 1.00);
 	--color-maraschino:        rgba(255, 38, 0, 1.00);
 	--color-electric-blue:     rgba(44, 117, 255, 1.00);
 	--color-frosted-glass:     rgba(214, 214, 214, 0.75);
@@ -86,12 +87,14 @@ body {
 	--bg-color: var(--color-snow);
 	--fg-color: var(--color-lead);
 	--btn-hover-mask: rgba(0, 0, 0, 0.1);
+	--code-blk-bg: var(--color-mercury);
 }
 
 body.pd-dark-theme {
 	--bg-color: var(--color-lead);
 	--fg-color: var(--color-snow);
 	--btn-hover-mask: rgba(255, 255, 255, 0.1);
+	--code-blk-bg: var(--color-licorice);
 }
 
 body {
@@ -148,7 +151,7 @@ h4 {
 pre {
 	font-family: 'IBM Plex Mono', monospace;
 	font-size: 0.75rem;
-	background-color: var(--color-mercury);
+	background-color: var(--code-blk-bg);
 	padding: calc(16px * var(--var-scaling));
 	overflow-x: auto;
 	border-radius: calc(8px * var(--var-scaling));

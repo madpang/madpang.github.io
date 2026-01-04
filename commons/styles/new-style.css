@@ -99,6 +99,9 @@ body {
 	font-family: 'IBM Plex Sans', sans-serif;
 	font-size: calc(32px * var(--var-scaling));
 	line-height: 1.5;
+	/* Coloring */
+	background-color: var(--bg-color);
+	color: var(--fg-color);
 }
 
 /* ::-webkit-scrollbar {

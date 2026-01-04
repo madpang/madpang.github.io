@@ -1,12 +1,23 @@
+<!DOCTYPE html>
+<!--@ANCHOR:NULL
+	@file:     pd-wysheid/common/templates/post-template.html
+	@brief:    the template for a post
+	@details:  post should be placed at `pd-wysheid/artifact/<post-id>/<post-id>.html`
+	@author:   madpang
+	@date:
+	- created on 2025-05-18
+	- updated on 2025-05-18        
+-->
 <html lang="en-US">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="author" content="madpang" />
-<link rel="stylesheet" href="../../commons/styles/new-style.css" />
 <link rel="icon" type="image/png" sizes="16x16" href="../../commons/images/favicon-16.png" />
 <link rel="icon" type="image/png" sizes="32x32" href="../../commons/images/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="64x64" href="../../commons/images/favicon-64.png" />
+<link rel="stylesheet" href="../../commons/styles/new-style.css" />
+<script src="../../commons/scripts/main.js" defer></script>
 <title>
 New CSS Debugging Page
 </title>
@@ -24,6 +35,7 @@ New CSS Debugging Page
 		id="btn-go-home"
 		class="pd-btn pd-h-full pd-w-96 pd-asset-home-icon pd-flex-0"
 		style="--pd-bg-color: blue;"
+		data-href="../../index.html"
 		aria-label="Go HomePage" >
 	</button>
 	<nav
@@ -60,7 +72,7 @@ New CSS Debugging Page
 	class="pd-main-scrollable pd-z-100 pd-grid pd-tri-cols" >
 <div class="pd-dummy" aria-hidden="true" ></div>
 <article
-	class="pd-article pd-pt-128 pd-pb-96 pd-pl-96 pd-pr-96" >
+	class="pd-article pd-pt-128 pd-pb-96 pd-pl-96 pd-pr-96 pd-debug-border" >
 <h1>Setup NFS Server for Local Network File Sharing</h1>
 <s-paragraph>
 <p>

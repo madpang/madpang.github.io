@@ -88,6 +88,12 @@ body {
 	--fg-color: var(--color-lead);
 	--btn-hover-mask: rgba(0, 0, 0, 0.1);
 	--code-blk-bg: var(--color-mercury);
+	--header-bg-color: var(--color-mercury);
+
+	--pd-stack-label-img: url('../../commons/images/STACK-label.png');
+	--pd-heap-label-img: url('../../commons/images/HEAP-label.png');
+	--pd-archive-label-img: url('../../commons/images/ARCHIVE-label.png');
+	--pd-theme-switch-img: url('../../commons/images/theme-switch.png');
 }
 
 body.pd-dark-theme {
@@ -95,6 +101,12 @@ body.pd-dark-theme {
 	--fg-color: var(--color-snow);
 	--btn-hover-mask: rgba(255, 255, 255, 0.1);
 	--code-blk-bg: var(--color-licorice);
+	--header-bg-color: var(--color-licorice);
+
+	--pd-stack-label-img: url('../../commons/images/STACK-label-dark.png');
+	--pd-heap-label-img: url('../../commons/images/HEAP-label-dark.png');
+	--pd-archive-label-img: url('../../commons/images/ARCHIVE-label-dark.png');
+	--pd-theme-switch-img: url('../../commons/images/theme-switch-dark.png');
 }
 
 body {
@@ -183,6 +195,26 @@ pre {
 	/* pure constructive, for layout purpose */
 	pointer-events: none;
 	user-select: none;
+}
+
+.pd-header-bg-color {
+	--pd-bg-color: var(--header-bg-color);
+}
+
+.pd-stack-label-img {
+	--pd-bg-img: var(--pd-stack-label-img);
+}
+
+.pd-heap-label-img {
+	--pd-bg-img: var(--pd-heap-label-img);
+}
+
+.pd-archive-label-img {
+	--pd-bg-img: var(--pd-archive-label-img);
+}
+
+.pd-theme-switch-img {
+	--pd-bg-img: var(--pd-theme-switch-img);
 }
 
 .pd-main-scrollable {

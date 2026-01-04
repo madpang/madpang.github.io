@@ -2,12 +2,10 @@
 	@file:   pd-wysheid/commons/styles/style.css
 	@brief:  The CSS style-sheet for the pd-wysheid
 	@author: madpang
-	@date:
-	- created on 2024-04-21
-	- updated on 2025-07-01
+	@date:   [created: 2024-04-21, updated: 2026-01-03]
 */
 
-/* === FONT RESOURCES === */
+/* === RESOURCES === */
 
 /* --- Monospace font resources, Latin-1 subset */
 @font-face {
@@ -59,146 +57,173 @@
 	unicode-range: U+0000, U+000D, U+0020-007E, U+00A0-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044, U+20AC, U+2122, U+2212, U+FB01-FB02
 }
 
-/* === GLOBAL STYLES === */
+/* === STYLES === */
+
+/* Define global CSS variables within `:root` scope */
+:root {
+	/* Scaling factor for different screen sizes */
+	--var-scaling: 0.5;
+
+	/* Named colors */
+	--color-snow:              rgba(255, 255, 255, 1.00);
+	--color-mercury:           rgba(235, 235, 235, 1.00);
+	--color-silver:            rgba(214, 214, 214, 1.00);
+	--color-tin:               rgba(145, 145, 145, 1.00);
+	--color-lead:              rgba(33, 33, 33, 1.00);
+	--color-licorice:          rgba(0, 0, 0, 1.00);
+	--color-maraschino:        rgba(255, 38, 0, 1.00);
+	--color-electric-blue:     rgba(44, 117, 255, 1.00);
+	--color-frosted-glass:     rgba(214, 214, 214, 0.75);
+}
 
 /* Reset browser's default styles */
 * {
 	margin: 0;
 	padding: 0;
-	box-sizing: border-box;
-}
-
-/* Define global CSS variables within `:root` scope */
-:root {
-	--scaling-factor: 0.5;          /* Scaling factor for different screen sizes */
-	--header-height: 96px;          /* Height of fixed header bar */
-	--header-height-scaled: calc(
-		var(--header-height) * var(--scaling-factor)
-	);
-	--main-content-padding-left: var(--header-height-scaled);
-	--main-content-padding-top: calc(32px * var(--scaling-factor));
-	--main-content-padding-bottom: calc(128px * var(--scaling-factor));
-	--base-font-size: calc(32px * var(--scaling-factor));
-	--base-line-height: 1.5;
-	/* Named colors */
-	--color-snow: #FFFFFF;
-	--color-mercury: #EBEBEB;
-	--color-silver: #D6D6D6;
-	--color-tin: #919191;
-	--color-lead: #212121;
-	--color-custom-dark-1: #161616;
-	--color-licorice: #503030;
-	--color-moss: #009051;
+	box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
 body {
-	font-family: 'IBM Plex Sans', sans-serif;
-	font-style: normal;
-	font-weight: 400;
-	margin: 0px;
-	padding: 0px;
-	/* Light theme settings */
-	background-color: var(--color-snow);
-	color: var(--color-lead);
+	--bg-color: var(--color-snow);
+	--fg-color: var(--color-lead);
+	--btn-hover-mask: rgba(0, 0, 0, 0.1);
+	--code-blk-bg: var(--color-mercury);
 	--header-bg-color: var(--color-mercury);
-	--header-icon-hover-bg-color: rgba(0, 0, 0, 10%);
+
+	--pd-stack-label-img: url('../../commons/images/STACK-label.png');
+	--pd-heap-label-img: url('../../commons/images/HEAP-label.png');
+	--pd-archive-label-img: url('../../commons/images/ARCHIVE-label.png');
+	--pd-theme-switch-img: url('../../commons/images/theme-switch.png');
 }
 
-body.dark-theme {
-	/* Dark theme settings
-	 * @note: it is activated by adding the 'dark-theme' class to the body through JavaScript.
-	 */
-	background-color: var(--color-custom-dark-1);
-	color: var(--color-silver);
-	--header-bg-color: var(--color-lead);
-	--header-icon-hover-bg-color: rgba(255, 255, 255, 10%);
+body.pd-dark-theme {
+	--bg-color: var(--color-lead);
+	--fg-color: var(--color-snow);
+	--btn-hover-mask: rgba(255, 255, 255, 0.1);
+	--code-blk-bg: var(--color-licorice);
+	--header-bg-color: var(--color-licorice);
+
+	--pd-stack-label-img: url('../../commons/images/STACK-label-dark.png');
+	--pd-heap-label-img: url('../../commons/images/HEAP-label-dark.png');
+	--pd-archive-label-img: url('../../commons/images/ARCHIVE-label-dark.png');
+	--pd-theme-switch-img: url('../../commons/images/theme-switch-dark.png');
 }
 
-/* === HEADER STYLES === */
-
-header {
-	padding: 0px;
-	margin: 0px;	
-	height: var(--header-height-scaled);
-	width: 100%;                                      /* Stretch the header across the entire width */
-	position: fixed;                                  /* Keep the header fixed at the top */
-	left: 0px;
-	top: 0px;
-	z-index: 100;                                     /* Ensure the header is above other content */
-	background-color: var(--header-bg-color);
-	color: var(--header-text-color);	
+body {
+	/* Base typography */
+	font-family: 'IBM Plex Sans', sans-serif;
+	font-size: calc(32px * var(--var-scaling));
+	line-height: 1.5;
+	/* Coloring */
+	background-color: var(--bg-color);
+	color: var(--fg-color);
 }
 
-header .nav-container {            	                  /* Container for navigation links and a theme switch button */
-	padding: 0px;
-	margin: 0px;	
-	position: absolute;
-	left: calc(
-		128px * var(--scaling-factor)
-	);
-	top: 0px;
+/* ::-webkit-scrollbar {
+	display: none;
+} */
+
+/* =========================
+   Typography
+   ========================= */
+
+p {
+	margin-top: 0;          /* no margin before paragraph */
+	margin-bottom: 0.25rem; /* small margin after paragraph */
 }
 
-header .clickable-icon {
-	display: block;
-	border: none;
-	background-color: transparent; /* Ensures no background color conflicts */
-	background-size: cover;
+h2, h3, h4 {
+	font-weight: 700;
+}
+
+h1 {
+	font-size: clamp(2.25rem, 3.2vw, 3.25rem);
+	line-height: 1.15;
+	margin: 0 0 1.0rem;
+}
+
+h2 {
+	font-size: clamp(1.60rem, 2.2vw, 2.25rem);
+	line-height: 1.20;
+	margin: 2.25rem 0 0.75rem;
+}
+
+h3 {
+	font-size: clamp(1.30rem, 1.6vw, 1.75rem);
+	line-height: 1.25;
+	margin: 1.75rem 0 0.50rem;
+}
+
+h4 {
+	font-size: clamp(1.10rem, 1.2vw, 1.35rem);
+	line-height: 1.30;
+	margin: 1.25rem 0 0.50rem;
+}
+
+pre {
+	font-family: 'IBM Plex Mono', monospace;
+	font-size: 0.75rem;
+	background-color: var(--code-blk-bg);
+	padding: calc(16px * var(--var-scaling));
+	overflow-x: auto;
+	border-radius: calc(8px * var(--var-scaling));
+	margin-bottom: calc(24px * var(--var-scaling));
+}
+
+/* =========================
+   Components
+   ========================= */
+
+.pd-btn {
+	/* default size */
+	height: calc(var(--pd-height, 128px) * var(--var-scaling));
+	width: calc(var(--pd-width, 128px) * var(--var-scaling));
+	/* visual */
+	border-width: 0;                     /* no border */
+	background-color: var(--pd-bg-color, transparent);
+	background-image: var(--pd-bg-img, none);
 	background-repeat: no-repeat;
 	background-position: center;
-	cursor: pointer;               /* Changes cursor to pointer on hover for better UX */
-	padding: 0px;
-	margin: 0px;
-	height: var(--header-height-scaled);
-	position: absolute;
+	background-size: contain;
+	/* behavior */
+	cursor: pointer;}
+
+.pd-btn:hover {
+	--pd-bg-color: var(--btn-hover-mask); }
+
+.pd-dummy {
+	/* pure constructive, for layout purpose */
+	pointer-events: none;
+	user-select: none;
 }
 
-header .clickable-icon:hover {
-	background-color: var(--header-icon-hover-bg-color);
+.pd-header-bg-color {
+	--pd-bg-color: var(--header-bg-color);
 }
 
-#link-stack {
-	background-image: url('../../commons/images/label-STACK-light.png');
-	width: calc(138px * var(--scaling-factor));
-	left: 0px;
-	top: 0px;
+.pd-stack-label-img {
+	--pd-bg-img: var(--pd-stack-label-img);
 }
 
-body.dark-theme #link-stack {
-	background-image: url('../../commons/images/label-STACK-dark.png');
+.pd-heap-label-img {
+	--pd-bg-img: var(--pd-heap-label-img);
 }
 
-#link-heap {
-	background-image: url('../../commons/images/label-HEAP-light.png');
-	width: calc(108px * var(--scaling-factor));
-	left: calc(170px * var(--scaling-factor)); /* 138 + 32 */ 
-	top: 0px;
+.pd-archive-label-img {
+	--pd-bg-img: var(--pd-archive-label-img);
 }
 
-body.dark-theme #link-heap {
-    background-image: url('../../commons/images/label-HEAP-dark.png');
+.pd-theme-switch-img {
+	--pd-bg-img: var(--pd-theme-switch-img);
 }
 
-#link-archive {
-	background-image: url('../../commons/images/label-ARCHIVE-light.png');
-	width: calc(180px * var(--scaling-factor));
-	left: calc(310px * var(--scaling-factor)); /* 108 + 138 + 32 * 2 */
-	top: 0px;
-}
+.pd-main-scrollable {
+	min-height: 100vh;
+	min-width: 100vw;
+	overflow-y: auto; }
 
-body.dark-theme #link-archive {
-	background-image: url('../../commons/images/label-ARCHIVE-dark.png');
-}
-
-#switch-theme-button {
-	width: var(--header-height-scaled);
-	background-image: url('../../commons/images/icon-switch-theme-light.png');
-	right: 0px;
-	top: 0px;
-}
-
-body.dark-theme #switch-theme-button {
-	background-image: url('../../commons/images/icon-switch-theme-dark.png');
+.pd-article {
+	overflow-x: hidden;
 }
 
 a {
@@ -206,76 +231,77 @@ a {
 	color: inherit;
 }
 
-a:hover {
-	color: #009051;
-}
+/* =========================
+   Micro-Tailwind (pd-*)
+   ========================= */
 
-/* === MAIN CONTENT STYLES === */
+/* layout */
+.pd-flex-container { display: flex; }
+.pd-inline-flex { display: inline-flex; }
+.pd-layout-row { flex-direction: row; }
+.pd-layout-col { flex-direction: column; }
+.pd-center-y { align-items: center; }
+.pd-center-x { justify-content: center; }
+.pd-ml-auto { margin-left: auto; }
+.pd-mt-96 { margin-top: calc(96px * var(--var-scaling)); }
+.pd-pt-128 { padding-top: calc(128px * var(--var-scaling)); }
+.pd-pb-96 { padding-bottom: calc(96px * var(--var-scaling)); }
+.pd-pl-96 { padding-left: calc(96px * var(--var-scaling)); }
+.pd-pr-96 { padding-right: calc(96px * var(--var-scaling)); }
+.pd-flex-1 { flex: 1 1 auto; }
+.pd-flex-0 { flex: 0 0 auto; }
+.pd-grid { display: grid; }
+.pd-tri-cols {
+	--pd-cent-width: calc(1802px * var(--var-scaling));
+	grid-template-columns: 1fr var(--pd-cent-width) 1fr; }
 
-main {
-	/* Adjust margin and padding */
-	margin-top: var(--header-height-scaled);
-	padding-top: var(--main-content-padding-top);
-	height: calc(
-		100vh - var(--header-height-scaled)
-	);                                              /* Adjusts height to fill the screen, subtracting the header's height */
-	margin-left: 0px;
-	padding-left: var(--main-content-padding-left); /* Add padding to the left for better visual effect */
-	margin-bottom: 0px;
-	padding-bottom: var(--main-content-padding-bottom);
-	/* Enable scrolling for content */
-	overflow-y: scroll;
-	overflow-x: scroll;
-	/* Set font size and line height */
-	font-size: var(--base-font-size);
-	line-height: var(--base-line-height);
-}
+/* sizing (token-based) */
+.pd-h-32 {
+	--pd-height: 32px;
+	height: calc(var(--pd-height) * var(--var-scaling));}
+.pd-h-96 {
+	--pd-height: 96px;
+	height: calc(var(--pd-height) * var(--var-scaling));}
+.pd-w-96 {
+	--pd-width: 96px;
+	width: calc(var(--pd-width) * var(--var-scaling));}
+.pd-w-128 {
+	--pd-width: 128px;
+	width: calc(var(--pd-width) * var(--var-scaling));}
+.pd-h-full { height: 100%; }
+.pd-w-full { width: 100%; }
 
-p {
-	margin-top: 0;             /* No margin before the paragraph */
-	margin-bottom: 0.25em;     /* Adds space after the paragraph */
-	/* @note: the margin setting actually result in a 125% line spacing */
-}
+/* positioning */
+.pd-viewport-anchor { position: fixed; }  /* position relative to viewport */
+.pd-parent-anchor { position: absolute; } /* position relative to nearest positioned ancestor */
+.pd-anchor-t-0 { top: 0; }                /* position anchor top */
+.pd-anchor-b-0 { bottom: 0; }             /* position anchor bottom */
+.pd-anchor-l-0 { left: 0; }               /* position anchor left */
+.pd-anchor-r-0 { right: 0; }              /* position anchor right */
+.pd-z-1000 { z-index: 1000; }
+.pd-z-999  { z-index: 999; }
+.pd-z-100 { z-index: 100; }
 
-h1, h2, h3, h4, h5 {
-	font-style: normal;
-	font-weight: 700;
-}
+/* Transformation */
+.pd-reverse-x {
+	transform: scaleX(-1); }
 
-h1 {
-    font-size: 4em;            /* Relative to base font size */
-	margin-top: 0px;
-	margin-bottom: 0.5em;
-}
+/* Coloring */
+.pd-bg-null { background-color: transparent; }
+.pd-bg-color {
+	background-color: var(--pd-bg-color, var(--color-mercury)); }
+.pd-bg-grad-x {
+	background-image: linear-gradient(to right,
+		var(--pd-grad-color-start, var(--color-electric-blue)),
+		var(--pd-grad-color-end, var(--color-frosted-glass))); }
 
-h2 {
-    font-size: 3em;            /* Relative to base font size */
-	margin-top: 1em;
-	margin-bottom: 0.5em;
-}
-
-h3 {
-    font-size: 2.5em;          /* Relative to base font size */
-	margin-top: 1em;
-	margin-bottom: 0.5em;
-}
-
-h4 {
-	font-size: 2em;            /* Relative to base font size */
-	margin-top: 1em;
-	margin-bottom: 0.5em;
-}
-
-h5 {
-	font-size: 1.5em;          /* Relative to base font size */
-	margin-top: 1em;
-	margin-bottom: 0.5em;
-}
-
-pre {
-	font-family: 'IBM Plex Mono', monospace;
-	font-style: normal;
-	font-weight: 300;
-	font-size: 16px;
-	line-height: var(--base-line-height);
+/* =========================
+   Debugging utilities
+   ========================= */
+.pd-debug-border {
+	--debug-border-thickness: 2px;
+	--debug-border-color: var(--color-maraschino);
+	border-width: var(--debug-border-thickness);
+	border-style: solid;
+	border-color: var(--debug-border-color);
 }

@@ -64,14 +64,6 @@
 	/* Scaling factor for different screen sizes */
 	--var-scaling: 0.5;
 
-	/* Base typography */
-	--base-font-size: calc(32px * var(--var-scaling));
-	--base-line-height: 1.5;
-
-	/* Components dimensions */
-	--header-height: calc(96px * var(--var-scaling));
-	--footer-height: calc(32px * var(--var-scaling));
-
 	/* Named colors */
 	--color-snow:              rgba(255, 255, 255, 1.00);
 	--color-mercury:           rgba(235, 235, 235, 1.00);
@@ -136,9 +128,6 @@ body {
 	pointer-events: none;
 	user-select: none;
 }
-
-.pd-h-header { height: var(--header-height); }
-.pd-h-footer { height: var(--footer-height); }
 
 .pd-main-scrollable {
 	min-height: 100vh;

@@ -140,14 +140,15 @@ This workflow requires PowerShell be installed on CI environment.
 @brief:
 Refine the layout of the website.
 
-@status: TODO
+@status: DONE
 
 @date:
 - created on 2025-07-04
-- updated on 2025-07-04
+- updated on 2026-01-04
 
 @details:
-The current layout of the website is functional, but there are several areas that could be improved for better usability and aesthetics.
+This website uses a custom CSS style sheet that is built with a micro-Tailwind approach.
+The CSS defines a set of utility classes that can be composed to create complex layouts.
 
 === Ticket 6
 

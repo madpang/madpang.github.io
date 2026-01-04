@@ -110,7 +110,7 @@ body {
    ========================= */
 
 p {
-	margin-top: 0;         /* no margin before paragraph */
+	margin-top: 0;          /* no margin before paragraph */
 	margin-bottom: 0.25rem; /* small margin after paragraph */
 }
 
@@ -140,6 +140,16 @@ h4 {
 	font-size: clamp(1.10rem, 1.2vw, 1.35rem);
 	line-height: 1.30;
 	margin: 1.25rem 0 0.50rem;
+}
+
+pre {
+	font-family: 'IBM Plex Mono', monospace;
+	font-size: 0.75rem;
+	background-color: var(--color-mercury);
+	padding: calc(16px * var(--var-scaling));
+	overflow-x: auto;
+	border-radius: calc(8px * var(--var-scaling));
+	margin-bottom: calc(24px * var(--var-scaling));
 }
 
 /* =========================

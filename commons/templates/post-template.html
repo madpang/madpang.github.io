@@ -4,40 +4,94 @@
 	@brief:    the template for a post
 	@details:  post should be placed at `pd-wysheid/artifact/<post-id>/<post-id>.html`
 	@author:   madpang
-	@date:     [created: 2025-05-18, updated: 2025-12-14]
+	@date:     [created: 2025-05-18, updated: 2025-01-04]
 -->
 <html lang="en-US">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="author" content="madpang" />
-<link rel="stylesheet" href="../../commons/styles/style.css" />
 <link rel="icon" type="image/png" sizes="16x16" href="../../commons/images/favicon-16.png" />
 <link rel="icon" type="image/png" sizes="32x32" href="../../commons/images/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="64x64" href="../../commons/images/favicon-64.png" />
+<link rel="stylesheet" href="../../commons/styles/style.css" />
+<script src="../../commons/scripts/main.js" defer></script>
 <title>
 <!-- @ANCHOR:TITLE -->
 </title>
 </head>
 <body>
-<header class="site-header" aria-label="Page Header">
-<div class="nav-container">
-<a id="link-stack" class="clickable-icon" aria-label="STACK" href="../../index.html"></a>
-<a id="link-heap" class="clickable-icon" aria-label="HEAP" href="#heap"></a>
-<a id="link-archive" class="clickable-icon" aria-label="ARCHIVE" href="#archive"></a>
-</div>
-<button id="switch-theme-button" class="clickable-icon" aria-label="Toggle theme"></button>
+<!-- @DIAGRAM
+| ------------------------  HEADER BAR ------------------------------ |
+| [96px icon] [<< ~~~  nav: link link link... ~~~  >>] [96px toggle ] |
+| -------------------------- 100% width ----------------------------- |
+-->
+<header
+	class="pd-viewport-anchor pd-anchor-t-0 pd-anchor-l-0 pd-h-96 pd-w-full pd-bg-color pd-header-bg-color pd-z-1000 pd-flex-container pd-layout-row pd-center-y"
+	aria-label="Page Header" >
+	<button
+		id="btn-go-home"
+		class="pd-btn pd-h-full pd-w-96 pd-flex-0"
+		style="--pd-bg-color: blue;"
+		data-href="../../index.html"
+		aria-label="Go HomePage" >
+	</button>
+	<nav
+		class="pd-h-full pd-inline-flex pd-flex-1"
+		aria-label="Site Navigation" >
+		<div class="pd-dummy pd-h-full pd-w-96 pd-flex-0" aria-hidden="true" ></div>
+		<button
+			id="btn-link-stack"
+			class="pd-btn pd-h-full pd-stack-label-img pd-flex-0"
+			style="--pd-width: 170px;"
+			aria-label="STACK Link" >
+		</button>
+		<button
+			id="btn-link-heap"
+			class="pd-btn pd-h-full pd-heap-label-img pd-flex-0"
+			style="--pd-width: 140px;"
+			aria-label="HEAP Link" >
+		</button>
+		<button
+			id="btn-link-archive"
+			class="pd-btn pd-h-full pd-archive-label-img pd-flex-0"
+			style="--pd-width: 212px;"
+			aria-label="ARCHIVE Link" >
+		</button>
+	</nav>
+	<button
+		id="btn-toggle-theme"
+		class="pd-btn pd-h-full pd-w-96 pd-theme-switch-img pd-flex-0 pd-ml-auto"
+		aria-label="Toggle Light/Dark Theme" >
+	</button>
 </header>
-<main>
-<article>
+<main
+	class="pd-main-scrollable pd-z-100 pd-grid pd-tri-cols" >
+<div class="pd-dummy" aria-hidden="true" ></div>
+<article
+	class="pd-article pd-pt-128 pd-pb-96 pd-pl-96 pd-pr-96" >
 <!-- @ANCHOR:ARTICLE -->
 </article>
+<div class="pd-dummy" aria-hidden="true" ></div>
 </main>
-<footer class="site-footer" aria-label="Page Footer">
-<div id="footer-bar-left"></div>
-<div id="footer-bar-center"></div>
-<div id="footer-bar-right"></div>
+<!-- @DIAGRAM
+| ------------------------  FOOTER BAR ------------------------------ |
+| [opt. grad.] [  --- fixed-width semi-trans. bar ---  ] [opt. grad.] |
+| -------------------------- 100% width ----------------------------- |
+-->
+<footer
+	class="pd-viewport-anchor pd-anchor-b-0 pd-anchor-l-0 pd-h-32 pd-w-full pd-z-999 pd-grid pd-tri-cols pd-center-y"
+	aria-label="Page Footer" >
+	<div
+		class="pd-h-full pd-w-full pd-bg-grad-x" >
+	</div>
+	<div
+		class="pd-h-full pd-w-full pd-bg-color"
+		style="--pd-bg-color: var(--color-frosted-glass);" >
+	</div>
+	<div
+		class="pd-h-full pd-w-full pd-bg-grad-x pd-reverse-x" >
+	</div>
 </footer>
-<script src="../../commons/scripts/main.js"></script>
 </body>
 </html>

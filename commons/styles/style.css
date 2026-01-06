@@ -86,14 +86,12 @@
 body {
 	--bg-color: var(--color-snow);
 	--fg-color: var(--color-lead);
-	--btn-hover-mask: rgba(0, 0, 0, 0.1);
 	--code-blk-bg: var(--color-mercury);
 }
 
 body.pd-dark-theme {
 	--bg-color: var(--color-lead);
 	--fg-color: var(--color-snow);
-	--btn-hover-mask: rgba(255, 255, 255, 0.1);
 	--code-blk-bg: var(--color-licorice);
 }
 
@@ -173,6 +171,7 @@ a {
 	--pd-btn-width: 128px;
 	--pd-btn-bg-color: transparent;
 	--pd-btn-bg-img: none;
+	--pd-btn-hover-mask: rgba(0, 0, 0, 0.1);
 	/* default size */
 	height: calc(var(--pd-btn-height) * var(--var-scaling));
 	width: calc(var(--pd-btn-width) * var(--var-scaling));
@@ -187,10 +186,13 @@ a {
 	cursor: pointer;}
 
 .pd-dark-theme .pd-btn {
+	/* variables override */
+	--pd-btn-hover-mask: rgba(255, 255, 255, 0.1);
+	/* visual override */
 	background-image: var(--pd-btn-bg-img-dark, var(--pd-btn-bg-img)); }
 
 .pd-btn:hover {
-	--pd-btn-bg-color: var(--btn-hover-mask); }
+	--pd-btn-bg-color: var(--pd-btn-hover-mask); }
 
 .pd-dummy {
 	/* pure constructive, for layout purpose */

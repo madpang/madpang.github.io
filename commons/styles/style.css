@@ -2,7 +2,7 @@
 	@file:   pd-wysheid/commons/styles/style.css
 	@brief:  The CSS style-sheet for the pd-wysheid
 	@author: madpang
-	@date:   [created: 2024-04-21, updated: 2026-01-06]
+	@date:   [created: 2024-04-21, updated: 2026-01-07]
 */
 
 /* === RESOURCES === */
@@ -88,7 +88,6 @@ body {
 	--fg-color: var(--color-lead);
 	--btn-hover-mask: rgba(0, 0, 0, 0.1);
 	--code-blk-bg: var(--color-mercury);
-	--header-bg-color: var(--color-mercury);
 }
 
 body.pd-dark-theme {
@@ -96,7 +95,6 @@ body.pd-dark-theme {
 	--fg-color: var(--color-snow);
 	--btn-hover-mask: rgba(255, 255, 255, 0.1);
 	--code-blk-bg: var(--color-licorice);
-	--header-bg-color: var(--color-licorice);
 }
 
 body {
@@ -113,9 +111,7 @@ body {
 	display: none;
 } */
 
-/* =========================
-   Typography
-   ========================= */
+/* --- Typography --- */
 
 p {
 	margin-top: 0;          /* no margin before paragraph */
@@ -160,9 +156,16 @@ pre {
 	margin-bottom: calc(24px * var(--var-scaling));
 }
 
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
 /* =========================
-   Components
+   Micro-Tailwind (pd-*)
    ========================= */
+
+/* --- Components --- */
 
 .pd-btn {
 	/* variables */
@@ -195,10 +198,6 @@ pre {
 	user-select: none;
 }
 
-.pd-header-bg-color {
-	--pd-bg-color: var(--header-bg-color);
-}
-
 .pd-main-scrollable {
 	min-height: 100vh;
 	min-width: 100vw;
@@ -208,14 +207,7 @@ pre {
 	overflow-x: hidden;
 }
 
-a {
-	text-decoration: none;
-	color: inherit;
-}
-
-/* =========================
-   Micro-Tailwind (pd-*)
-   ========================= */
+/* --- Utilities --- */
 
 /* layout */
 .pd-flex-container { display: flex; }
@@ -271,15 +263,19 @@ a {
 /* Coloring */
 .pd-bg-null { background-color: transparent; }
 .pd-bg-color {
-	background-color: var(--pd-bg-color, var(--color-mercury)); }
+	--pd-bg-color: var(--color-mercury);
+	background-color: var(--pd-bg-color); }
+
+.pd-dark-theme .pd-bg-color {
+	background-color: var(--pd-bg-color-dark, var(--pd-bg-color)); }
+
 .pd-bg-grad-x {
 	background-image: linear-gradient(to right,
 		var(--pd-grad-color-start, var(--color-electric-blue)),
 		var(--pd-grad-color-end, var(--color-frosted-glass))); }
 
-/* =========================
-   Debugging utilities
-   ========================= */
+/* --- Debugging utilities --- */
+
 .pd-debug-border {
 	--debug-border-thickness: 2px;
 	--debug-border-color: var(--color-maraschino);

@@ -1,7 +1,7 @@
 ``` header
 @file: pd-wysheid/README.txt
 @author: madpang
-@date: [created: 2025-02-22, updated: 2025-08-12]
+@date: [created: 2025-02-22, updated: 2025-08-16]
 ```
 
 # pd-wysheid
@@ -16,6 +16,10 @@ The content is written in plain text, with markdown-style custom markup.
 It is converted to HTML using a custom-built converter (see [mmd2html](https://github.com/madpang/mmd2html)).
 
 ## Organization
+
+This repository includes two submodules:
+- `zettelkasten/`: the post manuscripts (plain text source).
+- `mmd2html/`: the plain text → HTML converter used by the build scripts.
 
 The folder structure of the project is as follows:
 ``` tree
@@ -43,6 +47,51 @@ The folder structure of the project is as follows:
 |- build-post.ps1 # script to build a single blog post
 |- build.ps1      # script to build blogs for the website
 |- scripts/       # utility scripts
+```
+
+## Branches & theme
+
+- `develop`: working branch used for content authoring and builds (contains `contents/` and build scripts).
+- `gh-pages`: deployment branch that hosts generated `artifacts/` for GitHub Pages.
+- `main`: stable source snapshot and repository overview.
+
+Theme-wise, the site is intentionally minimal and supports light/dark modes via a toggle in the header, backed by the shared CSS and a small theme-switcher script.
+
+## How to build
+
+The build workflow is PowerShell-based and uses the `mmd2html` converter.
+
+### Prerequisites
+- PowerShell 7+
+- Java (required to run the converter JAR)
+- The `mmd2html` and `zettelkasten` submodules initialized
+
+### Initialize submodules
+``` powershell
+git submodule update --init --recursive
+```
+
+### Build the converter
+Build the converter so the JAR exists at `./mmd2html/app/build/libs/mmd2html.jar` (see the submodule for exact build commands).
+
+### Build all posts (full site)
+``` powershell
+pwsh -NoProfile ./build.ps1
+```
+
+This runs the three-stage build:
+1. `scripts/prepare-build.ps1` compares `contents/` against `artifacts/` and prepares post lists.
+2. `scripts/export-build.ps1` calls `build-post.ps1` for every new/updated post.
+3. `scripts/deploy-build.ps1` copies `tmp-ws/artifacts/` into `artifacts/` (for `gh-pages`).
+
+### Build a single post
+``` powershell
+pwsh -NoProfile ./build-post.ps1 <path-to-output.html> <path-to-input.txt> ./commons/templates/post-template.html
+```
+
+Internally, the converter is invoked as:
+``` text
+java -jar ./mmd2html/app/build/libs/mmd2html.jar <input.txt> <output.html>
 ```
 
 ## License info.

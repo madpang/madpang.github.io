@@ -221,3 +221,79 @@ Automatic post title extraction and insertion into the index page.
 @details:
 Currently, the post titles are manually inserted into the index page.
 I would like to automate this process by extracting the post titles from the metadata and inserting them into the index page automatically.
+
+=== Ticket 11
+
+@brief:
+Add a table of contents to each blog post.
+
+@status: TODO
+
+@date:
+- created on 2026-01-08
+- updated on 2026-01-08
+
+@details:
+The blog articles are long, so it would be helpful to auto-generate a table of contents from the headings.
+The TOC can appear right after the title in the article body, or as a side panel next to the `<article>` element (or both, with a responsive layout).
+This likely needs the post generator to emit heading IDs and a TOC block in the generated HTML.
+
+=== Ticket 12
+
+@brief:
+Add hierarchical "go-back" navigation inside blog posts.
+
+@status: TODO
+
+@date:
+- created on 2026-01-08
+- updated on 2026-01-08
+
+@details:
+Each sub-section should include a "go-back to section" button, each section should include a "go-back to chapter (h2)" button, and each chapter should include a "go-back to title" button.
+This implies auto-inserting anchors/buttons in the generated HTML, and ensuring headings have stable IDs to target.
+
+=== Ticket 13
+
+@brief:
+Convert Markdown-style lists to HTML lists during post generation.
+
+@status: TODO
+
+@date:
+- created on 2026-01-08
+- updated on 2026-01-08
+
+@details:
+Plain text lists (e.g., `- item`, `1. item`) are currently emitted as plain paragraphs instead of `<ul>/<ol>`.
+The `mmd2html` converter should recognize list blocks (including nested lists) and output proper HTML list markup.
+
+=== Ticket 14
+
+@brief:
+Improve code block contrast in light and dark themes.
+
+@status: TODO
+
+@date:
+- created on 2026-01-08
+- updated on 2026-01-08
+
+@details:
+Code blocks in articles have suboptimal contrast in the current theme.
+Adjust the `pre`/`code` palette to meet readable contrast ratios in both light and dark themes, and consider adding syntax highlighting for clarity.
+
+=== Ticket 15
+
+@brief:
+Support LaTeX math rendering in blog posts.
+
+@status: TODO
+
+@date:
+- created on 2026-01-08
+- updated on 2026-01-08
+
+@details:
+Technical posts need math rendering (inline and block).
+Integrate a math renderer (e.g., KaTeX or MathJax) into the post templates and ensure the post generator preserves math delimiters.

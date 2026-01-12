@@ -1,6 +1,6 @@
-+++ header
+``` header
 @file: pd-wysheid/tickets.txt
-+++
+```
 
 === Ticket 1
 
@@ -9,9 +9,7 @@ Figure out a folder structure for the project, such that both local test using `
 
 @status: DONE
 
-@date:
-- created on 2025-02-26
-- updated on 2025-02-26
+@date: [created: 2025-02-26, updated: 2025-02-26]
 
 @details:
 The folder structure was like:
@@ -80,9 +78,7 @@ Write an article for the website.
 
 @status: DONE
 
-@date:
-- created on 2025-02-26
-- updated on 2025-05-22
+@date: [created: 2025-02-26, updated: 2025-05-22]
 
 @details:
 The first article is stamped as `PD_2025_05_16_a`, which is a post about the process of building *THIS* blog website.
@@ -95,9 +91,7 @@ Add a favicon to the website.
 
 @status: DONE
 
-@date:
-- created on 2025-02-26
-- updated on 2025-05-31
+@date: [created: 2025-02-26, updated: 2025-05-31]
 
 @details:
 
@@ -122,9 +116,7 @@ Add a build script to automate the post generation process.
 
 @status: DONE
 
-@date:
-- created on 2025-05-31
-- updated on 2025-06-01
+@date: [created: 2025-05-31, updated: 2025-06-01]
 
 @details:
 Execute `pwsh -nop build.ps1` to build the website.
@@ -142,9 +134,7 @@ Refine the layout of the website.
 
 @status: DONE
 
-@date:
-- created on 2025-07-04
-- updated on 2026-01-04
+@date: [created: 2025-07-04, updated: 2026-01-04]
 
 @details:
 This website uses a custom CSS style sheet that is built with a micro-Tailwind approach.
@@ -157,9 +147,7 @@ Add a logo to the upper left corner of the website.
 
 @status: TODO
 
-@date:
-- created on 2025-07-04
-- updated on 2025-07-04
+@date: [created: 2025-07-04, updated: 2025-07-04]
 
 @details:
 First I need a logo.
@@ -171,9 +159,7 @@ Add a search function to the website.
 
 @status: TODO
 
-@date:
-- created on 2025-07-04
-- updated on 2025-07-04
+@date: [created: 2025-07-04, updated: 2025-07-04]
 
 @details:
 A search function would be a great addition to the website, allowing users to quickly find relevant posts and information.
@@ -185,9 +171,7 @@ Add a game to the website.
 
 @status: TODO
 
-@date:
-- created on 2025-07-04
-- updated on 2025-07-04
+@date: [created: 2025-07-04, updated: 2025-07-04]
 
 @details:
 Just for fun.
@@ -200,9 +184,7 @@ Make the top navigation bar semi-transparent.
 
 @status: TODO
 
-@date:
-- created on 2025-07-04
-- updated on 2025-07-04
+@date: [created: 2025-07-04, updated: 2025-07-04]
 
 @details:
 Try to mimic the *Liquid Glass* effect introduced by Apple in WWDC (Worldwide Developers Conference) 2025.
@@ -214,9 +196,7 @@ Automatic post title extraction and insertion into the index page.
 
 @status: TODO
 
-@date:
-- created on 2025-07-07
-- updated on 2025-07-07
+@date: [created: 2025-07-07, updated: 2025-07-07]
 
 @details:
 Currently, the post titles are manually inserted into the index page.
@@ -229,9 +209,7 @@ Add a table of contents to each blog post.
 
 @status: TODO
 
-@date:
-- created on 2026-01-08
-- updated on 2026-01-08
+@date: [created: 2026-01-08, updated: 2026-01-08]
 
 @details:
 The blog articles are long, so it would be helpful to auto-generate a table of contents from the headings.
@@ -245,9 +223,7 @@ Add hierarchical "go-back" navigation inside blog posts.
 
 @status: TODO
 
-@date:
-- created on 2026-01-08
-- updated on 2026-01-08
+@date: [created: 2026-01-08, updated: 2026-01-08]
 
 @details:
 Each sub-section should include a "go-back to section" button, each section should include a "go-back to chapter (h2)" button, and each chapter should include a "go-back to title" button.
@@ -260,9 +236,7 @@ Convert Markdown-style lists to HTML lists during post generation.
 
 @status: TODO
 
-@date:
-- created on 2026-01-08
-- updated on 2026-01-08
+@date: [created: 2026-01-08, updated: 2026-01-08]
 
 @details:
 Plain text lists (e.g., `- item`, `1. item`) are currently emitted as plain paragraphs instead of `<ul>/<ol>`.
@@ -275,9 +249,7 @@ Improve code block contrast in light and dark themes.
 
 @status: TODO
 
-@date:
-- created on 2026-01-08
-- updated on 2026-01-08
+@date: [created: 2026-01-08, updated: 2026-01-08]
 
 @details:
 Code blocks in articles have suboptimal contrast in the current theme.
@@ -290,9 +262,7 @@ Support LaTeX math rendering in blog posts.
 
 @status: TODO
 
-@date:
-- created on 2026-01-08
-- updated on 2026-01-08
+@date: [created: 2026-01-08, updated: 2026-01-08]
 
 @details:
 Technical posts need math rendering (inline and block).

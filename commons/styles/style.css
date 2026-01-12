@@ -73,6 +73,8 @@
 	--color-licorice:          rgba(0, 0, 0, 1.00);
 	--color-maraschino:        rgba(255, 38, 0, 1.00);
 	--color-electric-blue:     rgba(44, 117, 255, 1.00);
+	--color-lime:     	       rgba(142, 250, 0, 1.00);
+	--color-spring:            rgba(0, 249, 0, 1.00);
 	--color-frosted-glass:     rgba(214, 214, 214, 0.75);
 }
 
@@ -273,7 +275,7 @@ a {
 
 .pd-bg-grad-x {
 	background-image: linear-gradient(to right,
-		var(--pd-grad-color-start, var(--color-electric-blue)),
+		var(--pd-grad-color-start, var(--color-lime)),
 		var(--pd-grad-color-end, var(--color-frosted-glass))); }
 
 /* --- Debugging utilities --- */

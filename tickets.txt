@@ -267,3 +267,30 @@ Support LaTeX math rendering in blog posts.
 @details:
 Technical posts need math rendering (inline and block).
 Integrate a math renderer (e.g., KaTeX or MathJax) into the post templates and ensure the post generator preserves math delimiters.
+
+=== Ticket 16
+
+@brief:
+Overall website branding and visual identity refresh.
+
+@status: TODO
+
+@date: [created: 2026-01-12, updated: 2026-01-12]
+
+@details:
+The website needs a cohesive visual identity, including a logo, color scheme, typography, and consistent styling across all pages.
+This involves graphic design work and updating the CSS and HTML templates accordingly.
+I may also need obtain appropriate fonts resources and licenses.
+
+=== Ticket 17
+
+@brief:
+Add a back-end database for resource and access management.
+
+@status: TODO
+
+@date: [created: 2026-01-12, updated: 2026-01-12]
+
+@details:
+TBD.
+Currently, the website has no info. about visitors, access logs, or resource usage.

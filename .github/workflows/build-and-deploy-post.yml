@@ -48,6 +48,7 @@ jobs:
         git show origin/main:scripts/deploy-build.ps1 > deploy-build.ps1
         pwsh -nop ./deploy-build.ps1
         git show origin/main:index.html > index.html
+        git checkout origin/main -- commons
     
     - name: Push the changes to gh-pages branch
       run: |

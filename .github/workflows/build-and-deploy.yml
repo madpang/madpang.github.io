@@ -1,0 +1,70 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+          fetch-depth: 0
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Seed artifacts for diff
+        run: |
+          if [ -d gh-pages/artifacts ]; then
+            mkdir -p artifacts
+            cp -a gh-pages/artifacts/. artifacts/
+          fi
+
+      - name: Build mmd2html converter (if needed)
+        run: |
+          if [ ! -f ./mmd2html/app/build/libs/mmd2html.jar ]; then
+            chmod +x ./mmd2html/gradlew
+            ./mmd2html/gradlew -p ./mmd2html build
+          fi
+
+      - name: Prepare build
+        run: pwsh -NoProfile ./scripts/prepare-build.ps1
+
+      - name: Export build
+        run: pwsh -NoProfile ./scripts/export-build.ps1
+
+      - name: Deploy artifacts into gh-pages
+        working-directory: gh-pages
+        run: |
+          rm -rf tmp-ws
+          cp -a ../tmp-ws ./tmp-ws
+          pwsh -NoProfile -File ../scripts/deploy-build.ps1
+
+      - name: Commit and push gh-pages
+        working-directory: gh-pages
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Deploy site artifacts"
+            git push
+          else
+            echo "No changes to deploy."
+          fi

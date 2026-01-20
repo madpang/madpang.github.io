@@ -1,11 +1,7 @@
-+++ header
-@file: pd-wysheid/README.txt
+``` header
+@file: gh-pages/README.txt
 @author: madpang
-@date:
-- created on 2025-02-22
-- updated on 2025-05-11
-+++
+@date: [created: 2025-02-22, modified: 2026-02-11]
+```
 
-This is the DEPLOYMENT branch.
-DO NOT MERGE INTO THIS BRANCH---use the `main` branch for triggering.
-Do manual commit or cherry-pick if off-routine adjustments are needed.
+This is the DEPLOYMENT repo. for the [GitHub Pages](https://madpang.github.io/)

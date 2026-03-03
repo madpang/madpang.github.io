@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<!-- @note: This file is auto-generated. MANUAL EDITS WILL BE LOST -->
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="author" content="madpang" />
+<link rel="icon" type="image/png" sizes="16x16" href="../../commons/images/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../../commons/images/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="64x64" href="../../commons/images/favicon-64.png" />
+<link rel="stylesheet" href="../../commons/styles/style.css" />
+<script src="../../commons/scripts/main.js" defer></script>
+<title>
+Set up a Ubuntu based workstation | Step 2: KVM/QEMU Installation and Configuration | MadPang
+</title>
+</head>
+<body>
+<header
+	class="pd-viewport-anchor pd-anchor-t-0 pd-anchor-l-0 pd-h-96 pd-w-full pd-bg-color pd-z-1000 pd-flex-container pd-layout-row pd-center-y"
+	style="
+		--pd-bg-color: var(--color-mercury);
+		--pd-bg-color-dark: var(--color-licorice);"
+	aria-label="Page Header" >
+	<button
+		id="btn-go-home"
+		class="pd-btn pd-h-full pd-w-96 pd-flex-0"
+		style="--pd-btn-bg-color: var(--color-lime);"
+		data-href="../../index.html"
+		aria-label="Go HomePage" >
+	</button>
+	<nav
+		class="pd-h-full pd-inline-flex pd-flex-1"
+		aria-label="Site Navigation" >
+		<div class="pd-dummy pd-h-full pd-w-96 pd-flex-0" aria-hidden="true" ></div>
+		<button
+			id="btn-link-stack"
+			class="pd-btn pd-h-full pd-flex-0"
+			style="
+				--pd-btn-width: 170px;
+				--pd-btn-bg-img: url('../../commons/images/STACK-label.png');
+				--pd-btn-bg-img-dark: url('../../commons/images/STACK-label-dark.png');"
+			aria-label="STACK Link" >
+		</button>
+		<button
+			id="btn-link-heap"
+			class="pd-btn pd-h-full pd-flex-0"
+			style="
+				--pd-btn-width: 140px;
+				--pd-btn-bg-img: url('../../commons/images/HEAP-label.png');
+				--pd-btn-bg-img-dark: url('../../commons/images/HEAP-label-dark.png');"
+			aria-label="HEAP Link" >
+		</button>
+		<button
+			id="btn-link-archive"
+			class="pd-btn pd-h-full pd-flex-0"
+			style="
+				--pd-btn-width: 212px;
+				--pd-btn-bg-img: url('../../commons/images/ARCHIVE-label.png');
+				--pd-btn-bg-img-dark: url('../../commons/images/ARCHIVE-label-dark.png');"
+			aria-label="ARCHIVE Link" >
+		</button>
+	</nav>
+	<button
+		id="btn-toggle-theme"
+		class="pd-btn pd-h-full pd-w-96 pd-flex-0 pd-ml-auto"
+		style="
+			--pd-btn-bg-img: url('../../commons/images/theme-switch.png');
+			--pd-btn-bg-img-dark: url('../../commons/images/theme-switch-dark.png');"
+		aria-label="Toggle Light/Dark Theme" >
+	</button>
+</header>
+<main
+	class="pd-main-scrollable pd-z-100 pd-grid pd-tri-cols" >
+<div class="pd-dummy" aria-hidden="true" ></div>
+<article
+	class="pd-article pd-pt-128 pd-pb-96 pd-pl-96 pd-pr-96" >
+<h1>Set up a Ubuntu based workstation | Step 2: KVM/QEMU Installation and Configuration</h1>
+<s-paragraph>
+<p>
+This article is the second tutorial of a series on how to set up a multi-purpose Ubuntu based workstation.
+The general idea is to isolate different tasks in different virtual machines (VMs), to allow the the user be able to try out different software stacks while keeping the host machine clean and stable.
+</p>
+</s-paragraph>
+<h2>Introduction to KVM/QEMU</h2>
+<s-paragraph>
+<p>
+Kernel-based Virtual Machine (**KVM**) is a virtualization technology built directly into the Linux kernel.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+In software development, it is very common that each project requires a different environment:
+different Ubuntu versions, different toolchains, different system libraries.
+In my own case, for example, one project requires Ubuntu 24.04, while another project requires Ubuntu 20.04.
+Maintaining multiple physical machines—or constantly switching environments on one machine—is extremely painful---credentials, shortcuts, libraries, environment variables, and so on, all need to be reconfigured every time---I have repeatedly found myself doing work just to prepare the environment to do the real work.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+One effective solution is virtualization using KVM.
+With KVM, you can run multiple virtual machines on a single physical host, each with a fully isolated development environment.
+Snapshots and cloning make it easy to experiment while keeping systems stable.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+In this article, I use:
+- Host OS: Ubuntu 24.04 LTS
+- Guest OS: Ubuntu 20.04 LTS
+- Hypervisor: KVM / QEMU
+and demonstrate how to build a clean development workflow.
+</p>
+</s-paragraph>
+<h2>Method</h2>
+<h3>1. Install KVM/QEMU on the host machine</h3>
+<s-paragraph>
+<p>
+Install the required packages:
+</p>
+<pre>
+sudo apt-get update
+sudo apt-get install -y \
+	qemu-kvm \
+	libvirt-daemon-system \
+	libvirt-clients \
+	bridge-utils \
+	virt-manager \
+	ovmf
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+And here is a brief introduction to the installed packages:
+- qemu-kvm: the hypervisor
+- libvirt-*: VM management services and CLI tools
+- bridge-utils: networking (NAT / bridge)
+- virt-manager: GUI management tool
+- ovmf: UEFI firmware support
+</p>
+</s-paragraph>
+<h3>2. Configure user permissions</h3>
+<s-paragraph>
+<p>
+To manage VMs without root privileges, add your user to the required groups:
+</p>
+<pre>
+sudo usermod -aG kvm,libvirt ${USER}
+</pre>
+<p>
+After running the above command, log out and log back in for the changes to take effect.
+</p>
+</s-paragraph>
+<h3>3. Create and manage VMs with `virt-manager`</h3>
+<s-paragraph>
+<p>
+Prepare an installation ISO for the guest OS (e.g. Ubuntu 20.04 LTS), and launch `virt-manager`:
+</p>
+<pre>
+virt-manager
+</pre>
+<p>
+Then, with the GUI, follow the following steps to create a new VM:
+1. Click "File" &gt; "New Virtual Machine" to start the VM creation wizard
+2. Select "Local install media (ISO image or CDROM)" and click "Forward"
+3. Click “Browse…” to locate ISO media, select the downloaded Ubuntu 20.04 ISO, and click "Forward"
+4. Allocate appropriate resources for the VM (e.g. 8 CPU cores, 16 GB RAM, 64 GB disk space), and click "Forward"
+5. Start guest OS installation which is the same as installing Ubuntu on a real machine
+</p>
+</s-paragraph>
+<h3>3. Launch and configure VM</h3>
+<s-paragraph>
+<p>
+After the installation is complete, you can launch the VM from `virt-manager` GUI or use CLI commands:
+</p>
+<pre>
+# list all VMs
+virsh list --all
+# start a VM (replace "pd-vm-u20" with your VM name)
+virsh start pd-vm-u20
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Inside the VM, you can install necessary development tools, build and execute your projects as you would on a physical machine.
+</p>
+</s-paragraph>
+<h2>Extra Notes</h2>
+<h3>GPU passthrough</h3>
+<s-paragraph>
+<p>
+For beginners, VM is usually regarded as performance compromised, but this is not true.
+VM can do serious work, for example, 3D simulation, CUDA-accelerated machine learning, etc.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+For a single-developer workstation, a practical approach is to pass the dedicated GPU to the VM, which allows the VM to directly access the GPU hardware for native performance.
+Moreover, with GPU passthrough, you can connect a monitor to the GPU and use the VM as a full desktop environment.
+If your host machine's CPU has integrated graphics, you can use it for the graphic output of the host OS while dedicating the discrete GPU to the VM, achieving a seamless experience without performance compromise on either side.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+In the following tutorial, I assume the host machine has the following hardware configuration:
+- CPU: Intel Core i9-13900K (with integrated graphics)
+- GPU: NVIDIA GeForce GeForce GTX TITAN X
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+To perform GPU passthrough, first, find the PCI IDs of the GPU:
+</p>
+<pre>
+&gt; lspci -nn | grep -i nvidia
+07:00.0 VGA compatible controller [0300]: NVIDIA Corporation GM200 [GeForce TX TITAN X] [10de:17c2] (rev al)
+07:00.1 Audio device [0403]: NVIDIA Corporation GM200 High Definition Audio [10de:0fb0] (rev a1)
+</pre>
+<p>
+Second, enable IOMMU in the host's GRUB configuration:
+</p>
+<pre>
+&gt; sudo nano /etc/default/grub
+# Find the line that starts with 'GRUB_CMDLINE_LINUX_DEFAULT', add 'intel_iommu=on' and 'iommu=pt' to the existing parameters, it may look like:
+|----------------- text buffer of /etc/default/grub -------------|
+...
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash intel_iommu=on iommu=pt"
+...
+|----------------------------------------------------------------|
+# Save the file and update GRUB
+&gt; sudo update-grub
+</pre>
+<p>
+Third, bind the GPU to the VFIO driver:
+</p>
+<pre>
+&gt; sudo nano /etc/modprobe.d/vfio.conf
+# Add the following line to bind the GPU to VFIO (replace with your GPU's PCI IDs):
+|---------- text buffer of /etc/modprobe.d/vfio.conf ------------|
+options vfio-pci ids=10de:17c2,10de:0fb0
+|----------------------------------------------------------------|
+</pre>
+<p>
+Fourth, ensure VFIO modules are loaded at initramfs stage:
+</p>
+<pre>
+&gt; sudo nano /etc/initramfs-tools/modules
+# Add the following lines to include VFIO modules in initramfs:
+|----------- text buffer of /etc/initramfs-tools/modules --------|
+vfio
+vfio_iommu_type1
+vfio_pci
+vfio_virqfd
+|----------------------------------------------------------------|
+# Rebuild initramfs
+&gt; sudo update-initramfs -u
+</pre>
+<p>
+Finally, reboot the host machine for the changes to take effect.
+You can verify that the GPU is bound to VFIO (look at the "Kernel driver in use" field):
+</p>
+<pre>
+&gt; lspci -nnk -d 10de:
+07:00.0 VGA compatible controller [0300]: NVIDIA Corporation GM200 [GeForce TX TITAN X] [10de:17c2] (rev al)
+Subsystem: NVIDIA Corporation GM200 [GeForce TX TITAN X] [10de: 1132]
+Kernel driver in use: vfio-pci
+Kernel modules: nvidiafb, nouveau
+07:00.1 Audio device [0403]: NVIDIA Corporation GM200 High Definition Audio [10de:0fb0] (rev al)
+Subsystem: NVIDIA Corporation GM200 High Definition Audio [10de: 1132]
+Kernel driver in use: vfio-pci
+Kernel modules: snd_ha_intel
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+In summary, the above steps detaches the GPU from the host by binding it to`vfio-pci`.
+Without the setup, host machine usually loads the corresponding drivers and *claims* the GPU---you can check with the following command (*before* GPU passthrough):
+</p>
+<pre>
+&gt; lspci -nnk -d 10de:
+07:00.0 VGA compatible controller [0300]: NVIDIA Corporation GM200 [GeForce GTX TITAN X] [10de:17c2] (rev al)
+Subsystem: NVIDIA Corporation GM200 [GeForce TX TITAN X] [10de: 1132]
+Kernel driver in use: nouveau
+Kernel modules: nvidiafb, nouveau
+07:00.1 Audio device [0403]: NVIDIA Corporation GM200 High Definition Audio [10de:0fb0] (rev al)
+Subsystem: NVIDIA Corporation GM200 High Definition Audio [10de: 1132]
+Kernel driver in use: snd_hda_intel
+Kernel modules: snd_hda_intel
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+To attach the GPU to the VM, you can use `virt-manager` GUI:
+1. Open the VM's settings in `virt-manager`
+2. Go to "Add Hardware" &gt; "PCI Host Device"
+3. Select the GPU (both VGA and audio devices) from the list
+4. Start the VM, and install the appropriate GPU drivers inside the VM for optimal performance
+</p>
+</s-paragraph>
+<h3>USB devices passthrough</h3>
+<s-paragraph>
+<p>
+You can also pass through USB devices to the VM---e.g. mouse, keyboard, joystick, etc.---this is especially useful when using the VM as a main work environment.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+USB passthrough can be easily configured in `virt-manager` GUI:
+1. Open the VM's settings in `virt-manager`
+2. Go to "Add Hardware" &gt; "USB Host Device"
+3. Select the desired USB device from the list and add it to the VM.
+This allows the VM to directly access the USB device, providing a seamless experience as if the device were connected to a physical machine.
+</p>
+</s-paragraph>
+<h3>Commonly used CLI commands</h3>
+<s-paragraph>
+<p>
+To manage VMs from the command line, you can use `virsh` commands:
+</p>
+<pre>
+# list all VMs
+virsh list --all
+# start a VM (replace "pd-vm-u20" with your VM name)
+virsh start pd-vm-u20
+# shutdown a VM
+virsh shutdown pd-vm-u20
+</pre>
+</s-paragraph>
+<h2>References</h2>
+<s-paragraph>
+<p>
+1. [KVM hypervisor: a beginners’ guide](https://ubuntu.com/blog/kvm-hyphervisor)
+</p>
+</s-paragraph>
+</article>
+<div class="pd-dummy" aria-hidden="true" ></div>
+</main>
+<footer
+	class="pd-viewport-anchor pd-anchor-b-0 pd-anchor-l-0 pd-h-32 pd-w-full pd-z-999 pd-grid pd-tri-cols pd-center-y"
+	aria-label="Page Footer" >
+	<div
+		class="pd-h-full pd-w-full pd-bg-grad-x" >
+	</div>
+	<div
+		class="pd-h-full pd-w-full pd-bg-color"
+		style="--pd-bg-color: var(--color-frosted-glass);" >
+	</div>
+	<div
+		class="pd-h-full pd-w-full pd-bg-grad-x pd-reverse-x" >
+	</div>
+</footer>
+</body>
+</html>

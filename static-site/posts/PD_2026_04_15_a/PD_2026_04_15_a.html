@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!-- @note: This file is auto-generated. MANUAL EDITS WILL BE LOST -->
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="author" content="madpang" />
+<link rel="icon" type="image/png" sizes="16x16" href="../../commons/images/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../../commons/images/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="64x64" href="../../commons/images/favicon-64.png" />
+<link rel="stylesheet" href="../../commons/styles/style.css" />
+<script src="../../commons/scripts/main.js" defer></script>
+<title>
+KVM in Practice | Stop Reinstalling: Build a Golden Base Image for KVM/QEMU VMs | MadPang
+</title>
+</head>
+<body>
+<header
+	class="pd-viewport-anchor pd-anchor-t-0 pd-anchor-l-0 pd-h-96 pd-w-full pd-bg-color pd-z-1000 pd-flex-container pd-layout-row pd-center-y"
+	style="
+		--pd-bg-color: var(--color-mercury);
+		--pd-bg-color-dark: var(--color-licorice);"
+	aria-label="Page Header" >
+	<button
+		id="btn-go-home"
+		class="pd-btn pd-h-full pd-w-96 pd-flex-0"
+		style="--pd-btn-bg-color: var(--color-lime);"
+		data-href="../../index.html"
+		aria-label="Go HomePage" >
+	</button>
+	<nav
+		class="pd-h-full pd-inline-flex pd-flex-1"
+		aria-label="Site Navigation" >
+		<div class="pd-dummy pd-h-full pd-w-96 pd-flex-0" aria-hidden="true" ></div>
+		<button
+			id="btn-link-stack"
+			class="pd-btn pd-h-full pd-flex-0"
+			style="
+				--pd-btn-width: 170px;
+				--pd-btn-bg-img: url('../../commons/images/STACK-label.png');
+				--pd-btn-bg-img-dark: url('../../commons/images/STACK-label-dark.png');"
+			aria-label="STACK Link" >
+		</button>
+		<button
+			id="btn-link-heap"
+			class="pd-btn pd-h-full pd-flex-0"
+			style="
+				--pd-btn-width: 140px;
+				--pd-btn-bg-img: url('../../commons/images/HEAP-label.png');
+				--pd-btn-bg-img-dark: url('../../commons/images/HEAP-label-dark.png');"
+			aria-label="HEAP Link" >
+		</button>
+		<button
+			id="btn-link-archive"
+			class="pd-btn pd-h-full pd-flex-0"
+			style="
+				--pd-btn-width: 212px;
+				--pd-btn-bg-img: url('../../commons/images/ARCHIVE-label.png');
+				--pd-btn-bg-img-dark: url('../../commons/images/ARCHIVE-label-dark.png');"
+			aria-label="ARCHIVE Link" >
+		</button>
+	</nav>
+	<button
+		id="btn-toggle-theme"
+		class="pd-btn pd-h-full pd-w-96 pd-flex-0 pd-ml-auto"
+		style="
+			--pd-btn-bg-img: url('../../commons/images/theme-switch.png');
+			--pd-btn-bg-img-dark: url('../../commons/images/theme-switch-dark.png');"
+		aria-label="Toggle Light/Dark Theme" >
+	</button>
+</header>
+<main
+	class="pd-main-scrollable pd-z-100 pd-grid pd-tri-cols" >
+<div class="pd-dummy" aria-hidden="true" ></div>
+<article
+	class="pd-article pd-pt-128 pd-pb-96 pd-pl-96 pd-pr-96" >
+<h1>KVM in Practice | Stop Reinstalling: Build a Golden Base Image for KVM/QEMU VMs</h1>
+<h2>Motivation</h2>
+<s-paragraph>
+<p>
+When working across multiple development environments, installing and configuring each VM from scratch is wasteful.
+A *golden-image* is a pre-configured, sealed VM disk that serves as the starting point for every new VM.
+It holds common setups such as SSH server, GPG public keys, RDP server, and core tools --- e.g. tmux, git, etc.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+The key requirements for VM-based developments are:
+- The *guest* should survive host OS reinstallation (no dependency on libvirt state)
+- The *guest* should be portable with minimal dependencies --- a single `.qcow2` file, no backing chains
+- New VMs should be fast to clone --- ready in under a minute
+</p>
+</s-paragraph>
+<h2>Architecture</h2>
+<s-paragraph>
+<p>
+The golden image is a single `.qcow2` file that is never booted directly once created.
+Instead, it is cloned via `qemu-img convert` to create fully independent disk images for each new VM:
+```
+golden-ubuntu2404-base.qcow2   &lt;- sealed, never booted again
+	  |
+	  +-- vm-project-a.qcow2   &lt;- full independent clone
+	  +-- vm-project-b.qcow2   &lt;- full independent clone
+```
+</p>
+</s-paragraph>
+<h2>Method</h2>
+<h3>Phase 1: Build the Golden Image</h3>
+<s-paragraph>
+<p>
+First, install Ubuntu 24.04 LTS (I personally prefer Xubuntu 24.04 *Minimal* [1], which is a sweet spot between the GUI function-rich GNOME desktop version and a headless Ubuntu Server) via CLI `virt-install` or GUI virt-manager, remember to set the firmware to UEFI (OVMF) for better future-proofing.
+Boot it and install the core tools:
+</p>
+<pre>
+sudo apt update &amp;&amp;  \
+sudo apt install -y \
+	openssh-server  \
+	tmux            \
+	git             \
+	xrdp            \
+	curl
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Then, configure the SSH server --- `sudo nano /etc/ssh/sshd_config` and append the following line:
+```
+StreamLocalBindUnlink yes
+```
+This enables automatic removal of stale Unix socket files when a new connection is made. Without it, socket files accumulate on the remote host and must be cleared manually before an agent-forwarded connection can be established [2].
+Enable and start the SSH server by running:
+</p>
+<pre>
+sudo systemctl enable ssh
+sudo systemctl start ssh
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Next, configure the RDP server (xrdp) for optional GUI access [3].
+xrdp encrypts RDP sessions using TLS and needs to read the SSL private key (`ssl-cert-snakeoil.key`), which on Ubuntu is readable only by root and the `ssl-cert` group.
+Add the xrdp user to that group so it can open its TLS listener socket:
+</p>
+<pre>
+sudo adduser xrdp ssl-cert
+</pre>
+<p>
+If you installed a desktop version of Ubuntu, xrdp will automatically use the existing desktop session.
+Enable and start the xrdp service:
+</p>
+<pre>
+sudo systemctl enable xrdp
+sudo systemctl start xrdp
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Finally, configure your most commonly used tools, e.g. tmux, git, etc. per your preferences.
+You may also want to add your GPG public keys to the image so that any new VM can immediately use them for git commit signing, etc. (given agent forwarding is working).
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+Optionally, create a `system-card.txt` file in the home directory to document the installed software and configurations for future reference.
+</p>
+</s-paragraph>
+<h3>Phase 2: Seal the Golden Image</h3>
+<s-paragraph>
+<p>
+Inside the VM, clean up before shutdown:
+</p>
+</s-paragraph>
+<s-paragraph>
+<pre>
+# Clean up package caches
+sudo apt autoremove -y &amp;&amp; sudo apt clean
+
+# Reset machine-id so each clone gets a unique identity
+sudo truncate -s 0 /etc/machine-id
+
+# Validate everything is clean before sealing
+systemctl --failed       # must be empty
+systemctl status ssh     # must be active (running)
+systemctl status xrdp    # must be active (running)
+
+history -c &amp;&amp; sudo shutdown now
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+After VM guest shutdown, on the host, store the image safely:
+</p>
+<pre>
+# Undefine the VM
+sudo virsh undefine vm-ubuntu2404-base --nvram
+
+# Move the base image to external storage (e.g. NAS, USB drive, etc.)
+sudo mv \
+	/var/lib/libvirt/images/vm-ubuntu2404-base.qcow2 \
+	/mnt/datastore/cabinet/vm-guest-img/
+
+# Protect against accidental writes
+sudo chown root:root /mnt/datastore/cabinet/vm-guest-img/vm-ubuntu2404-base.qcow2
+sudo chmod 400 /mnt/datastore/cabinet/vm-guest-img/vm-ubuntu2404-base.qcow2
+</pre>
+</s-paragraph>
+<h3>Phase 3: Clone and Launch a New VM</h3>
+<s-paragraph>
+<p>
+When you need a new VM, first clone from the golden image:
+</p>
+<pre>
+# Full clone --- completely independent, no backing chain
+sudo qemu-img convert -O qcow2 \
+	/mnt/datastore/cabinet/vm-guest-img/vm-ubuntu2404-base.qcow2 \
+	/var/lib/libvirt/images/vm-new-project.qcow2
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Do basic preparations for the new image:
+```
+# Set proper ownership for libvirt
+sudo chown libvirt-qemu:kvm /var/lib/libvirt/images/vm-new-project.qcow2
+</p>
+</s-paragraph>
+</article>
+<div class="pd-dummy" aria-hidden="true" ></div>
+</main>
+<footer
+	class="pd-viewport-anchor pd-anchor-b-0 pd-anchor-l-0 pd-h-32 pd-w-full pd-z-999 pd-grid pd-tri-cols pd-center-y"
+	aria-label="Page Footer" >
+	<div
+		class="pd-h-full pd-w-full pd-bg-grad-x" >
+	</div>
+	<div
+		class="pd-h-full pd-w-full pd-bg-color"
+		style="--pd-bg-color: var(--color-frosted-glass);" >
+	</div>
+	<div
+		class="pd-h-full pd-w-full pd-bg-grad-x pd-reverse-x" >
+	</div>
+</footer>
+</body>
+</html>

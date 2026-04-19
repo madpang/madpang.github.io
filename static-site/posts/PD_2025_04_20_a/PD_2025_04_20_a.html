@@ -96,30 +96,30 @@ The resulting storage layout after completing the configuration is as follows:
 </p>
 <pre>
 &gt; lsblk
-NAME                      MAJ:MIN RM   SIZE RO TYPE   MOUNTPOINTS
-sda                         8:0    0   1.8T  0 disk   
-|-sda1                      8:1    0   1.8T  0 part   /mnt/timemachine
-sdb                         8:16   0   1.8T  0 disk   
-|-sdb1                      8:17   0   1.8T  0 part   /mnt/backup
-sdc                         8:32   0 931.5G  0 disk   
-|-sdc1                      8:33   0     1G  0 part   /boot/efi
-|-sdc2                      8:34   0     2G  0 part   /boot
-|-sdc3                      8:35   0 928.5G  0 part   
-  |-ubuntu--vg-ubuntu--lv 252:0    0   100G  0 lvm    /
-  |-ubuntu--vg-swap--lv   252:1    0   256G  0 lvm    [SWAP]
-sr0                        11:0    1  1024M  0 rom    
-nvme0n1                   259:0    0 953.9G  0 disk   
-|-nvme0n1p1               259:2    0 953.9G  0 part   
-  |-md0                     9:0    0   1.9T  0 raid10 /mnt/workspace
-nvme1n1                   259:1    0 953.9G  0 disk   
-|-nvme1n1p1               259:3    0 953.9G  0 part   
-  |-md0                     9:0    0   1.9T  0 raid10 /mnt/workspace
-|-nvme2n1                   259:4  0 953.9G  0 disk   
-  |-nvme2n1p1               259:7  0 953.9G  0 part   
-  |-md0                     9:0    0   1.9T  0 raid10 /mnt/workspace
-|-nvme3n1                   259:5  0 953.9G  0 disk   
-  |-nvme3n1p1               259:6  0 953.9G  0 part   
-  |-md0                     9:0    0   1.9T  0 raid10 /mnt/workspace
+NAME                      MAJ:MIN  RM   SIZE RO TYPE   MOUNTPOINTS
+sda                          8:0    0   1.8T  0 disk
+|- sda1                      8:1    0   1.8T  0 part   /mnt/timemachine
+sdb                          8:16   0   1.8T  0 disk
+|- sdb1                      8:17   0   1.8T  0 part   /mnt/backup
+sdc                          8:32   0 931.5G  0 disk
+|- sdc1                      8:33   0     1G  0 part   /boot/efi
+|- sdc2                      8:34   0     2G  0 part   /boot
+|- sdc3                      8:35   0 928.5G  0 part
+   |- ubuntu--vg-ubuntu--lv252:0    0   100G  0 lvm    /
+   |- ubuntu--vg-swap--lv  252:1    0   256G  0 lvm    [SWAP]
+sr0                         11:0    1  1024M  0 rom
+nvme0n1                    259:0    0 953.9G  0 disk
+|- nvme0n1p1               259:2    0 953.9G  0 part
+   |- md0                    9:0    0   1.9T  0 raid10 /mnt/workspace
+nvme1n1                    259:1    0 953.9G  0 disk
+|- nvme1n1p1               259:3    0 953.9G  0 part
+   |- md0                    9:0    0   1.9T  0 raid10 /mnt/workspace
+nvme2n1                    259:4    0 953.9G  0 disk
+|- nvme2n1p1               259:7    0 953.9G  0 part
+   |- md0                    9:0    0   1.9T  0 raid10 /mnt/workspace
+nvme3n1                    259:5    0 953.9G  0 disk
+|- nvme3n1p1               259:6    0 953.9G  0 part
+   |- md0                    9:0    0   1.9T  0 raid10 /mnt/workspace
 </pre>
 </s-paragraph>
 <s-paragraph>
@@ -174,10 +174,10 @@ Before the RAID setup, the storage layout looks like this:
 &gt; lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
 NAME          SIZE    FSTYPE     TYPE    MOUNTPOINT
 # ...
-nvme0n1       953.9G             disk 
-nvme2n1       953.9G             disk 
-nvme1n1       953.9G             disk 
-nvme3n1       953.9G             disk 
+nvme0n1       953.9G             disk
+nvme2n1       953.9G             disk
+nvme1n1       953.9G             disk
+nvme3n1       953.9G             disk
 </pre>
 </s-paragraph>
 <s-paragraph>

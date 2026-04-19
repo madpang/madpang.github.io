@@ -146,9 +146,140 @@ sudo apt install -y tmux
 </pre>
 <p>
 And here is a minimal `~/.tmux.conf` configuration file that I use:
-```
+</p>
+<pre>
 # @brief: a tmux configuration for a better terminal experience
 # @details: copy this file to $HOME/.tmux.conf
+
+# @note: prevent tmux from creating new *log-in* sessions
+set -g default-command 'exec bash'
+
+# @note: this is equivalent to set the TERM environment variable
+# set -g default-terminal "tmux-256color"
+# set true color support
+# set -ga terminal-overrides ',*:Tc'
+
+# modify the escape key
+unbind C-b
+set-option -g prefix `
+bind ` send-prefix
+
+# make tmux behaves more like screen
+unbind %
+bind | split-window -h
+unbind '"'
+bind - split-window -v
+unbind w
+bind '"' choose-window
+unbind x
+bind x confirm-before -p "kill-window #W? (y/n)" kill-window
+unbind &amp;
+bind k confirm-before -p "kill-pane #P? (y/n)" kill-pane
+unbind ,
+bind A command-prompt -I "#W" "rename-window '%%'"
+
+# set Emacs mode
+set-option -g mode-keys emacs
+
+# set status bar
+set -g status-position top
+set -g status-style bg="#009193",fg="#D6D6D6"
+
+# set larger history
+set-option -g history-limit 8192
+</pre>
+</s-paragraph>
+<h2>Extra Notes</h2>
+<h3>Disable Wayland</h3>
+<s-paragraph>
+<p>
+Although Wayland is the current rising star in the Linux desktop world, X11 is still the preferred choice for a computing workstation, especially for working with OpenCV and Nvidia drivers.
+To disable Wayland, edit the GDM configuration file `/etc/gdm3/custom.conf` and uncomment the relevant line:
+</p>
+<pre>
+# GDM configuration storage
+#
+# See /usr/share/gdm/gdm.schemas for a list of available options.
+
+[daemon]
+WaylandEnable=false
+
+# ...
+</pre>
+</s-paragraph>
+<h3>Install Nvidia driver</h3>
+<s-paragraph>
+<p>
+To use the Nvidia GPU in the VM guest for development, you first need to attach the GPU to the VM---you can use *Virtual Machine Manager*:
+1. Click on "View &gt; Details" in the VM's window
+2. Go to "Add Hardware" &gt; "PCI Host Device"
+3. Select the GPU (both VGA and audio devices) from the list
+4. Start the VM, and install the appropriate GPU drivers inside the VM for optimal performance 
+</p>
+</s-paragraph>
+<h3>Enable RDP</h3>
+<s-paragraph>
+<p>
+Remote Desktop Protocol (RDP) is a valuable supplementary to SSH for remote access, allowing you to access the VM's graphical desktop environment remotely.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+Ubuntu 24.04 LTS has built-in support for RDP, and it is by default accessed at port 3389.
+To enable RDP, go to "Settings &gt; System &gt; Remote Desktop &gt; Remote Login", turn on the switch, and set the login user name and password (note, the password you set here is for RDP connection, and it is different from the session login password).
+Then, you can use any RDP client (e.g. Microsoft Remote Desktop) to connect to the VM guest using its IP address.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+After you connect to the VM guest through RDP, you can disable the *screen-off* in "Settings &gt; Power" by setting "Power Saving &gt; Screen Blank" to "Never".
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+See [1].
+</p>
+</s-paragraph>
+<h3>Setup Avahi</h3>
+<s-paragraph>
+<p>
+With `avahi-daemon` installed and running, you can access the VM guest using its hostname (e.g. `pd-vm-u24.local`) instead of its IP address, which is more convenient.
+One a *Desktop* Ubuntu installation, `avahi-daemon` is usually installed and enabled by default.
+But for a *Server* installation, you need to install and enable it manually:
+</p>
+<pre>
+sudo apt install -y avahi-daemon
+sudo systemctl enable avahi-daemon
+sudo systemctl start avahi-daemon
+</pre>
+</s-paragraph>
+<h2>Create a snapshot of the clean installation</h2>
+<s-paragraph>
+<p>
+After the installation is complete, it is recommended to create a snapshot of the clean installation state, so that you can easily revert to this state if needed in the future.
+Use the following command to create a snapshot:
+</p>
+<pre>
+virsh snapshot-create-as --domain &lt;vm-name&gt; --name "snapshot1" --description "Clean installation"
+</pre>
+<p>
+Replace `&lt;vm_name&gt;` with the name of your VM guest (e.g. `pd-vm-u24`).
+You can list all snapshots of a VM with the following command:
+</p>
+<pre>
+virsh snapshot-list &lt;vm_name&gt;
+</pre>
+<p>
+And you can revert to a snapshot with the following command:
+</p>
+<pre>
+virsh snapshot-revert &lt;vm_name&gt; snapshot1
+</pre>
+</s-paragraph>
+<h2>Reference</h2>
+<s-paragraph>
+<p>
+1. [Install and configure xrdp to use Remote Desktop with Ubuntu](https://docs.azure.cn/en-us/virtual-machines/linux/use-remote-desktop?tabs=azure-cli)
 </p>
 </s-paragraph>
 </article>

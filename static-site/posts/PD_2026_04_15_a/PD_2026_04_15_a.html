@@ -96,13 +96,13 @@ The key requirements for VM-based developments are:
 <p>
 The golden image is a single `.qcow2` file that is never booted directly once created.
 Instead, it is cloned via `qemu-img convert` to create fully independent disk images for each new VM:
-```
+</p>
+<pre>
 golden-ubuntu2404-base.qcow2   &lt;- sealed, never booted again
 	  |
 	  +-- vm-project-a.qcow2   &lt;- full independent clone
 	  +-- vm-project-b.qcow2   &lt;- full independent clone
-```
-</p>
+</pre>
 </s-paragraph>
 <h2>Method</h2>
 <h3>Phase 1: Build the Golden Image</h3>
@@ -112,21 +112,23 @@ First, install Ubuntu 24.04 LTS (I personally prefer Xubuntu 24.04 *Minimal* [1]
 Boot it and install the core tools:
 </p>
 <pre>
-sudo apt update &amp;&amp;  \
+sudo apt update
 sudo apt install -y \
-	openssh-server  \
-	tmux            \
-	git             \
-	xrdp            \
-	curl
+    openssh-server  \
+    tmux            \
+    git             \
+    xrdp            \
+    curl
 </pre>
 </s-paragraph>
 <s-paragraph>
 <p>
 Then, configure the SSH server --- `sudo nano /etc/ssh/sshd_config` and append the following line:
-```
+</p>
+<pre>
 StreamLocalBindUnlink yes
-```
+</pre>
+<p>
 This enables automatic removal of stale Unix socket files when a new connection is made. Without it, socket files accumulate on the remote host and must be cleared manually before an agent-forwarded connection can be established [2].
 Enable and start the SSH server by running:
 </p>
@@ -212,16 +214,87 @@ When you need a new VM, first clone from the golden image:
 <pre>
 # Full clone --- completely independent, no backing chain
 sudo qemu-img convert -O qcow2 \
-	/mnt/datastore/cabinet/vm-guest-img/vm-ubuntu2404-base.qcow2 \
-	/var/lib/libvirt/images/vm-new-project.qcow2
+    /mnt/datastore/cabinet/vm-guest-img/vm-ubuntu2404-base.qcow2 \
+    /var/lib/libvirt/images/vm-new-project.qcow2
 </pre>
 </s-paragraph>
 <s-paragraph>
 <p>
 Do basic preparations for the new image:
-```
+</p>
+<pre>
 # Set proper ownership for libvirt
 sudo chown libvirt-qemu:kvm /var/lib/libvirt/images/vm-new-project.qcow2
+
+# Optional: Increase disk size
+sudo qemu-img resize /var/lib/libvirt/images/vm-new-project.qcow2 64G
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Define and start the VM:
+</p>
+<pre>
+virt-install \
+    --name vm-new-project \
+    --import \
+    --disk path=/var/lib/libvirt/images/vm-new-project.qcow2,format=qcow2 \
+    --os-variant ubuntu24.04 \
+    --ram 8192 --vcpus 4 \
+    --boot uefi \
+    --network bridge=br0 \
+    --video virtio,accel3d=no \
+    --graphics spice \
+    --noautoconsole
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Note some key flags:
+- `--import` skips the OS installer entirely
+- `--boot uefi` is required if the golden image was installed with UEFI firmware (OVMF)
+- `--network bridge=br0` connects the VM to the same network as the host for easy SSH/RDP access; adjust as needed for your network setup
+</p>
+</s-paragraph>
+<h3>Phase 4: Post-Clone Setup</h3>
+<s-paragraph>
+<p>
+After the VM starts, set a unique hostname to avoid conflicts on the network:
+</p>
+<pre>
+sudo hostnamectl set-hostname vm-new-project
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Optionally, resize the root partition to use the full disk if you increased the disk size in Phase 3:
+</p>
+<pre>
+# Use `lsblk` to identify the root partition (e.g. /dev/vda2)
+sudo growpart /dev/vda 2
+sudo resize2fs /dev/vda2
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Optionally, regenerate SSH host keys, especially if you want to ensure each VM has unique host keys:
+</p>
+<pre>
+sudo ssh-keygen -A
+sudo systemctl restart ssh
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Restart the VM to ensure all changes take effect.
+</p>
+</s-paragraph>
+<h2>References</h2>
+<s-paragraph>
+<p>
+1. [Xubuntu official site](https://xubuntu.org/)
+2. [Arch Linux Wiki: GnuPG](https://wiki.archlinux.org/title/GnuPG)
+3. [Install and configure xrdp to use Remote Desktop with Ubuntu](https://docs.azure.cn/en-us/virtual-machines/linux/use-remote-desktop?tabs=azure-cli)
 </p>
 </s-paragraph>
 </article>

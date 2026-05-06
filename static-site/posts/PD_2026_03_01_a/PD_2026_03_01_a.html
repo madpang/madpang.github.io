@@ -105,7 +105,7 @@ Snapshots and cloning make it easy to experiment while keeping systems stable.
 <s-paragraph>
 <p>
 In this article, I use:
-- Host OS: Ubuntu 24.04 LTS
+- Host OS: Ubuntu 26.04 LTS
 - Guest OS: Ubuntu 20.04 LTS
 - Hypervisor: KVM / QEMU
 and demonstrate how to build a clean development workflow.
@@ -118,24 +118,26 @@ and demonstrate how to build a clean development workflow.
 Install the required packages:
 </p>
 <pre>
-sudo apt-get update
-sudo apt-get install -y \
-	qemu-kvm \
+sudo apt update
+sudo apt install -y \
+	qemu-system-x86 \
 	libvirt-daemon-system \
 	libvirt-clients \
 	bridge-utils \
 	virt-manager \
-	ovmf
+	ovmf \
+	virtiofsd
 </pre>
 </s-paragraph>
 <s-paragraph>
 <p>
 And here is a brief introduction to the installed packages:
-- qemu-kvm: the hypervisor
+- qemu-system-x86: the hypervisor
 - libvirt-*: VM management services and CLI tools
 - bridge-utils: networking (NAT / bridge)
 - virt-manager: GUI management tool
 - ovmf: UEFI firmware support
+- virtiofsd: Virtio-FS support for shared folders between host and guest
 </p>
 </s-paragraph>
 <h3>2. Configure user permissions</h3>
@@ -175,8 +177,8 @@ After the installation is complete, you can launch the VM from `virt-manager` GU
 <pre>
 # list all VMs
 virsh list --all
-# start a VM (replace "pd-vm-u20" with your VM name)
-virsh start pd-vm-u20
+# start a VM (replace "vm-test-u20" with your VM name)
+virsh start vm-test-u20
 </pre>
 </s-paragraph>
 <s-paragraph>
@@ -201,9 +203,9 @@ If your host machine's CPU has integrated graphics, you can use it for the graph
 </s-paragraph>
 <s-paragraph>
 <p>
-In the following tutorial, I assume the host machine has the following hardware configuration:
+In the following tutorial, I use a host machine that has the following hardware configuration:
 - CPU: Intel Core i9-13900K (with integrated graphics)
-- GPU: NVIDIA GeForce GeForce GTX TITAN X
+- GPU: NVIDIA GeForce GTX TITAN X
 </p>
 </s-paragraph>
 <s-paragraph>
@@ -212,14 +214,14 @@ To perform GPU passthrough, first, find the PCI IDs of the GPU:
 </p>
 <pre>
 &gt; lspci -nn | grep -i nvidia
-07:00.0 VGA compatible controller [0300]: NVIDIA Corporation GM200 [GeForce TX TITAN X] [10de:17c2] (rev al)
+07:00.0 VGA compatible controller [0300]: NVIDIA Corporation GM200 [GeForce GTX TITAN X] [10de:17c2] (rev al)
 07:00.1 Audio device [0403]: NVIDIA Corporation GM200 High Definition Audio [10de:0fb0] (rev a1)
 </pre>
 <p>
 Second, enable IOMMU in the host's GRUB configuration:
 </p>
 <pre>
-&gt; sudo nano /etc/default/grub
+&gt; sudo emacs /etc/default/grub
 # Find the line that starts with 'GRUB_CMDLINE_LINUX_DEFAULT', add 'intel_iommu=on' and 'iommu=pt' to the existing parameters, it may look like:
 |----------------- text buffer of /etc/default/grub -------------|
 ...
@@ -233,23 +235,24 @@ GRUB_CMDLINE_LINUX_DEFAULT="quiet splash intel_iommu=on iommu=pt"
 Third, bind the GPU to the VFIO driver:
 </p>
 <pre>
-&gt; sudo nano /etc/modprobe.d/vfio.conf
+&gt; sudo emacs /etc/modprobe.d/vfio.conf
 # Add the following line to bind the GPU to VFIO (replace with your GPU's PCI IDs):
 |---------- text buffer of /etc/modprobe.d/vfio.conf ------------|
 options vfio-pci ids=10de:17c2,10de:0fb0
 |----------------------------------------------------------------|
 </pre>
 <p>
-Fourth, ensure VFIO modules are loaded at initramfs stage:
+Fourth, ensure KVM and VFIO kernel modules are loaded at boot (systemd): 
 </p>
 <pre>
-&gt; sudo nano /etc/initramfs-tools/modules
+&gt; sudo emacs /etc/modules-load.d/vfio-pci.conf
 # Add the following lines to include VFIO modules in initramfs:
-|----------- text buffer of /etc/initramfs-tools/modules --------|
+|--------- text buffer of /etc/modules-load.d/vfio-pci.conf -----|
 vfio
 vfio_iommu_type1
 vfio_pci
-vfio_virqfd
+kvm
+kvm_intel
 |----------------------------------------------------------------|
 # Rebuild initramfs
 &gt; sudo update-initramfs -u
@@ -319,16 +322,17 @@ To manage VMs from the command line, you can use `virsh` commands:
 <pre>
 # list all VMs
 virsh list --all
-# start a VM (replace "pd-vm-u20" with your VM name)
-virsh start pd-vm-u20
+# start a VM (replace "vm-test-u20" with your VM name)
+virsh start vm-test-u20
 # shutdown a VM
-virsh shutdown pd-vm-u20
+virsh shutdown vm-test-u20
 </pre>
 </s-paragraph>
 <h2>References</h2>
 <s-paragraph>
 <p>
 1. [KVM hypervisor: a beginners’ guide](https://ubuntu.com/blog/kvm-hyphervisor)
+2. [Gentoo Wiki: GPU passthrough with virt-manager, QEMU, and KVM](https://wiki.gentoo.org/wiki/GPU_passthrough_with_virt-manager,_QEMU,_and_KVM)
 </p>
 </s-paragraph>
 </article>

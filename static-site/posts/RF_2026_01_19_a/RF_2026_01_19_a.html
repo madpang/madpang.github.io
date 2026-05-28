@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<!-- @note: This file is auto-generated. MANUAL EDITS WILL BE LOST -->
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="author" content="madpang" />
+<link rel="icon" type="image/png" sizes="16x16" href="../../commons/images/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../../commons/images/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="64x64" href="../../commons/images/favicon-64.png" />
+<link rel="stylesheet" href="../../commons/styles/style.css" />
+<script src="../../commons/scripts/main.js" defer></script>
+<title>
+KVM in Practice | Share a Host Folder with VMs using Virtiofs on KVM/QEMU | MadPang
+</title>
+</head>
+<body>
+<header
+	class="pd-viewport-anchor pd-anchor-t-0 pd-anchor-l-0 pd-h-96 pd-w-full pd-bg-color pd-z-1000 pd-flex-container pd-layout-row pd-center-y"
+	style="
+		--pd-bg-color: var(--color-mercury);
+		--pd-bg-color-dark: var(--color-licorice);"
+	aria-label="Page Header" >
+	<button
+		id="btn-go-home"
+		class="pd-btn pd-h-full pd-w-96 pd-flex-0"
+		style="--pd-btn-bg-color: var(--color-lime);"
+		data-href="../../index.html"
+		aria-label="Go HomePage" >
+	</button>
+	<nav
+		class="pd-h-full pd-inline-flex pd-flex-1"
+		aria-label="Site Navigation" >
+		<div class="pd-dummy pd-h-full pd-w-96 pd-flex-0" aria-hidden="true" ></div>
+		<button
+			id="btn-link-stack"
+			class="pd-btn pd-h-full pd-flex-0"
+			style="
+				--pd-btn-width: 170px;
+				--pd-btn-bg-img: url('../../commons/images/STACK-label.png');
+				--pd-btn-bg-img-dark: url('../../commons/images/STACK-label-dark.png');"
+			aria-label="STACK Link" >
+		</button>
+		<button
+			id="btn-link-heap"
+			class="pd-btn pd-h-full pd-flex-0"
+			style="
+				--pd-btn-width: 140px;
+				--pd-btn-bg-img: url('../../commons/images/HEAP-label.png');
+				--pd-btn-bg-img-dark: url('../../commons/images/HEAP-label-dark.png');"
+			aria-label="HEAP Link" >
+		</button>
+		<button
+			id="btn-link-archive"
+			class="pd-btn pd-h-full pd-flex-0"
+			style="
+				--pd-btn-width: 212px;
+				--pd-btn-bg-img: url('../../commons/images/ARCHIVE-label.png');
+				--pd-btn-bg-img-dark: url('../../commons/images/ARCHIVE-label-dark.png');"
+			aria-label="ARCHIVE Link" >
+		</button>
+	</nav>
+	<button
+		id="btn-toggle-theme"
+		class="pd-btn pd-h-full pd-w-96 pd-flex-0 pd-ml-auto"
+		style="
+			--pd-btn-bg-img: url('../../commons/images/theme-switch.png');
+			--pd-btn-bg-img-dark: url('../../commons/images/theme-switch-dark.png');"
+		aria-label="Toggle Light/Dark Theme" >
+	</button>
+</header>
+<main
+	class="pd-main-scrollable pd-z-100 pd-grid pd-tri-cols" >
+<div class="pd-dummy" aria-hidden="true" ></div>
+<article
+	class="pd-article pd-pt-128 pd-pb-96 pd-pl-96 pd-pr-96" >
+<h1>KVM in Practice | Share a Host Folder with VMs using Virtiofs on KVM/QEMU</h1>
+<s-paragraph>
+<p>
+This tutorial shows how to share a host directory with Linux guests on a local KVM/QEMU setup using **Virtiofs** --- the simplest built-in shared-folder option with near-native performance.
+</p>
+</s-paragraph>
+<h2>Introduction</h2>
+<h3>Why Virtiofs</h3>
+<s-paragraph>
+<p>
+Virtiofs is a convenient way to share a directory from a Linux host to a Linux guest.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+Compared with network-based sharing methods such as Samba or NFS, virtiofs is often simpler for a local VM setup because no network service needs to be configured.
+It is also designed specifically for virtualized local filesystem sharing.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+Some advantages are:
+- No networking setup required
+- Near-native performance
+- Proper UNIX permission passthrough
+- Designed for **local Linux host + Linux guest** workflows
+</p>
+</s-paragraph>
+<h3>Compatibility</h3>
+<s-paragraph>
+<p>
+The setup documented in this post has been tested on the following environments:
+- Host OS: Ubuntu 26.04, 24.04
+- Guest OS: Ubuntu 24.04, 20.04
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+In this article, I use the following example host directory:
+</p>
+<pre>
+/mnt/datastore
+</pre>
+<p>
+and expose it to the guest using the virtiofs mount tag:
+</p>
+<pre>
+datastore
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Inside the guest, it will be mounted at:
+</p>
+<pre>
+/mnt/datastore
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Of course, these names can be changed according to your own setup.
+</p>
+</s-paragraph>
+<h2>Method</h2>
+<h3>Step 1: Install virtiofsd on the host</h3>
+<s-paragraph>
+<p>
+On Ubuntu/Debian host:
+</p>
+<pre>
+sudo apt install virtiofsd
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Make sure the host directory exists:
+</p>
+<pre>
+sudo mkdir -p /mnt/datastore
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Optionally, set permissions for easy access:
+</p>
+<pre>
+sudo chmod 777 /mnt/datastore
+</pre>
+</s-paragraph>
+<h3>Step 2: Power off the VM</h3>
+<s-paragraph>
+<p>
+Before changing the VM hardware configuration, power off the guest.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+From *virt-manager*, shut down the VM normally.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+Or from CLI:
+</p>
+<pre>
+virsh shutdown &lt;vm-name&gt;
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Check the VM state:
+</p>
+<pre>
+virsh list --all
+</pre>
+</s-paragraph>
+<h3>Step 3: Add the shared folder to the VM</h3>
+<s-paragraph>
+<p>
+There are two common ways to add the virtiofs shared folder:
+1 using *virt-manager*,
+2 editing the libvirt XML from CLI.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+The two methods are equivalent.
+*virt-manager* is easier to use interactively, while the XML method is more explicit and easier to reproduce.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+#### Option A: Add the shared folder using virt-manager
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+Ensure the VM is powered off, then:
+1. Open **virt-manager**,
+2. Select the VM and open **Details**,
+3. Click **Memory** tab,
+4. Enable **Shared memory** checkbox,
+5. Apply changes;
+6. Click **Add Hardware** button -&gt; select **Filesystem**,
+7. Configure:
+   - **Driver:** `virtiofs`
+   - **Source path:** `/mnt/datastore`
+   - **Target path:** `datastore`
+   - **Access mode:** `Passthrough`
+8. Apply changes.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+#### Option B: Add the shared folder from CLI using libvirt XML
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+Alternatively, edit the VM XML directly:
+</p>
+<pre>
+virsh edit &lt;vm-name&gt;
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+First, add the following top-level `memoryBacking` section under `&lt;domain&gt;`, outside `&lt;devices&gt;`:
+</p>
+<pre>
+&lt;memoryBacking&gt;
+  &lt;source type='memfd'/&gt;
+  &lt;access mode='shared'/&gt;
+&lt;/memoryBacking&gt;
+</pre>
+<p>
+Then, inside the &lt;devices&gt; section, add the virtiofs filesystem device:
+</p>
+<pre>
+&lt;filesystem type='mount' accessmode='passthrough'&gt;
+  &lt;driver type='virtiofs' queue='1024'/&gt;
+  &lt;source dir='/mnt/datastore'/&gt;
+  &lt;target dir='datastore'/&gt;
+&lt;/filesystem&gt;
+</pre>
+<p>
+Save and exit.
+`virsh edit` will validate and apply the XML change.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+The final shape should be similar to:
+</p>
+<pre>
+&lt;domain type='kvm'&gt;
+  [...]
+  &lt;memoryBacking&gt;
+    &lt;source type='memfd'/&gt;
+    &lt;access mode='shared'/&gt;
+  &lt;/memoryBacking&gt;
+  [...]
+  &lt;devices&gt;
+    [...]
+    &lt;filesystem type='mount' accessmode='passthrough'&gt;
+      &lt;driver type='virtiofs' queue='1024'/&gt;
+      &lt;source dir='/mnt/datastore'/&gt;
+      &lt;target dir='datastore'/&gt;
+    &lt;/filesystem&gt;
+    [...]
+  &lt;/devices&gt;
+&lt;/domain&gt;
+</pre>
+</s-paragraph>
+<h3>Step 4: Start the VM</h3>
+<s-paragraph>
+<p>
+Start the VM from *virt-manager* or CLI:
+</p>
+<pre>
+virsh start &lt;vm-name&gt;
+</pre>
+</s-paragraph>
+<h3>Step 5: Mount the shared folder in the guest</h3>
+<s-paragraph>
+<p>
+Inside the guest, create a mount point:
+</p>
+<pre>
+sudo mkdir -p /mnt/datastore
+</pre>
+<p>
+Then mount the virtiofs filesystem:
+</p>
+<pre>
+sudo mount -t virtiofs datastore /mnt/datastore
+</pre>
+</s-paragraph>
+<s-paragraph>
+<p>
+Here, datastore is the mount tag specified in the VM configuration:
+</p>
+<pre>
+&lt;target dir='datastore'/&gt;
+</pre>
+<p>
+It is not the host path.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+After mounting, the host directory `/mnt/datastore` is available inside the guest at `/mnt/datastore` with read/write access.
+</p>
+</s-paragraph>
+<h3>Step 6: Make the mount persistent</h3>
+<s-paragraph>
+<p>
+To mount it automatically when the guest boots, add the following line to `/etc/fstab` inside the guest:
+</p>
+<pre>
+datastore  /mnt/datastore  virtiofs  defaults  0  0
+</pre>
+<p>
+Then test the `fstab` entry:
+</p>
+<pre>
+sudo mount -a
+</pre>
+<p>
+Check that it is mounted:
+</p>
+<pre>
+findmnt /mnt/datastore
+</pre>
+</s-paragraph>
+<h2>Extra Notes</h2>
+<h3>About the virtiofs mount configuration</h3>
+<s-paragraph>
+<p>
+The meaning of the key fields in the xml configuration is:
+- `&lt;source dir='/mnt/datastore'/&gt;` is the directory on the host,
+- `&lt;target dir='datastore'/&gt;` is the mount tag used inside the guest,
+- `&lt;driver type='virtiofs'/&gt;` selects virtiofs,
+- `accessmode='passthrough'` makes file ownership and permissions pass through naturally,
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+The virtiofs mount command uses the mount tag, not the host directory path.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+The `queue='1024'` option does not mean 1024 queues.
+It means that the virtiofs request queue can hold up to 1024 request entries.
+In most cases, leaving it as 1024 is fine.
+</p>
+</s-paragraph>
+<h3>About shared memory</h3>
+<s-paragraph>
+<p>
+Virtiofs requires the guest memory to be shared with the host-side virtiofs process.
+This is enabled by the `&lt;memoryBacking&gt;` section in the XML, and the "Shared memory" checkbox in virt-manager.
+</p>
+</s-paragraph>
+<h3>About UID/GID and permissions</h3>
+<s-paragraph>
+<p>
+File ownership and permissions are enforced by the host filesystem.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+For the smoothest experience, it is recommended to use the same UID/GID for the normal user on both the host and the guest.
+</p>
+</s-paragraph>
+<s-paragraph>
+<p>
+Use `id` command on both host and guest to check the UID/GID of your user.
+If the user has UID 1000 on both sides, permission handling is usually straightforward.
+</p>
+</s-paragraph>
+<h3>About choosing virtiofs vs a virtual disk</h3>
+<s-paragraph>
+<p>
+Use virtiofs when the directory should be naturally shared between host and guest.
+Use a normal virtual disk when the data should belong primarily to the VM.
+</p>
+</s-paragraph>
+<h2>Reference</h2>
+<s-paragraph>
+<p>
+1. [libvirt: Sharing files with Virtiofs](https://libvirt.org/kbase/virtiofs.html)
+2. [libvirt: Domain XML format](https://libvirt.org/formatdomain.html)
+3. [virtio-fs: A shared file system for virtual machines](https://virtio-fs.gitlab.io/)
+</p>
+</s-paragraph>
+</article>
+<div class="pd-dummy" aria-hidden="true" ></div>
+</main>
+<footer
+	class="pd-viewport-anchor pd-anchor-b-0 pd-anchor-l-0 pd-h-32 pd-w-full pd-z-999 pd-grid pd-tri-cols pd-center-y"
+	aria-label="Page Footer" >
+	<div
+		class="pd-h-full pd-w-full pd-bg-grad-x" >
+	</div>
+	<div
+		class="pd-h-full pd-w-full pd-bg-color"
+		style="--pd-bg-color: var(--color-frosted-glass);" >
+	</div>
+	<div
+		class="pd-h-full pd-w-full pd-bg-grad-x pd-reverse-x" >
+	</div>
+</footer>
+</body>
+</html>
